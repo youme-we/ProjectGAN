@@ -1,0 +1,115 @@
+2023-08-17 18:58:23,859 INFO    StreamThr :22718 [internal.py:wandb_internal():86] W&B internal server running at pid: 22718, started at: 2023-08-17 18:58:23.859103
+2023-08-17 18:58:23,860 DEBUG   HandlerThread:22718 [handler.py:handle_request():144] handle_request: status
+2023-08-17 18:58:23,863 INFO    WriterThread:22718 [datastore.py:open_for_write():85] open: /Users/skost/coding-s/ProjectGAN/NN/wandb/run-20230817_185823-dddq9c50/run-dddq9c50.wandb
+2023-08-17 18:58:23,863 DEBUG   SenderThread:22718 [sender.py:send():379] send: header
+2023-08-17 18:58:23,903 DEBUG   SenderThread:22718 [sender.py:send():379] send: run
+2023-08-17 18:58:24,522 INFO    SenderThread:22718 [dir_watcher.py:__init__():211] watching files in: /Users/skost/coding-s/ProjectGAN/NN/wandb/run-20230817_185823-dddq9c50/files
+2023-08-17 18:58:24,522 INFO    SenderThread:22718 [sender.py:_start_run_threads():1121] run started: dddq9c50 with start time 1692291503.860509
+2023-08-17 18:58:24,524 DEBUG   SenderThread:22718 [sender.py:send_request():406] send_request: summary_record
+2023-08-17 18:58:24,525 INFO    SenderThread:22718 [sender.py:_save_file():1375] saving file wandb-summary.json with policy end
+2023-08-17 18:58:24,533 DEBUG   HandlerThread:22718 [handler.py:handle_request():144] handle_request: check_version
+2023-08-17 18:58:24,533 DEBUG   SenderThread:22718 [sender.py:send_request():406] send_request: check_version
+2023-08-17 18:58:24,670 DEBUG   HandlerThread:22718 [handler.py:handle_request():144] handle_request: run_start
+2023-08-17 18:58:24,679 DEBUG   HandlerThread:22718 [system_info.py:__init__():31] System info init
+2023-08-17 18:58:24,679 DEBUG   HandlerThread:22718 [system_info.py:__init__():46] System info init done
+2023-08-17 18:58:24,679 INFO    HandlerThread:22718 [system_monitor.py:start():181] Starting system monitor
+2023-08-17 18:58:24,679 INFO    SystemMonitor:22718 [system_monitor.py:_start():145] Starting system asset monitoring threads
+2023-08-17 18:58:24,680 INFO    HandlerThread:22718 [system_monitor.py:probe():201] Collecting system info
+2023-08-17 18:58:24,680 INFO    SystemMonitor:22718 [interfaces.py:start():190] Started cpu monitoring
+2023-08-17 18:58:24,681 DEBUG   HandlerThread:22718 [system_info.py:probe():195] Probing system
+2023-08-17 18:58:24,681 INFO    SystemMonitor:22718 [interfaces.py:start():190] Started disk monitoring
+2023-08-17 18:58:24,683 INFO    SystemMonitor:22718 [interfaces.py:start():190] Started gpuapple monitoring
+2023-08-17 18:58:24,685 INFO    SystemMonitor:22718 [interfaces.py:start():190] Started memory monitoring
+2023-08-17 18:58:24,686 INFO    SystemMonitor:22718 [interfaces.py:start():190] Started network monitoring
+2023-08-17 18:58:24,693 DEBUG   HandlerThread:22718 [system_info.py:_probe_git():180] Probing git
+2023-08-17 18:58:24,726 DEBUG   HandlerThread:22718 [system_info.py:_probe_git():188] Probing git done
+2023-08-17 18:58:24,727 DEBUG   HandlerThread:22718 [system_info.py:probe():240] Probing system done
+2023-08-17 18:58:24,727 DEBUG   HandlerThread:22718 [system_monitor.py:probe():210] {'os': 'macOS-13.5-arm64-arm-64bit', 'python': '3.11.3', 'heartbeatAt': '2023-08-17T16:58:24.681106', 'startedAt': '2023-08-17T16:58:23.853281', 'docker': None, 'cuda': None, 'args': (), 'state': 'running', 'program': '/Users/skost/coding-s/ProjectGAN/NN/wrapper.py', 'codePath': 'ProjectGAN/NN/wrapper.py', 'git': {'remote': 'git@github.com:youme-we/coding-s.git', 'commit': 'e8da50e0b1c185d1a8abfbca0f0e8afae8737376'}, 'email': 'simeon.kost@gmail.com', 'root': '/Users/skost/coding-s', 'host': 'simeons-Air.fritz.box', 'username': 'skost', 'executable': '/Library/Frameworks/Python.framework/Versions/3.11/bin/python3', 'cpu_count': 8, 'cpu_count_logical': 8, 'disk': {'total': 228.27386474609375, 'used': 8.545608520507812}, 'gpuapple': {'type': 'arm', 'vendor': 'Apple'}, 'memory': {'total': 8.0}}
+2023-08-17 18:58:24,727 INFO    HandlerThread:22718 [system_monitor.py:probe():211] Finished collecting system info
+2023-08-17 18:58:24,727 INFO    HandlerThread:22718 [system_monitor.py:probe():214] Publishing system info
+2023-08-17 18:58:24,727 DEBUG   HandlerThread:22718 [system_info.py:_save_pip():51] Saving list of pip packages installed into the current environment
+2023-08-17 18:58:24,727 DEBUG   HandlerThread:22718 [system_info.py:_save_pip():67] Saving pip packages done
+2023-08-17 18:58:24,728 INFO    HandlerThread:22718 [system_monitor.py:probe():216] Finished publishing system info
+2023-08-17 18:58:24,730 DEBUG   SenderThread:22718 [sender.py:send():379] send: files
+2023-08-17 18:58:24,730 INFO    SenderThread:22718 [sender.py:_save_file():1375] saving file wandb-metadata.json with policy now
+2023-08-17 18:58:24,734 DEBUG   HandlerThread:22718 [handler.py:handle_request():144] handle_request: stop_status
+2023-08-17 18:58:24,734 DEBUG   SenderThread:22718 [sender.py:send_request():406] send_request: stop_status
+2023-08-17 18:58:24,912 DEBUG   HandlerThread:22718 [handler.py:handle_request():144] handle_request: partial_history
+2023-08-17 18:58:24,948 DEBUG   SenderThread:22718 [sender.py:send():379] send: telemetry
+2023-08-17 18:58:24,948 DEBUG   SenderThread:22718 [sender.py:send():379] send: history
+2023-08-17 18:58:24,948 DEBUG   SenderThread:22718 [sender.py:send_request():406] send_request: summary_record
+2023-08-17 18:58:24,948 INFO    SenderThread:22718 [sender.py:_save_file():1375] saving file wandb-summary.json with policy end
+2023-08-17 18:58:25,217 DEBUG   SenderThread:22718 [sender.py:send():379] send: telemetry
+2023-08-17 18:58:25,225 DEBUG   HandlerThread:22718 [handler.py:handle_request():144] handle_request: partial_history
+2023-08-17 18:58:25,226 DEBUG   SenderThread:22718 [sender.py:send():379] send: history
+2023-08-17 18:58:25,226 DEBUG   SenderThread:22718 [sender.py:send_request():406] send_request: summary_record
+2023-08-17 18:58:25,226 INFO    SenderThread:22718 [sender.py:_save_file():1375] saving file wandb-summary.json with policy end
+2023-08-17 18:58:25,237 DEBUG   HandlerThread:22718 [handler.py:handle_request():144] handle_request: partial_history
+2023-08-17 18:58:25,237 DEBUG   SenderThread:22718 [sender.py:send():379] send: history
+2023-08-17 18:58:25,237 DEBUG   SenderThread:22718 [sender.py:send_request():406] send_request: summary_record
+2023-08-17 18:58:25,238 INFO    SenderThread:22718 [sender.py:_save_file():1375] saving file wandb-summary.json with policy end
+2023-08-17 18:58:25,249 DEBUG   HandlerThread:22718 [handler.py:handle_request():144] handle_request: partial_history
+2023-08-17 18:58:25,250 DEBUG   SenderThread:22718 [sender.py:send():379] send: history
+2023-08-17 18:58:25,250 DEBUG   SenderThread:22718 [sender.py:send_request():406] send_request: summary_record
+2023-08-17 18:58:25,250 INFO    SenderThread:22718 [sender.py:_save_file():1375] saving file wandb-summary.json with policy end
+2023-08-17 18:58:25,266 DEBUG   HandlerThread:22718 [handler.py:handle_request():144] handle_request: partial_history
+2023-08-17 18:58:25,267 DEBUG   SenderThread:22718 [sender.py:send():379] send: history
+2023-08-17 18:58:25,267 DEBUG   SenderThread:22718 [sender.py:send_request():406] send_request: summary_record
+2023-08-17 18:58:25,267 INFO    SenderThread:22718 [sender.py:_save_file():1375] saving file wandb-summary.json with policy end
+2023-08-17 18:58:25,277 DEBUG   HandlerThread:22718 [handler.py:handle_request():144] handle_request: partial_history
+2023-08-17 18:58:25,277 DEBUG   SenderThread:22718 [sender.py:send():379] send: history
+2023-08-17 18:58:25,277 DEBUG   SenderThread:22718 [sender.py:send_request():406] send_request: summary_record
+2023-08-17 18:58:25,277 INFO    SenderThread:22718 [sender.py:_save_file():1375] saving file wandb-summary.json with policy end
+2023-08-17 18:58:25,288 DEBUG   HandlerThread:22718 [handler.py:handle_request():144] handle_request: partial_history
+2023-08-17 18:58:25,288 DEBUG   SenderThread:22718 [sender.py:send():379] send: history
+2023-08-17 18:58:25,288 DEBUG   SenderThread:22718 [sender.py:send_request():406] send_request: summary_record
+2023-08-17 18:58:25,288 INFO    SenderThread:22718 [sender.py:_save_file():1375] saving file wandb-summary.json with policy end
+2023-08-17 18:58:25,301 DEBUG   HandlerThread:22718 [handler.py:handle_request():144] handle_request: partial_history
+2023-08-17 18:58:25,301 DEBUG   SenderThread:22718 [sender.py:send():379] send: history
+2023-08-17 18:58:25,301 DEBUG   SenderThread:22718 [sender.py:send_request():406] send_request: summary_record
+2023-08-17 18:58:25,302 INFO    SenderThread:22718 [sender.py:_save_file():1375] saving file wandb-summary.json with policy end
+2023-08-17 18:58:25,312 DEBUG   HandlerThread:22718 [handler.py:handle_request():144] handle_request: partial_history
+2023-08-17 18:58:25,312 DEBUG   SenderThread:22718 [sender.py:send():379] send: history
+2023-08-17 18:58:25,312 DEBUG   SenderThread:22718 [sender.py:send_request():406] send_request: summary_record
+2023-08-17 18:58:25,312 INFO    SenderThread:22718 [sender.py:_save_file():1375] saving file wandb-summary.json with policy end
+2023-08-17 18:58:25,323 DEBUG   HandlerThread:22718 [handler.py:handle_request():144] handle_request: partial_history
+2023-08-17 18:58:25,323 DEBUG   SenderThread:22718 [sender.py:send():379] send: history
+2023-08-17 18:58:25,323 DEBUG   SenderThread:22718 [sender.py:send_request():406] send_request: summary_record
+2023-08-17 18:58:25,323 INFO    SenderThread:22718 [sender.py:_save_file():1375] saving file wandb-summary.json with policy end
+2023-08-17 18:58:25,530 INFO    Thread-12 :22718 [dir_watcher.py:_on_file_created():271] file/dir created: /Users/skost/coding-s/ProjectGAN/NN/wandb/run-20230817_185823-dddq9c50/files/requirements.txt
+2023-08-17 18:58:25,531 INFO    Thread-12 :22718 [dir_watcher.py:_on_file_created():271] file/dir created: /Users/skost/coding-s/ProjectGAN/NN/wandb/run-20230817_185823-dddq9c50/files/wandb-summary.json
+2023-08-17 18:58:25,531 INFO    Thread-12 :22718 [dir_watcher.py:_on_file_created():271] file/dir created: /Users/skost/coding-s/ProjectGAN/NN/wandb/run-20230817_185823-dddq9c50/files/output.log
+2023-08-17 18:58:25,531 INFO    Thread-12 :22718 [dir_watcher.py:_on_file_created():271] file/dir created: /Users/skost/coding-s/ProjectGAN/NN/wandb/run-20230817_185823-dddq9c50/files/wandb-metadata.json
+2023-08-17 18:58:25,552 INFO    wandb-upload_0:22718 [upload_job.py:push():131] Uploaded file /var/folders/y7/lcb_p_y900g1ks5pcncpkcvh0000gn/T/tmp9mbtn9iiwandb/mlsgvt6n-wandb-metadata.json
+2023-08-17 18:58:27,537 INFO    Thread-12 :22718 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/skost/coding-s/ProjectGAN/NN/wandb/run-20230817_185823-dddq9c50/files/output.log
+2023-08-17 18:58:29,344 DEBUG   HandlerThread:22718 [handler.py:handle_request():144] handle_request: status_report
+2023-08-17 18:58:34,367 DEBUG   HandlerThread:22718 [handler.py:handle_request():144] handle_request: status_report
+2023-08-17 18:58:39,389 DEBUG   HandlerThread:22718 [handler.py:handle_request():144] handle_request: status_report
+2023-08-17 18:58:39,740 DEBUG   HandlerThread:22718 [handler.py:handle_request():144] handle_request: stop_status
+2023-08-17 18:58:39,741 DEBUG   SenderThread:22718 [sender.py:send_request():406] send_request: stop_status
+2023-08-17 18:58:45,016 DEBUG   HandlerThread:22718 [handler.py:handle_request():144] handle_request: status_report
+2023-08-17 18:58:50,033 DEBUG   HandlerThread:22718 [handler.py:handle_request():144] handle_request: status_report
+2023-08-17 18:58:54,743 DEBUG   HandlerThread:22718 [handler.py:handle_request():144] handle_request: stop_status
+2023-08-17 18:58:54,745 DEBUG   SenderThread:22718 [sender.py:send_request():406] send_request: stop_status
+2023-08-17 18:58:55,970 DEBUG   HandlerThread:22718 [handler.py:handle_request():144] handle_request: status_report
+2023-08-17 18:58:56,684 INFO    Thread-12 :22718 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/skost/coding-s/ProjectGAN/NN/wandb/run-20230817_185823-dddq9c50/files/config.yaml
+2023-08-17 18:59:01,227 DEBUG   HandlerThread:22718 [handler.py:handle_request():144] handle_request: status_report
+2023-08-17 18:59:06,247 DEBUG   HandlerThread:22718 [handler.py:handle_request():144] handle_request: status_report
+2023-08-17 18:59:09,744 DEBUG   HandlerThread:22718 [handler.py:handle_request():144] handle_request: stop_status
+2023-08-17 18:59:09,745 DEBUG   SenderThread:22718 [sender.py:send_request():406] send_request: stop_status
+2023-08-17 18:59:11,944 DEBUG   HandlerThread:22718 [handler.py:handle_request():144] handle_request: status_report
+2023-08-17 18:59:16,966 DEBUG   HandlerThread:22718 [handler.py:handle_request():144] handle_request: status_report
+2023-08-17 18:59:21,987 DEBUG   HandlerThread:22718 [handler.py:handle_request():144] handle_request: status_report
+2023-08-17 18:59:24,690 DEBUG   SystemMonitor:22718 [system_monitor.py:_start():159] Starting system metrics aggregation loop
+2023-08-17 18:59:24,694 DEBUG   SenderThread:22718 [sender.py:send():379] send: telemetry
+2023-08-17 18:59:24,694 DEBUG   SenderThread:22718 [sender.py:send():379] send: stats
+2023-08-17 18:59:24,747 DEBUG   HandlerThread:22718 [handler.py:handle_request():144] handle_request: stop_status
+2023-08-17 18:59:24,747 DEBUG   SenderThread:22718 [sender.py:send_request():406] send_request: stop_status
+2023-08-17 18:59:27,033 DEBUG   HandlerThread:22718 [handler.py:handle_request():144] handle_request: status_report
+2023-08-17 18:59:27,822 INFO    Thread-12 :22718 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/skost/coding-s/ProjectGAN/NN/wandb/run-20230817_185823-dddq9c50/files/config.yaml
+2023-08-17 18:59:32,263 DEBUG   HandlerThread:22718 [handler.py:handle_request():144] handle_request: status_report
+2023-08-17 18:59:34,842 INFO    cpu       :22718 [interfaces.py:monitor():140] Process cpu has exited.
+2023-08-17 18:59:34,842 DEBUG   SystemMonitor:22718 [system_monitor.py:_start():166] Finished system metrics aggregation loop
+2023-08-17 18:59:34,843 DEBUG   SystemMonitor:22718 [system_monitor.py:_start():170] Publishing last batch of metrics
+2023-08-17 18:59:34,843 DEBUG   SenderThread:22718 [sender.py:send():379] send: stats
+2023-08-17 18:59:36,981 INFO    MainThread:22718 [internal.py:handle_exit():76] Internal process exited
