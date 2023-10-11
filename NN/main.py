@@ -1,10 +1,12 @@
-from NN_subfunc import device, NeuralNetwork, send_plot
-import torch
-from torch.utils.data import Dataset, sampler, DataLoader
-from torch import nn
-from tqdm import tqdm
 from matplotlib import pyplot as plt
-# imports functions and classes from other file needed for the NN
+from tqdm import tqdm
+from torch import nn
+from torch.utils.data import Dataset, sampler, DataLoader
+import torch
+from NN import NeuralNetwork
+from subfunc import device
+from plot import Plot_Data
+Plot_Data = Plot_Data()
 
 
 class Main:
@@ -14,7 +16,6 @@ class Main:
         self.hyperparameters = hyperparameters
         self.input_shape = Dataset[0][0].shape[0]
         self.output_shape = Dataset[0][1].shape[0]
-        # in future the hole shape of the NN will be passed to the funciton
         self.model = NeuralNetwork(
             self.input_shape, self.output_shape).to(self.device)
         self.Dataset = Dataset
@@ -31,12 +32,11 @@ class Main:
 
         for epoch in tqdm(range(hyperparameters.epochs)):
             self.model.iter(training_dataloader, self.model, self.loss_fn,
-                  optimizer, epoch, hyperparameters.show_information_rate)
-            if epoch % hyperparameters.show_information_rate == 0:
-                send_plot(epoch,self.model.loss)
+                            optimizer, epoch, hyperparameters.show_information_rate)
+
+            # saves the epoch and the loss in a key value pair and seds it every nth epoch to the client/plot api
+            Plot_Data.plot(epoch, self.model.loss)
+            if epoch+1 % hyperparameters.show_information_rate == 0:
                 print(f"Epoch {epoch}\n-------------------------------")
 
-
-
         print("Done!")
-        plt.show()

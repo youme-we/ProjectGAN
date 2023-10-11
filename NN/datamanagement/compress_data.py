@@ -51,8 +51,8 @@ class Load_data():
 
 
     def generate_input(self):
-        r1 = -1
-        r2 = 1
+        r1 = -10
+        r2 = 10
         return ((r1 - r2) * torch.rand(self.maxNumber_of_images, self.input_shape, dtype=dtype) + r2)
 
     

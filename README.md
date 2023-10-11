@@ -1,4 +1,4 @@
-![alt text](https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.yankodesign.com%2F2023%2F02%2F20%2Ffrom-zaha-hadid-to-frank-llyod-ai-generated-these-eye-popping-cars-in-the-design-style-of-famous-architects%2F&psig=AOvVaw3lpuIRe0BCX1SoIJMZZKBw&ust=1692714109306000&source=images&cd=vfe&opi=89978449&ved=0CBAQjRxqFwoTCKCVu8v57YADFQAAAAAdAAAAABAU)
+![alt text](https://www.yankodesign.com/images/design_news/2023/02/ai-generates-eye-popping-car-designs-in-the-style-of-famous-architects/Moss-and-Fog-Renzo-Piano.jpg)
 
 # ProjectGAN
 

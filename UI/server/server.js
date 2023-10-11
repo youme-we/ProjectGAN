@@ -11,7 +11,7 @@ const bcrypt = require('bcrypt');
 const client = new MongoClient(uri);
 const path = require('path');
 const { connect } = require('http2');
-const  path_build =  "/Users/skost/coding-s/ProjectGAN/UI/client/build"
+const path_build =  "/Users/skost/coding-s/ProjectGAN/UI/client/build"
 
 
 app.use(sessions({
@@ -49,12 +49,12 @@ async function createProject(ID, req){
   const Projects = await connectDB();
   const user_obj = {
       ID,
-      sessionID: req.sessionID
+      sessionID: req.sessionID//this is done so that the server saves the sessionID in the datbase
     }
 
 
-  Projects.insertOne(user_obj);
-  req.session.authenticated = true;
+  Projects.insertOne(user_obj);//saves created Project to the DB
+  req.session.authenticated = true;//this is done so that the browser saves the sessionID 
 }
 
 
@@ -75,7 +75,7 @@ app.post("/create",async (req,res) => {
   const ID = data.ID
 
   try{
-      await createProject(ID, req)
+      await createProject(ID, req)//saves created Project in the DB and the linked sessionID which gets also stored in the Browser
       res.send(true)
       console.log('creating Project worked')
     }
@@ -120,6 +120,7 @@ app.get(['/create', '/login'], async (req,res) => {
 app.get("/project",async (req,res) => {
   try{
     const sessionID = req.sessionID
+    console.log(sessionID)
     const Projects = await connectDB();
     const Project = await Projects.findOne({sessionID})
     if(Project == null){
@@ -128,7 +129,7 @@ app.get("/project",async (req,res) => {
     }
     else{
         res.sendFile(path.join(path_build, "index.html"))
-        console.log("user is authenticated"+user)
+        console.log("user is authenticated"+Project)
     }
   }
   catch{
@@ -136,6 +137,13 @@ app.get("/project",async (req,res) => {
   }
 })
 
+app.post("/plot", async (req,res) => {
+  plot = req.body
+  res.end()//need to send response to finish request process in python
+})
+app.get("/plot", async(req,res) => {
+  res.send(plot)
+})
 
 app.listen(PORT, ()=> {console.log("server is listening on Port:"+PORT)});
 
