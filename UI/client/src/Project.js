@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react'
-import {useNavigate} from "react-router-dom"
+import React, { useEffect, useState } from 'react'
+import { useNavigate } from "react-router-dom"
 import * as echarts from 'echarts';
 
 
@@ -9,7 +9,7 @@ function Project() {
   const [UsrInputValue, setUsrInputValue] = useState("")
   const [PassInputValue, setPassInputValue] = useState("")
   const navigate = useNavigate();
-  
+
   // Create the echarts instance
   var myChart = echarts.init(document.getElementById('main'));
 
@@ -32,25 +32,27 @@ function Project() {
     ]
   });
 
-  const Send = () =>{
+  const Send = () => {
     fetch('http://localhost:3001/project', {
-      method:"POST",
-      headers: { 'Content-Type': 'application/json'},
-      body: JSON.stringify({ usr:UsrInputValue,pass:PassInputValue })
+      method: "POST",
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ usr: UsrInputValue, pass: PassInputValue })
     })
       .then(response => response.json())
-      .then(res => {if(res){
-        navigate('/auth')
-      }})
-       }
+      .then(res => {
+        if (res) {
+          navigate('/auth')
+        }
+      })
+  }
 
 
 
   return (
     <div className="Project">
       <h1>Project</h1>
-     
-    </div>  
+      <div className='main'></div>
+    </div>
   );
 }
 
