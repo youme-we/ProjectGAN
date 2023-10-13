@@ -80,7 +80,8 @@ while True:  # runs as long as you do not interrup
 
     print("save the script to rerun, CTRL-C to exit")
     print("  ")
-    print("#######################################")
+    print(Fore.GREEN+"#######################################")
+    print(Style.RESET_ALL)
     print("  ")
     print("  ")
 

@@ -25,7 +25,8 @@ class Plot_Data():
     def plot(self, epoch, loss):
         self.epochs.append(epoch)
         self.losses.append(loss.item())
-        if epoch % 100 == 0:
-            sio.emit('/message_c', {'epoch': self.epochs,
-                                    'loss': self.losses,
-                                    })
+        if epoch % 10 == 0:
+            sio.emit('/send_s', {'epoch': self.epochs,
+                                 'loss': self.losses,
+                                 })
+            
