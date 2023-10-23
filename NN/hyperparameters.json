@@ -1,7 +1,7 @@
 {
-  "N_samples":600,
+  "N_samples":16,
   "batch_size":8,
-  "learning_rate":100,
-  "epochs":1000,
+  "learning_rate":0.1,
+  "epochs":2000,
   "show_information_rate":100
 }

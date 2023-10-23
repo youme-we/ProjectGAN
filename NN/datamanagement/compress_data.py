@@ -46,7 +46,10 @@ class Load_data():
         self.maxNumber_of_images = a
         train_images_unedited = torch.reshape(
             all_images, (a, shape_1, shape_2))
+        
+        torch.set_printoptions(profile="full")
         train_images = normalization(train_images_unedited)
+        print(train_images[0])
         return train_images
 
 
@@ -57,7 +60,7 @@ class Load_data():
 
     
 Load_data = Load_data("/Users/skost/coding-s/Data/Images/cars",
-                 128, 128, 150)
+                 128, 512, 550)
 data = Load_data.data()
 torch.save(data, "/Users/skost/coding-s/ProjectGAN/NN/data/data.pt")
 print("your data was succesfully compressed")

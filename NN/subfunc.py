@@ -1,5 +1,6 @@
 import torch
 
+
 def device():
     device = (
         "cuda"

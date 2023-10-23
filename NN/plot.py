@@ -1,8 +1,9 @@
+from sys import exc_info
 from matplotlib import pyplot as plt
 import asyncio
 import socketio
 sio = socketio.Client()
-sio.connect('http://localhost:3000')
+
 
 
 def plot_example_data():
@@ -21,6 +22,10 @@ class Plot_Data():
     def __init__(self):
         self.epochs = []
         self.losses = []
+        try:
+            sio.connect('http://localhost:3000')
+        except:
+            pass
 
     def plot(self, epoch, loss):
         self.epochs.append(epoch)

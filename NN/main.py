@@ -3,6 +3,7 @@ from tqdm import tqdm
 from torch import nn
 from torch.utils.data import Dataset, sampler, DataLoader
 import torch
+import numpy 
 from NN import NeuralNetwork
 from subfunc import device
 from plot import Plot_Data
@@ -16,6 +17,8 @@ class Main:
         self.hyperparameters = hyperparameters
         self.input_shape = Dataset[0][0].shape[0]
         self.output_shape = Dataset[0][1].shape[0]
+        #torch.set_printoptions(profile="full")
+        #print(Dataset[0][1])
         self.model = NeuralNetwork(
             self.input_shape, self.output_shape).to(self.device)
         self.Dataset = Dataset
@@ -40,3 +43,13 @@ class Main:
                 print(f"Epoch {epoch}\n-------------------------------")
 
         print("Done!")
+        self.model.eval()
+        x,y = self.Dataset[0]
+        x = x[None, :]
+        print(x.shape)
+        pred = self.model(x)
+        pred = torch.reshape(pred, (64,64))
+        pred = pred.to(self.cpu_d)
+        pred = pred.detach().numpy()
+        plt.imshow(pred)
+        plt.show()

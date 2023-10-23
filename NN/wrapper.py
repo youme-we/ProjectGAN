@@ -11,10 +11,14 @@ from watchdog.observers import Observer
 from importlib import reload
 from importlib.machinery import SourceFileLoader
 from subfunc import device
+i = 0
 try:
     import main
+    i = 1
 except:
     pass
+
+    
 
 
 def print_error(e):
@@ -63,19 +67,25 @@ Observer.start()
 Dataset = Dataloader.load_Dataset()
 ###########################
 
-i = 0
+
 while True:  # runs as long as you do not interrup
     try:
-        # vars which should be reloaded after every run
-        hyperparameters = Dataloader.load_hyperparmeters()
-        ##########################
+        try:
+            # vars which should be reloaded after every run
+            hyperparameters = Dataloader.load_hyperparmeters()
+            ##########################
 
-        # imports and runs the Main class --> NN function
-        from main import Main
-        Main = Main(Dataset, hyperparameters)
-        Main.NN()
+            # imports and runs the Main class --> NN function
+            from main import Main
+            Main = Main(Dataset, hyperparameters)
+            Main.NN()
+            print("test")
+
+        except KeyboardInterrupt:
+            pass
 
     except Exception as e:
+        print("error at running NN()")
         print_error(e)
 
     print("save the script to rerun, CTRL-C to exit")
@@ -89,26 +99,36 @@ while True:  # runs as long as you do not interrup
         Watcher.reset()
         while True:  # runs as long as the Observer observes a change in the defined directory
             mutated = Watcher.mutated
-            if (mutated):
+            if mutated:
                 break
 
         while True:  # runs as long as the File itself gets updated
             tracked_path = Watcher.tracked_path
             root, ext = os.path.splitext(tracked_path)
             if ext:
+
                 break
         try:
-            if ext == ".py":
+            if ext == ".py" and root != "/Users/skost/coding-s/ProjectGAN/NN/main":
                 Filename = os.path.basename(os.path.normpath(root))
                 sub = SourceFileLoader(Filename, tracked_path).load_module()
-                reload(sub)  # reloads sub_module which was modified
-            if i == 0:
-                import main
-                i=i+1
-            else:
-                reload(main)  # reloads main_module
-            break
+                reload(sub)  # reloads sub_module which was Modified
+                if i == 0:
+                    import main
 
-        except Exception as e:
+                else:
+                    reload(main)  # reloads main_module
+                i = 1
+                break
+            elif ext == ".py": 
+                if i == 0:
+                    import main
+
+                else:
+                    reload(main)  # reloads main_module
+                i = 1
+                break
+
+        except Exception as e:  
+            print("error at reloading modules")
             print_error(e)
-

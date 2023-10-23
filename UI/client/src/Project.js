@@ -1,57 +1,32 @@
-import React, { useEffect, useState } from 'react'
-import { useNavigate } from "react-router-dom"
-import * as echarts from 'echarts';
-
-
+import React, { useEffect, useState } from "react";
+import { socket } from './socket';
+import ReactEcharts from "echarts-for-react";
 
 function Project() {
-  const [backendData, setBackendData] = useState([{}])
-  const [UsrInputValue, setUsrInputValue] = useState("")
-  const [PassInputValue, setPassInputValue] = useState("")
-  const navigate = useNavigate();
-
-  // Create the echarts instance
-  var myChart = echarts.init(document.getElementById('main'));
-
+  const [data, setdata] = useState([])
+  socket.on('/send_c', (data) => {
+    setdata(data)
+  });
   // Draw the chart
-  myChart.setOption({
-    title: {
-      text: 'ECharts Getting Started Example'
-    },
-    tooltip: {},
+  const option = {
     xAxis: {
-      data: ['shirt', 'cardigan', 'chiffon', 'pants', 'heels', 'socks']
+      type: "category",
+      data: data.epoch,
     },
-    yAxis: {},
+    yAxis: {
+      type: "value",
+    },
     series: [
       {
-        name: 'sales',
-        type: 'bar',
-        data: [5, 20, 36, 10, 10, 20]
-      }
-    ]
-  });
-
-  const Send = () => {
-    fetch('http://localhost:3001/project', {
-      method: "POST",
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ usr: UsrInputValue, pass: PassInputValue })
-    })
-      .then(response => response.json())
-      .then(res => {
-        if (res) {
-          navigate('/auth')
-        }
-      })
-  }
-
-
-
+        data: data.loss,
+        type: "line",
+        smooth: true,
+      },
+    ],
+  };
   return (
     <div className="Project">
-      <h1>Project</h1>
-      <div className='main'></div>
+      <ReactEcharts option={option} />;
     </div>
   );
 }
