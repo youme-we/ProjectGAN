@@ -16,7 +16,7 @@ class Main:
         self.cpu_d = "cpu"
         self.hyperparameters = hyperparameters
         self.input_shape = Dataset[0][0].shape[0]
-        self.output_shape = Dataset[0][1].shape[0]
+        self.output_shape = torch.flatten(Dataset[0][1]).shape[0]
         #torch.set_printoptions(profile="full")
         #print(Dataset[0][1])
         self.model = NeuralNetwork(
@@ -38,18 +38,27 @@ class Main:
                             optimizer, epoch, hyperparameters.show_information_rate)
 
             # saves the epoch and the loss in a key value pair and seds it every nth epoch to the client/plot api
-            Plot_Data.plot(epoch, self.model.loss)
+            Plot_Data.plot(epoch, self.model, self.Dataset)
+
             if epoch+1 % hyperparameters.show_information_rate == 0:
                 print(f"Epoch {epoch}\n-------------------------------")
 
         print("Done!")
         self.model.eval()
         x,y = self.Dataset[0]
-        x = x[None, :]
-        print(x.shape)
         pred = self.model(x)
-        pred = torch.reshape(pred, (64,64))
-        pred = pred.to(self.cpu_d)
-        pred = pred.detach().numpy()
+        pred = torch.reshape(pred*73.6184+115.2330, (128,158,3))
+        print(pred[0])
+        pred = pred.to(self.cpu_d).int()
         plt.imshow(pred)
         plt.show()
+        
+        x,y = self.Dataset[600]
+        pred = self.model(x)
+        pred = torch.reshape(pred*73.6184+115.2330, (128,158,3))
+        print(pred[0])
+        pred = pred.to(self.cpu_d).int()
+        plt.imshow(pred)
+        plt.show()
+
+

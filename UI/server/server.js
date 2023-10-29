@@ -25,7 +25,6 @@ const path_build = "/Users/skost/coding-s/ProjectGAN/UI/client/build";
 io.on("connection", (socket) => {
   //receive a message from the client
   socket.on("/send_s", (data) => {
-    console.log(data);
     // send data to the client
     socket.broadcast.emit("/send_c", data);
   });
@@ -67,7 +66,6 @@ async function open_socket() {
   await io.on("connection", (socket) => {
     //receive a message from the client
     socket.on("/send_s", (data) => {
-      console.log(data);
       // send data to the client
       socket.broadcast.emit("/send_c", data);
     });
