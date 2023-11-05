@@ -3,6 +3,5 @@ import torch
 def normalization(data):
             mean = torch.mean(data)
             var = torch.std(data)
-            print(mean,var)
-            print(data)
-            return(data - mean)/var
+            normalied_data = (data - mean)/var
+            return normalied_data, mean, var

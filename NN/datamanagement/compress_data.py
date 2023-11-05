@@ -1,13 +1,16 @@
 import torch
+import sys
 import os
 from PIL import Image
-from torch.functional import Tensor
 from prepare_data import normalization
-from torch.utils.data import DataLoader, TensorDataset
+from torch.utils.data import TensorDataset
+sys.path.insert(0, '/Users/skost/coding-s/ProjectGAN/NN/')
+from subfunc import load_json  # beacuse of formater this line often moves to the top
+data_p = load_json('/Users/skost/coding-s/ProjectGAN/NN/parameters.json').data
 dtype = torch.float
 
 
-class Load_data():
+class Load_Dataset():
 
     def __init__(self, folder_dir, input_shape, shape_1, shape_2):
         self.folder_dir = folder_dir
@@ -15,18 +18,22 @@ class Load_data():
         self.shape_1 = shape_1
         self.shape_2 = shape_2
 
-    def data(self):
-        train_images = self.Load_images_from_file_system()
-        #train_images = torch.flatten(train_images, start_dim=1)
+    def torch_Dataset(self):
+        train_output, mean, var = self.load_img_fs()  # load images from filesystem
         train_input = self.generate_input()
 
         # puts the lables to the corresoponding image. So that when you print the [0] obj you get [[image],[label]]
-        data = TensorDataset(train_input, train_images)
-        return data
+        train_data = TensorDataset(train_input, train_output)
+        train_data.mean = mean
+        train_data.var = var
+        print("mean:", train_data.mean, "var:", train_data.var)
+        return train_data
 
-    def Load_images_from_file_system(self):
+    def save(self, Dataset):
+        torch.save(Dataset, "/Users/skost/coding-s/ProjectGAN/NN/data/data.pt")
+
+    def load_img_fs(self):
         folder_dir = self.folder_dir
-        input_shape = self.input_shape
         shape_1 = self.shape_1
         shape_2 = self.shape_2
         a = 0
@@ -34,22 +41,20 @@ class Load_data():
 
         for images in os.listdir(folder_dir):
             if (images.endswith(".jpg")):
-                a = a+1
+                a += 1
                 img = Image.open(folder_dir+"/"+images)
-                img = img.resize((shape_1, shape_2))
+                img = img.resize((shape_2, shape_1))  # you need two bracket's
                 img = img.convert('RGB')
                 img = img.getdata()
                 img = torch.tensor(img)
-                img = torch.reshape(img, (shape_1, shape_2,3))
+                img = torch.reshape(img, (shape_1, shape_2, 3))
                 all_images = torch.cat((all_images, img), dim=0)
         self.maxNumber_of_images = a
         train_images_unedited = torch.reshape(
-            all_images, (a, shape_1, shape_2,3))
+            all_images, (a, shape_1, shape_2, 3))
 
-        #torch.set_printoptions(profile="full")
-        train_images = normalization(train_images_unedited)
-        #print(train_images)
-        return train_images
+        train_images, mean, var = normalization(train_images_unedited)
+        return train_images, mean, var
 
     def generate_input(self):
         r1 = -1
@@ -57,8 +62,8 @@ class Load_data():
         return ((r1 - r2) * torch.rand(self.maxNumber_of_images, self.input_shape, dtype=dtype) + r2)
 
 
-Load_data = Load_data("/Users/skost/coding-s/Data/Images/cars",
-                      128, 158, 128)
-data = Load_data.data()
-torch.save(data, "/Users/skost/coding-s/ProjectGAN/NN/data/data.pt")
+main_Dataset_i = Load_Dataset(
+    data_p.folder_dir, data_p.input_shape, data_p.shape_1, data_p.shape_2)
+main_Dataset = main_Dataset_i.torch_Dataset()  # make data to torch Dataset
+main_Dataset_i.save(main_Dataset)  # save data as .pt file
 print("your data was succesfully compressed")

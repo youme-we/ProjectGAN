@@ -1,24 +1,20 @@
 import torch
 import os
 import time
-import json
 import sys
 import traceback
 from colorama import Fore, Back, Style
-from types import SimpleNamespace
 from watchdog.events import FileSystemEventHandler, LoggingEventHandler
 from watchdog.observers import Observer
 from importlib import reload
 from importlib.machinery import SourceFileLoader
-from subfunc import device
+from subfunc import device, load_json
 i = 0
 try:
     import main
     i = 1
 except:
     pass
-
-    
 
 
 def print_error(e):
@@ -34,15 +30,7 @@ class Dataloader:
     def load_Dataset(self):
         return torch.load('data/data.pt', map_location=torch.device(self.device))
 
-    def load_hyperparmeters(self):
-        with open("hyperparameters.json", "r") as hyperparameters_file:
-            hyperparameters = json.load(
-                hyperparameters_file, object_hook=lambda d: SimpleNamespace(**d))
-            return hyperparameters
-
-    def load_parameters(self):
-        pass
-
+    
 
 Dataloader = Dataloader()
 
@@ -72,12 +60,12 @@ while True:  # runs as long as you do not interrup
     try:
         try:
             # vars which should be reloaded after every run
-            hyperparameters = Dataloader.load_hyperparmeters()
+            parameters = load_json("parameters.json")
             ##########################
 
             # imports and runs the Main class --> NN function
             from main import Main
-            Main = Main(Dataset, hyperparameters)
+            Main = Main(Dataset, parameters)
             Main.NN()
             print("test")
 
@@ -120,7 +108,7 @@ while True:  # runs as long as you do not interrup
                     reload(main)  # reloads main_module
                 i = 1
                 break
-            elif ext == ".py": 
+            elif ext == ".py":
                 if i == 0:
                     import main
 
@@ -129,6 +117,6 @@ while True:  # runs as long as you do not interrup
                 i = 1
                 break
 
-        except Exception as e:  
+        except Exception as e:
             print("error at reloading modules")
             print_error(e)
