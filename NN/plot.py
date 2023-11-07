@@ -31,29 +31,27 @@ class Plot_Data():
         try:
             sio.connect('http://localhost:3000')
         except:
-            pass
+            print("didn't connect to the server => doesn't send plot")
 
-    def plot(self, epoch, model, Dataset ,parameters):
+    def plot(self, epoch, model, Dataset, parameters):
         self.model = model
         self.Dataset = Dataset
         self.parameters = parameters
         self.epochs.append(epoch)
         self.losses.append(model.loss.item())
-        if epoch % 1 == 0:
+        if epoch % self.parameters.plot.show_information_rate == 0:
             generated_data = self.pack_generated_data()
             sio.emit('/send_s', {'epoch': self.epochs,
                                  'loss': self.losses,
-                                 'generated_data':generated_data[1],
-                                 'imitated_data':generated_data[0]
+                                 'generated_data': generated_data[1],
+                                 'imitated_data': generated_data[0]
                                  })
 
-  
     def pack_generated_data(self):
         self.model.eval()
-        transform = transforms.ToPILImage()
 
         train = self.Dataset[0:10][0]
-        test = self.Dataset[820:830][0]
+        test = self.Dataset[-10:][0]
 
         pred_tr = self.model(train)
         pred_tr_0 = self.prepare_data(pred_tr[0])
@@ -63,7 +61,7 @@ class Plot_Data():
         pred_te_0 = self.prepare_data(pred_te[0])
         pred_te_b64 = self.to_base64(pred_te_0)
 
-        return [[pred_tr_b64], [pred_te_b64]]
+        return [pred_tr_b64, pred_te_b64]
 
     def prepare_data(self, data):
         shape_1 = self.parameters.data.shape_1
@@ -74,6 +72,7 @@ class Plot_Data():
         data = torch.div(data, 255)
         data[data > 1] = 1
         data[data < 0] = 0
+
         data = torch.reshape(data, (shape_1, shape_2, 3))
         data = data.to('cpu').detach().numpy()
 
@@ -86,4 +85,3 @@ class Plot_Data():
         data = base64.b64encode(data).decode()
 
         return data
-

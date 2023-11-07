@@ -23,7 +23,7 @@ class NeuralNetwork(nn.Module):
         logits = self.linear_relu_stack(x)
         return logits
 
-    def iter(self, dataloader, model, loss_fn, optimizer, epoch, show_information_rate):
+    def iter(self, dataloader, model, loss_fn, optimizer, epoch):
         model.train()  # prepers the model for training. sets all states like drop out... but doesn't train
         for batch, (X, y) in enumerate(dataloader):
             X, y = X.to(device()), y.to(device())
