@@ -12,30 +12,31 @@ class NeuralNetwork(nn.Module):
         self.linear_relu_stack = nn.Sequential(
             nn.Linear(input_shape, 1024),
             nn.Tanh(),
-            nn.Linear(1024,1024),
+            nn.Linear(1024, 1024),
             nn.Tanh(),
             nn.Linear(1024, output_shape),
             nn.LeakyReLU(0.9)
         )
 
     def forward(self, x):
-        #x = self.flatten(x)
         logits = self.linear_relu_stack(x)
         return logits
 
-    def iter(self, dataloader, model, loss_fn, optimizer, epoch):
+    def iter(self, dataloader, model, loss_fn, optimizer):
         model.train()  # prepers the model for training. sets all states like drop out... but doesn't train
         for batch, (X, y) in enumerate(dataloader):
             X, y = X.to(device()), y.to(device())
             y = self.flatten(y)
+
             # Compute prediction error
             pred = model(X)
             loss = loss_fn(pred, y)
-            self.lable = y
-            self.pred = pred
-            self.loss = loss
 
             # Backpropagation
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
+
+            self.lable = y
+            self.pred = pred
+            self.loss = loss

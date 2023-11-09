@@ -2,16 +2,22 @@ const express = require("express");
 const app = express();
 const PORT = 3001;
 const cors = require("cors");
-var genuuid = require("uuid");
-const fs = require("fs");
 const sessions = require("express-session");
 const cookieParser = require("cookie-parser");
+const bcrypt = require("bcrypt");
+const path = require("path");
+const http = require("http");
+
+const path_build = "/Users/skost/coding-s/ProjectGAN/UI/client/build";
+
 var MongoClient = require("mongodb").MongoClient;
 const uri = "mongodb://localhost:27017/";
-const bcrypt = require("bcrypt");
 const client = new MongoClient(uri);
-const http = require("http");
+
 const server = http.createServer(app);
+server.listen(PORT, () => {
+  console.log("listening on *:3000");
+});
 const { Server } = require("socket.io");
 const io = new Server(server, {
   cors: {
@@ -19,9 +25,6 @@ const io = new Server(server, {
     methods: ["GET", "POST"],
   },
 });
-const path = require("path");
-const { connect } = require("http2");
-const path_build = "/Users/skost/coding-s/ProjectGAN/UI/client/build";
 
 io.on("connection", (socket) => {
   //receive a message from the client
@@ -32,7 +35,6 @@ io.on("connection", (socket) => {
 });
 
 /////////////functions
-
 async function connectDB() {
   await client.connect();
   const database = client.db("ProjectGAN");
@@ -62,17 +64,6 @@ async function compareDB(ID, req, res) {
   res.send(true);
   console.log("login worked");
 }
-
-async function open_socket() {
-  await io.on("connection", (socket) => {
-    //receive a message from the client
-    socket.on("/send_s", (data) => {
-      // send data to the client
-      socket.broadcast.emit("/send_c", data);
-    });
-  });
-}
-
 ///////////////////////
 
 ///////////////////////app.use
@@ -121,12 +112,11 @@ app.post("/create", async (req, res) => {
 });
 
 app.post("/login", async (req, res) => {
-  const data = req.body;
+  let data = req.body;
   const ID = data.ID;
 
   try {
     await compareDB(ID, req, res);
-    await open_socket();
   } catch (error) {
     res.send(false);
     console.log("login failed:Project_ID was wrong");
@@ -138,7 +128,6 @@ app.post("/login", async (req, res) => {
 app.get("/project", async (req, res) => {
   try {
     const sessionID = req.sessionID;
-    console.log(sessionID);
     const Projects = await connectDB();
     const Project = await Projects.findOne({ sessionID });
     if (Project == null) {
@@ -146,7 +135,6 @@ app.get("/project", async (req, res) => {
       console.log("Project_ID has to be entered");
     } else {
       res.sendFile(path.join(path_build, "index.html"));
-      await open_socket();
       console.log("user is authenticated" + Project);
     }
   } catch {
@@ -154,18 +142,4 @@ app.get("/project", async (req, res) => {
   }
 });
 
-app.post("/plot", async (req, res) => {
-  plot = req.body;
-  res.end(); //need to send response to finish request process in python
-});
-app.get("/plot", async (req, res) => {
-  res.send(plot);
-});
 
-app.listen(PORT, () => {
-  console.log("server is listening on Port:" + PORT);
-});
-
-server.listen(3000, () => {
-  console.log("listening on *:3000");
-});

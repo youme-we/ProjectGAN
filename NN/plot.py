@@ -29,7 +29,7 @@ class Plot_Data():
         self.epochs = []
         self.losses = []
         try:
-            sio.connect('http://localhost:3000')
+            sio.connect('http://localhost:3001')
         except:
             print("didn't connect to the server => doesn't send plot")
 

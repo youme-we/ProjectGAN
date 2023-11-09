@@ -1,13 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { socket } from "./socket";
 import ReactEcharts from "echarts-for-react";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import PlayDisabledIcon from "@mui/icons-material/PlayDisabled";
+import PauseIcon from "@mui/icons-material/Pause";
 
 function Project() {
   const [data, setdata] = useState([]);
-  var imgChunks = [];
   socket.on("/send_c", (data) => {
     setdata(data);
   });
+
+  const play_stop = (play, save) => {
+    console.log(play, save);
+  };
 
   console.log(data);
   // Draw the chart
@@ -27,15 +33,26 @@ function Project() {
       },
     ],
   };
+
+  const ButtonStyle = {
+    width: "30px",
+    height: "auto",
+    color: "black",
+  };
   return (
     <div className="Project">
+      <div style={{ border: "2px solid", borderRadius: "5px", width: "100px" }}>
+        <PlayArrowIcon onClick={() => play_stop(true, false)} style={ButtonStyle} />
+        <PauseIcon onClick={() => play_stop(false, false)} style={ButtonStyle} />
+        <PlayDisabledIcon onClick={() => play_stop(false,true)} style={ButtonStyle} />
+      </div>
       <ReactEcharts option={option} />
       <img
-        style={{ width: "400px", height:'auto' }}
+        style={{ width: "400px", height: "auto" }}
         src={`data:image/png;base64,${data.generated_data}`}
       />
       <img
-        style={{ width: "400px", height:'auto' }}
+        style={{ width: "400px", height: "auto" }}
         src={`data:image/png;base64,${data.imitated_data}`}
       />
     </div>
