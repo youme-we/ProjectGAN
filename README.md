@@ -2,7 +2,7 @@
 
 # ProjectGAN
 
-ProjectGAN consists of a GAN which can be managed and analysed by an embodied UI. A GAN is a NeuroanlNetwork specificaly developed to create Data. In this case it is creating Images from random noise. 
+ProjectGAN consists of a GAN which can be managed and analysed by an embodied UI. A GAN is a NeuroanlNetwork specificaly developed to create Data. In this case it is creating Images from random noise(random input vector). 
 
 
 
