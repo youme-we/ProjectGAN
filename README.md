@@ -16,5 +16,16 @@ ProjectGAN consists of a GAN which can be managed and analysed by an embodied UI
 #### To run the GAN with its correspoinding UI run the following command:
 
 ```bash
-  make UI... 
+  make plot 
 ```
+
+#### Change parameters of the NN
+
+##### go into the parameters.json file 
+##### here you can for example change the origin of your dataset
+##### To compress and make use of your data with the stated orignin, run following command
+
+```bash
+  make compress
+```
+
