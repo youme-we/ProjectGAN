@@ -58,7 +58,7 @@ Dataset = Dataloader.load_Dataset()
 
 while True:  # runs as long as you do not interrup
     try:
-        loop = asyncio.get_event_loop()
+        loop = asyncio.new_event_loop()
         try:
             # vars which should be reloaded after every run
             parameters = load_json("parameters.json")
@@ -67,6 +67,7 @@ while True:  # runs as long as you do not interrup
             # imports and runs the Main class --> NN function
             from main import Main
             Main = Main(Dataset, parameters)
+            asyncio.set_event_loop(loop)
             asyncio.ensure_future(Main.NN())
             loop.run_forever()
 
@@ -74,8 +75,7 @@ while True:  # runs as long as you do not interrup
             pass
 
         finally:
-            loop.close()
-
+            loop.close() 
     except Exception as e:
         print("error at running NN()")
         print_error(e)
