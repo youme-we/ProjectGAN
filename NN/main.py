@@ -52,5 +52,5 @@ class Main:
             # saves the epoch and the loss in a key value pair and seds it every nth epoch to the server/plot api over Socket.IO
             await Plot_Data.plot(epoch, self.model, self.Dataset, self.parameters, SOCKET_CONNECTION)
             await asyncio.sleep(0.01)
-            if Operating.play == False:
-                break
+            while Operating.play == False:
+               await asyncio.sleep(0.01) 
