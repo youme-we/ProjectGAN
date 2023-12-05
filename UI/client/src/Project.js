@@ -13,6 +13,10 @@ function Project() {
 
   const play_stop = (play, save) => {
     console.log(play, save);
+    socket.emit("/play_pause_save_s", {
+      play: play,
+      save: save,
+    });
   };
 
   console.log(data);
@@ -42,9 +46,18 @@ function Project() {
   return (
     <div className="Project">
       <div style={{ border: "2px solid", borderRadius: "5px", width: "100px" }}>
-        <PlayArrowIcon onClick={() => play_stop(true, false)} style={ButtonStyle} />
-        <PauseIcon onClick={() => play_stop(false, false)} style={ButtonStyle} />
-        <PlayDisabledIcon onClick={() => play_stop(false,true)} style={ButtonStyle} />
+        <PlayArrowIcon
+          onClick={() => play_stop(true, false)}
+          style={ButtonStyle}
+        />
+        <PauseIcon
+          onClick={() => play_stop(false, false)}
+          style={ButtonStyle}
+        />
+        <PlayDisabledIcon
+          onClick={() => play_stop(false, true)}
+          style={ButtonStyle}
+        />
       </div>
       <ReactEcharts option={option} />
       <img

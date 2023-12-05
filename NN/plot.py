@@ -6,10 +6,10 @@ from torchvision.utils import save_image
 from PIL import Image
 from torchvision import transforms
 import base64
+import os
 from io import BytesIO
 import asyncio
-import socketio
-sio = socketio.Client()
+
 
 
 def plot_example_data():
@@ -28,20 +28,16 @@ class Plot_Data():
     def __init__(self):
         self.epochs = []
         self.losses = []
-        try:
-            sio.connect('http://localhost:3001')
-        except:
-            print("didn't connect to the server => doesn't send plot")
 
-    def plot(self, epoch, model, Dataset, parameters):
-        self.model = model
-        self.Dataset = Dataset
-        self.parameters = parameters
-        self.epochs.append(epoch)
-        self.losses.append(model.loss.item())
-        if epoch % self.parameters.plot.show_information_rate == 0:
-            generated_data = self.pack_generated_data()
-            sio.emit('/send_s', {'epoch': self.epochs,
+    async def plot(self, epoch, model, Dataset, parameters, SOCKET_CONNECTION):
+       self.model = model
+       self.Dataset = Dataset
+       self.parameters = parameters
+       self.epochs.append(epoch)
+       self.losses.append(model.loss.item())
+       if epoch % self.parameters.plot.show_information_rate == 0:
+           generated_data = self.pack_generated_data()
+           await SOCKET_CONNECTION.emit('/send_s', {'epoch': self.epochs,
                                  'loss': self.losses,
                                  'generated_data': generated_data[1],
                                  'imitated_data': generated_data[0]

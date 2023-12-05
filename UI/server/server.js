@@ -32,6 +32,11 @@ io.on("connection", (socket) => {
     // send data to the client
     socket.broadcast.emit("/send_c", data);
   });
+
+  socket.on("/play_pause_save_s", (data) => {
+    socket.broadcast.emit("/play_pause_save_py", data)
+    console.log(data)
+  })
 });
 
 /////////////functions
@@ -142,4 +147,9 @@ app.get("/project", async (req, res) => {
   }
 });
 
+
+
+app.get("/play_pause_save", async (req, res) => {
+    res.json({"play": true})
+})
 

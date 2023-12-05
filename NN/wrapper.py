@@ -3,6 +3,7 @@ import os
 import time
 import sys
 import traceback
+import asyncio
 from colorama import Fore, Back, Style
 from watchdog.events import FileSystemEventHandler, LoggingEventHandler
 from watchdog.observers import Observer
@@ -30,7 +31,6 @@ class Dataloader:
     def load_Dataset(self):
         return torch.load('data/data.pt', map_location=torch.device(self.device))
 
-    
 
 Dataloader = Dataloader()
 
@@ -58,6 +58,7 @@ Dataset = Dataloader.load_Dataset()
 
 while True:  # runs as long as you do not interrup
     try:
+        loop = asyncio.get_event_loop()
         try:
             # vars which should be reloaded after every run
             parameters = load_json("parameters.json")
@@ -66,11 +67,14 @@ while True:  # runs as long as you do not interrup
             # imports and runs the Main class --> NN function
             from main import Main
             Main = Main(Dataset, parameters)
-            Main.NN()
-            print("test")
+            asyncio.ensure_future(Main.NN())
+            loop.run_forever()
 
         except KeyboardInterrupt:
             pass
+
+        finally:
+            loop.close()
 
     except Exception as e:
         print("error at running NN()")

@@ -1,17 +1,17 @@
 {
   "hyperparameters": {
-    "N_samples": 956,
-    "batch_size": 128,
-    "learning_rate": 200,
-    "epochs": 1000
+    "N_samples": 8,
+    "batch_size": 8,
+    "learning_rate": 100,
+    "epochs": 100
   },
   "data": {
     "folder_dir": "/Users/skost/coding-s/Data/Images/cars",
-    "input_shape": 32,
+    "input_shape": 2048,
     "shape_1": 200,
     "shape_2": 256
   },
   "plot": {
-    "show_information_rate": 10
+    "show_information_rate": 1
   }
 }
