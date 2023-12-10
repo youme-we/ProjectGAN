@@ -1,75 +1,21 @@
-const express = require("express");
-const app = express();
-const PORT = 3001;
-const cors = require("cors");
-const sessions = require("express-session");
-const cookieParser = require("cookie-parser");
-const bcrypt = require("bcrypt");
-const path = require("path");
-const http = require("http");
+import express from "express";
+import cors from "cors";
+import sessions from "express-session";
+import cookieParser from "cookie-parser";
+import path from "path";
+import http from 'http'
+import mongodb from 'mongodb';
+const app = express()
+const PORT = 3001
 
 const path_build = "/Users/skost/coding-s/ProjectGAN/UI/client/build";
-
-var MongoClient = require("mongodb").MongoClient;
-const uri = "mongodb://localhost:27017/";
-const client = new MongoClient(uri);
-
 const server = http.createServer(app);
 server.listen(PORT, () => {
   console.log("listening on *:3000");
 });
-const { Server } = require("socket.io");
-const io = new Server(server, {
-  cors: {
-    origin: "*",
-    methods: ["GET", "POST"],
-  },
-});
 
-io.on("connection", (socket) => {
-  //receive a message from the client
-  socket.on("/send_s", (data) => {
-    // send data to the client
-    socket.broadcast.emit("/send_c", data);
-  });
-
-  socket.on("/play_pause_save_s", (data) => {
-    socket.broadcast.emit("/play_pause_save_py", data)
-    console.log(data)
-  })
-});
 
 /////////////functions
-async function connectDB() {
-  await client.connect();
-  const database = client.db("ProjectGAN");
-  const Projects = database.collection("Projects");
-  return Projects;
-}
-
-async function createProject(ID, req) {
-  const Projects = await connectDB();
-  const user_obj = {
-    ID,
-    sessionID: req.sessionID, //this is done so that the server saves the sessionID in the datbase
-  };
-
-  Projects.insertOne(user_obj); //saves created Project to the DB
-  req.session.authenticated = true; //this is done so that the browser saves the sessionID
-}
-
-async function compareDB(ID, req, res) {
-  const Projects = await connectDB();
-  const Project = await Projects.findOne({ ID });
-  Projects.updateOne(
-    { _id: Project._id },
-    { $set: { sessionID: req.sessionID } }
-  );
-  req.session.authenticated = true;
-  res.send(true);
-  console.log("login worked");
-}
-///////////////////////
 
 ///////////////////////app.use
 app.use(
@@ -102,54 +48,4 @@ app.get(["/create", "/login"], async (req, res) => {
 ////////////////////////
 
 ////////////////////////Endpoints
-app.post("/create", async (req, res) => {
-  let data = req.body;
-  const ID = data.ID;
-
-  try {
-    await createProject(ID, req); //saves created Project in the DB and the linked sessionID which gets also stored in the Browser
-    res.send(true);
-    console.log("creating Project worked");
-  } catch {
-    res.send(false);
-    console.log("creating Project didn't work");
-  }
-});
-
-app.post("/login", async (req, res) => {
-  let data = req.body;
-  const ID = data.ID;
-
-  try {
-    await compareDB(ID, req, res);
-  } catch (error) {
-    res.send(false);
-    console.log("login failed:Project_ID was wrong");
-  }
-
-  console.log(req.sessionID);
-});
-
-app.get("/project", async (req, res) => {
-  try {
-    const sessionID = req.sessionID;
-    const Projects = await connectDB();
-    const Project = await Projects.findOne({ sessionID });
-    if (Project == null) {
-      res.redirect("/login");
-      console.log("Project_ID has to be entered");
-    } else {
-      res.sendFile(path.join(path_build, "index.html"));
-      console.log("user is authenticated" + Project);
-    }
-  } catch {
-    res.redirect("/login");
-  }
-});
-
-
-
-app.get("/play_pause_save", async (req, res) => {
-    res.json({"play": true})
-})
 
