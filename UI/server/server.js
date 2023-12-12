@@ -1,51 +1,22 @@
-import express from "express";
-import cors from "cors";
-import sessions from "express-session";
-import cookieParser from "cookie-parser";
-import path from "path";
+import express from 'express';
+import cors from 'cors';
+import sessions from 'express-session';
+import cookieParser from 'cookie-parser';
 import http from 'http'
-import mongodb from 'mongodb';
-const app = express()
-const PORT = 3001
+import path from 'path';
+const path_build = '/Users/skost/coding-s/ProjectGAN/UI/client/build';
+import DB from './database.js';
+import socket_endpoints from './socket_endpoints.js';
+import setup_express from './express_setup.js';
+import http_endpoints from './http_endpoints.js'
+const PORT = 3001;
+const app = setup_express();
 
-const path_build = "/Users/skost/coding-s/ProjectGAN/UI/client/build";
 const server = http.createServer(app);
-server.listen(PORT, () => {
-  console.log("listening on *:3000");
-});
+    server.listen(PORT, () => {
+      console.log("socket is listening on PORT:", PORT);
+    });
 
-
-/////////////functions
-
-///////////////////////app.use
-app.use(
-  sessions({
-    secret: "test",
-    saveUninitialized: false, //when false the cookie only gets stored in the Brwoser when it get's modified by for example setting req.session.authentication = true;
-    cookie: { maxAge: 1000000 }, //milliseconds
-    resave: false,
-    secure: false, //if this is true the cookie only gets send over a https secure connection
-  })
-);
-
-app.use(cookieParser()); // don't need this because express-session includes it
-app.use(express.json()); // <==== parse request body as JSON
-app.use(
-  cors({
-    origin: ["http://localhost:3000", "http://localhost:3001"], //alows requests from this PORT
-    credentials: true,
-  })
-);
-//For more information look at the note in Notablitiy
-
-//this is serving the React app from the build folder
-app.use(express.static(path_build));
-
-app.get(["/create", "/login"], async (req, res) => {
-  res.sendFile(path.join(path_build, "index.html"));
-});
-
-////////////////////////
-
-////////////////////////Endpoints
-
+let prjs_db_data = new DB("ProjectGAN","Projects");
+http_endpoints(app, prjs_db_data);
+socket_endpoints(server);

@@ -28,7 +28,7 @@ function Login() {
 
   return (
     <div className="App">
-      <h3>enter extisting Project_ID to enter Project</h3>
+      <h3>enter Project_ID</h3>
       <input type={"text"} value={IDInputValue} onChange={(e) => setIDInputValue(e.target.value)}></input>
       <button onClick={Send}>login</button>
     </div>  
