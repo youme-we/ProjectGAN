@@ -11,7 +11,6 @@ from io import BytesIO
 import asyncio
 
 
-
 def plot_example_data():
     print(f"Feature batch shape: {train_features.size()}")
     print(f"Labels batch shape: {train_labels.size()}")
@@ -30,18 +29,18 @@ class Plot_Data():
         self.losses = []
 
     async def plot(self, epoch, model, Dataset, parameters, SOCKET_CONNECTION):
-       self.model = model
-       self.Dataset = Dataset
-       self.parameters = parameters
-       self.epochs.append(epoch)
-       self.losses.append(model.loss.item())
-       if epoch % self.parameters.plot.show_information_rate == 0:
-           generated_data = self.pack_generated_data()
-           await SOCKET_CONNECTION.emit('/send_s', {'epoch': self.epochs,
-                                 'loss': self.losses,
-                                 'generated_data': generated_data[1],
-                                 'imitated_data': generated_data[0]
-                                 })
+        self.model = model
+        self.Dataset = Dataset
+        self.parameters = parameters
+        self.epochs.append(epoch)
+        self.losses.append(model.loss.item())
+        if epoch % self.parameters.plot.show_information_rate == 0:
+            generated_data = self.pack_generated_data()
+            await SOCKET_CONNECTION.emit('/send_s', {'epoch': self.epochs,
+                                                     'loss': self.losses,
+                                                     'generated_data': generated_data[1],
+                                                     'imitated_data': generated_data[0]
+                                                     })
 
     def pack_generated_data(self):
         self.model.eval()

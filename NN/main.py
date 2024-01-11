@@ -40,10 +40,14 @@ class Main:
 
         operator = await Operator.listen(SOCKET_CONNECTION)
         for epoch in tqdm(range(hyperparameters.epochs)):
-            # trains model:
-            self.model.iter(training_dataloader, self.model, self.loss_fn,
-                            optimizer)
+            for batch, (X, y) in enumerate(training_dataloader):
+                # trains model
+                self.model.iter(X, y, self.model, self.loss_fn,
+                                optimizer)
 
-            # saves the epoch and the loss in a key value pair and seds it every nth epoch to the server/plot api over Socket.IO
+                # saves the epoch and the loss in a key value pair and seds it every nth epoch to the server/plot api over Socket.IO
+                await Operator.operate()
+                if Operator.run == False:
+                    return
+
             await Plot_Data.plot(epoch, self.model, self.Dataset, self.parameters, SOCKET_CONNECTION)
-            await Operator.operate()

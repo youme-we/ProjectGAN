@@ -22,21 +22,20 @@ class NeuralNetwork(nn.Module):
         logits = self.linear_relu_stack(x)
         return logits
 
-    def iter(self, dataloader, model, loss_fn, optimizer):
+    def iter(self, X, y, model, loss_fn, optimizer):
         model.train()  # prepers the model for training. sets all states like drop out... but doesn't train
-        for batch, (X, y) in enumerate(dataloader):
-            X, y = X.to(device()), y.to(device())
-            y = self.flatten(y)
+        X, y = X.to(device()), y.to(device())
+        y = self.flatten(y)
 
-            # Compute prediction error
-            pred = model(X)
-            loss = loss_fn(pred, y)
+        # Compute prediction error
+        pred = model(X)
+        loss = loss_fn(pred, y)
 
-            # Backpropagation
-            optimizer.zero_grad()
-            loss.backward()
-            optimizer.step()
+        # Backpropagation
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
 
-            self.lable = y
-            self.pred = pred
-            self.loss = loss
+        self.lable = y
+        self.pred = pred
+        self.loss = loss

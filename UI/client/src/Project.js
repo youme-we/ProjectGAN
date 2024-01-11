@@ -11,11 +11,12 @@ function Project() {
     setdata(data);
   });
 
-  const play_stop = (play, save) => {
-    console.log(play, save);
+  const play_stop = (pause, save, run) => {
     socket.emit("/play_pause_save_s", {
-      play: play,
+      pause: pause,
       save: save,
+      run: run
+
     });
   };
 
@@ -47,15 +48,15 @@ function Project() {
     <div className="Project">
       <div style={{ border: "2px solid", borderRadius: "5px", width: "100px" }}>
         <PlayArrowIcon
-          onClick={() => play_stop(true, false)}
+          onClick={() => play_stop(false, false, true)}
           style={ButtonStyle}
         />
         <PauseIcon
-          onClick={() => play_stop(false, false)}
+          onClick={() => play_stop(true, false, true)}
           style={ButtonStyle}
         />
         <PlayDisabledIcon
-          onClick={() => play_stop(false, true)}
+          onClick={() => play_stop(false, true, false)}
           style={ButtonStyle}
         />
       </div>
