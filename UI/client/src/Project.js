@@ -4,11 +4,14 @@ import ReactEcharts from "echarts-for-react";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import PlayDisabledIcon from "@mui/icons-material/PlayDisabled";
 import PauseIcon from "@mui/icons-material/Pause";
+import Network from "./Network.js"
 
 function Project() {
   const [data, setdata] = useState([]);
+  const [show, setshow] = useState(false);
   socket.on("/send_c", (data) => {
     setdata(data);
+    setshow(true)
   });
 
   const play_stop = (pause, save, run) => {
@@ -20,7 +23,6 @@ function Project() {
     });
   };
 
-  console.log(data);
   // Draw the chart
   const option = {
     xAxis: {
@@ -69,6 +71,9 @@ function Project() {
         style={{ width: "400px", height: "auto" }}
         src={`data:image/png;base64,${data.imitated_data}`}
       />
+    {show === true &&
+    <Network weights = {data.weights}/>
+    }
     </div>
   );
 }

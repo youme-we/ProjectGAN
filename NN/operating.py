@@ -28,9 +28,14 @@ class Operator():
                 self.save = event[1]["save"]
                 self.run = event[1]["run"]
 
-            if self.pause == True:
-                print(Fore.GREEN+"the calculation was paused")
+            if self.pause:
+                print(Fore.GREEN+"The calculation was paused")
                 print(Style.RESET_ALL)
+
+            if self.run == False:
+                print(Fore.GREEN+"Ending the calculation and saving the weights")
+                print(Style.RESET_ALL)
+
 
     async def keyboard(self):
         with KeyPoller() as keyPoller:
@@ -40,10 +45,7 @@ class Operator():
                 if not key is None:
                     if key == "b":
                         self.run = False
-                        #self.task2.cancel()
-                        #self.task1.cancel()
-                        self.group.cancel()
-                
+                        self.pause = False
 
     async def listen(self, SOCKET_CONNECTION):
         # makes listening to and receiving from sockets asynchronous
@@ -57,8 +59,8 @@ class Operator():
 
     async def operate(self):
         # gives the Progmram "time" to empty the stack and clear/execute the event loop
-        await asyncio.sleep(0)
-        while self.pause == True:
+        await asyncio.sleep(0.001)
+        while self.pause:
             # pauses the program while listening to the socket in parellel
             await asyncio.sleep(0)
             # program continues when Operator.play is set to True

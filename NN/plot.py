@@ -34,12 +34,15 @@ class Plot_Data():
         self.parameters = parameters
         self.epochs.append(epoch)
         self.losses.append(model.loss.item())
+        #print(self.model.linear_relu_stack[0].weight.tolist())
+
         if epoch % self.parameters.plot.show_information_rate == 0:
             generated_data = self.pack_generated_data()
             await SOCKET_CONNECTION.emit('/send_s', {'epoch': self.epochs,
                                                      'loss': self.losses,
                                                      'generated_data': generated_data[1],
-                                                     'imitated_data': generated_data[0]
+                                                     'imitated_data': generated_data[0],
+                                                     'weights':torch.flatten(self.model.linear_relu_stack[0].weight[0:2]).tolist()
                                                      })
 
     def pack_generated_data(self):

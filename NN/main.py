@@ -45,9 +45,12 @@ class Main:
                 self.model.iter(X, y, self.model, self.loss_fn,
                                 optimizer)
 
-                # saves the epoch and the loss in a key value pair and seds it every nth epoch to the server/plot api over Socket.IO
                 await Operator.operate()
                 if Operator.run == False:
+                    Operator.group.cancel()
                     return
-
+            
+            # saves the epoch and the loss in a key value pair and seds it every nth epoch to the server/plot api over Socket.IO
             await Plot_Data.plot(epoch, self.model, self.Dataset, self.parameters, SOCKET_CONNECTION)
+
+     

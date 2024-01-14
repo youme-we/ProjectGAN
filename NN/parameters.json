@@ -7,7 +7,7 @@
   },
   "data": {
     "folder_dir": "/Users/skost/coding-s/Data/Images/cars",
-    "input_shape": 2048,
+    "input_shape": 16,
     "shape_1": 200,
     "shape_2": 256
   },
