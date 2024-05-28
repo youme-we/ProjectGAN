@@ -28,7 +28,7 @@ const setup_express =  () => {
 
   //this is serving the React app from the build folder
   app.use(express.static(path_build));
-  app.get(["/create", "/login"], async (req, res) => {
+  app.get(["/", "/create", "/login", "/project"], async (req, res) => {
     res.sendFile(path.join(path_build, "index.html"));
   });
   return app;

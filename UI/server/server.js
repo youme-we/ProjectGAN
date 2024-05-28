@@ -17,6 +17,6 @@ const server = http.createServer(app);
       console.log("socket is listening on PORT:", PORT);
     });
 
-let prjs_db_data = new DB("ProjectGAN","Projects");
-http_endpoints(app, prjs_db_data);
+let db = new DB("ProjectGAN","Projects");
+http_endpoints(app, db);
 socket_endpoints(server);
