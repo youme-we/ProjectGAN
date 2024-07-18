@@ -1,21 +1,19 @@
 const http_endpoints = (app, db) => {
   app.post("/login", async (req, res) => {
-    try {
-      await db.check_prj_existence(req.body.ID)
-      res.send(true);
-    } catch {
+    let prj = await db.get_prj(req.body.prj_name)
+    if (prj) {
+      res.send(prj);
+    } else {
       res.send(false);
     }
   });
 
   app.post("/create", async (req, res) => {
-    try {
-      await db.check_prj_existence(req.body.ID)
+    if (await db.get_prj(req.body.prj_name)) {
       res.send(false)
     }
-    catch {
-      await db.create_prj(req.body.ID)
-      res.send(true)
+    else {
+      res.send(await db.create_prj(req.body.prj_name))
     }
   })
 };

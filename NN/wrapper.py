@@ -62,19 +62,18 @@ async def wrapper():
     while True:  # runs as long as you do not InterruptedError
         try:
             # vars which should be reloaded after every run
-            parameters = load_json("parameters.json")
             ##########################
 
             # imports and runs the Main class --> NN function
             from main import Main
-            Main = Main(Dataset, parameters)
+            Main = Main(Dataset)
             await Main.NN()
 
         except Exception as e:
             print("error at running NN()")
             print_error(e)
        
-        print("save the script to rerun, or press b to exit")
+        print("save the script to rerun, or press ctrl-z to exit")
         print("  ")
         print(Fore.GREEN+"#######################################")
         print(Style.RESET_ALL)

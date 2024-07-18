@@ -22,12 +22,12 @@ class NeuralNetwork(nn.Module):
         logits = self.linear_relu_stack(x)
         return logits
 
-    def iter(self, X, y, model, loss_fn, optimizer):
+    def iter(self, X, y, model, loss_fn, optimizer, scheduler):
         model.train()  # prepers the model for training. sets all states like drop out... but doesn't train
-        X, y = X.to(device()), y.to(device())
+        X, y = X, y
         y = self.flatten(y)
-
         # Compute prediction error
+
         pred = model(X)
         loss = loss_fn(pred, y)
 
@@ -35,6 +35,7 @@ class NeuralNetwork(nn.Module):
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
+        #scheduler.step()
 
         self.lable = y
         self.pred = pred

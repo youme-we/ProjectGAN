@@ -29,7 +29,6 @@ class Network extends Component {
     //Array.from(lyers_shape.toString()).map(Number);
     
     var strong_lyers_shape = this.props.weights; //weights of NN;
-    console.log(strong_lyers_shape)
 
     var second_lyer_a = []; //nimmt jeden zwieten Wert von lyers_shape :jede ungerade Stelle der Array
     for (var i = 0; i < lyers_shape.length; i = i + 2) {

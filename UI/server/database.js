@@ -1,4 +1,7 @@
-import { MongoClient } from "mongodb";
+import { MongoClient, ObjectId } from "mongodb";
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+const overview = require('../../overview.json')
 
 export default class DB {
   constructor(db_name, collection_name) {
@@ -10,12 +13,14 @@ export default class DB {
     this.projects = database.collection(collection_name);
   }
 
-  async check_prj_existence(ID) {
-    const prj = await this.projects.findOne({ ID });
-    return prj.ID
+  async get_prj(prj_name) {
+    return this.projects.findOne({ prj_name });
   }
 
-  async create_prj(ID) {
-    await this.projects.insertOne({ ID }); //saves created Project to the DB
+  async create_prj(prj_name) {
+    overview.prj_name = prj_name
+    overview._id = new ObjectId()
+    await this.projects.insertOne(overview); //saves created Project to the DB
+    return overview
   }
 }

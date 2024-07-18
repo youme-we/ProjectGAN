@@ -1,0 +1,20 @@
+{
+  "_id":"",
+  "prj_name":"",
+  "hyperparameters": {
+    "N_samples": 1,
+    "batch_size":1,
+    "learning_rate": 1,
+    "momentum": 0.9,
+    "epochs": 50000
+  },
+  "data": {
+    "folder_dir": "/Users/skost/coding-s/Data/Images/cars",
+    "input_shape": 32,
+    "shape_1": 100,
+    "shape_2": 120
+  },
+  "plot": {
+    "show_information_rate": 1
+  }
+}

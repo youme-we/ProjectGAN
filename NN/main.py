@@ -1,56 +1,65 @@
 import torch
 import asyncio
 from tqdm import tqdm
-from torch import nn
+from torch import func, nn, optim
 from torch.utils.data import Dataset, sampler, DataLoader
 from NN import NeuralNetwork
-from subfunc import device
+from subfunc import device, checking_data_actuality
 from operating import Operator
 from plot import Plot_Data
 import socketio
+from types import SimpleNamespace
 
 sio = socketio.AsyncSimpleClient()
+torch.set_default_device(device())
 Plot_Data = Plot_Data()
 Operator = Operator()
 
 
 class Main:
-    def __init__(self, Dataset, parameters):
-        self.device = device()
-        data_p = parameters.data
-        self.parameters = parameters
-        self.input_shape = Dataset[0][0].shape[0]  # data_p.input_shape
+    def __init__(self, Dataset):
+        self.overview = Operator.overview
+        self.input_shape = Dataset[0][0].shape[0]
         self.output_shape = torch.flatten(Dataset[0][1]).shape[0]
-        # data_p.shape_1*data_p.shape_2*3
+        # checking if NN runs with the latest Data(comparing shape of parameters.json and given data)
+        checking_data_actuality(
+            self.input_shape, self.output_shape, self.overview.data)
+
         self.model = NeuralNetwork(
-            self.input_shape, self.output_shape).to(self.device)
+            self.input_shape, self.output_shape)
         self.Dataset = Dataset
-        self.loss_fn = nn.MSELoss()
 
     async def NN(self):
         await sio.connect('http://localhost:3001')
         SOCKET_CONNECTION = sio
-        hyperparameters = self.parameters.hyperparameters
-        optimizer = torch.optim.SGD(
-            self.model.parameters(), lr=hyperparameters.learning_rate)
-        samplers_data = sampler.SubsetRandomSampler(
-            indices=torch.arange(hyperparameters.N_samples))
-        training_dataloader = DataLoader(
-            self.Dataset, sampler=samplers_data, batch_size=hyperparameters.batch_size)
 
         operator = await Operator.listen(SOCKET_CONNECTION)
-        for epoch in tqdm(range(hyperparameters.epochs)):
+
+        for epoch in tqdm(range(self.overview.hyperparameters.epochs)):
+            overview = Operator.overview
+            if epoch%10 ==0:
+                print(overview.hyperparameters.learning_rate)
+            optimizer = torch.optim.SGD(
+                self.model.parameters(), lr=overview.hyperparameters.learning_rate, momentum=overview.hyperparameters.momentum)
+            scheduler = torch.optim.lr_scheduler.StepLR(
+                optimizer, step_size=1, gamma=0.99999)
+            samplers_data = sampler.SubsetRandomSampler(
+                indices=torch.arange(overview.hyperparameters.N_samples))
+            training_dataloader = DataLoader(
+                self.Dataset, sampler=samplers_data, batch_size=overview.hyperparameters.batch_size)
+
             for batch, (X, y) in enumerate(training_dataloader):
-                # trains model
-                self.model.iter(X, y, self.model, self.loss_fn,
-                                optimizer)
+                    # trains model
+                    self.model.iter(X, y, self.model, nn.MSELoss(),
+                                    optimizer, scheduler)
 
-                await Operator.operate()
-                if Operator.run == False:
-                    Operator.group.cancel()
-                    return
-            
+                    # for param_group in optimizer.param_groups:
+                    # print(param_group['lr'])
+
+                    await Operator.operate()
+                    if Operator.run == False:
+                        Operator.group.cancel()
+                        return
+
             # saves the epoch and the loss in a key value pair and seds it every nth epoch to the server/plot api over Socket.IO
-            await Plot_Data.plot(epoch, self.model, self.Dataset, self.parameters, SOCKET_CONNECTION)
-
-     
+            await Plot_Data.plot(epoch, self.model, self.Dataset, overview, SOCKET_CONNECTION)

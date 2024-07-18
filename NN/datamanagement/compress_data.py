@@ -7,8 +7,7 @@ from torch.utils.data import TensorDataset
 sys.path.insert(0, '/Users/skost/coding-s/ProjectGAN/NN/')
 from subfunc import load_json  # beacuse of formater this line often moves to the top
 data_p = load_json('/Users/skost/coding-s/ProjectGAN/NN/parameters.json').data
-dtype = torch.float
-
+dtype = torch.float32
 
 class Load_Dataset():
 
@@ -46,7 +45,7 @@ class Load_Dataset():
                 img = img.resize((shape_2, shape_1))  # you need two bracket's
                 img = img.convert('RGB')
                 img = img.getdata()
-                img = torch.tensor(img)
+                img = torch.tensor(img, dtype=dtype)
                 img = torch.reshape(img, (shape_1, shape_2, 3))
                 all_images = torch.cat((all_images, img), dim=0)
         self.maxNumber_of_images = a
@@ -57,9 +56,7 @@ class Load_Dataset():
         return train_images, mean, var
 
     def generate_input(self):
-        r1 = -1
-        r2 = 1
-        return ((r1 - r2) * torch.rand(self.maxNumber_of_images, self.input_shape, dtype=dtype) + r2)
+        return torch.rand(self.maxNumber_of_images, self.input_shape, dtype=dtype)
 
 
 main_Dataset_i = Load_Dataset(

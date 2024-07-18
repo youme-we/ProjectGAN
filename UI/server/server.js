@@ -1,10 +1,4 @@
-import express from 'express';
-import cors from 'cors';
-import sessions from 'express-session';
-import cookieParser from 'cookie-parser';
 import http from 'http'
-import path from 'path';
-const path_build = '/Users/skost/coding-s/ProjectGAN/UI/client/build';
 import DB from './database.js';
 import socket_endpoints from './socket_endpoints.js';
 import setup_express from './express_setup.js';
@@ -13,10 +7,10 @@ const PORT = 3001;
 const app = setup_express();
 
 const server = http.createServer(app);
-    server.listen(PORT, () => {
-      console.log("socket is listening on PORT:", PORT);
-    });
+server.listen(PORT, () => {
+  console.log("socket is listening on PORT:", PORT);
+});
 
-let db = new DB("ProjectGAN","Projects");
+let db = new DB("ProjectGAN", "Projects");
 http_endpoints(app, db);
 socket_endpoints(server);
