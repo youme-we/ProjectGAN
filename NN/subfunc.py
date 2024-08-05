@@ -20,8 +20,10 @@ def load_json(file):
             data_file, object_hook=lambda d: SimpleNamespace(**d))
     return data
 
-def checking_data_actuality(input_shape, output_shape, data_p):
-    if input_shape != data_p.input_shape or output_shape != data_p.shape_1*data_p.shape_2*3:
+def checking_data_actuality(Dataset, overview):
+    input_shape = Dataset[0][0].shape[0]
+    output_shape = torch.flatten(Dataset[0][1]).shape[0]
+    if input_shape != overview.data.input_shape or output_shape != overview.data.output_shape1*overview.data.output_shape2*3:
         print(Fore.RED)
         print("Warning!: NN does not run with the latest data format")
         print(Style.RESET_ALL)

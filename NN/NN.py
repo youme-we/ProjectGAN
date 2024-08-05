@@ -6,15 +6,15 @@ from subfunc import device
 
 
 class NeuralNetwork(nn.Module):
-    def __init__(self, input_shape, output_shape):
+    def __init__(self, overview):
         super().__init__()
         self.flatten = nn.Flatten()
         self.linear_relu_stack = nn.Sequential(
-            nn.Linear(input_shape, 1024),
+            nn.Linear(overview.data.input_shape, 1024),
             nn.Tanh(),
             nn.Linear(1024, 1024),
             nn.Tanh(),
-            nn.Linear(1024, output_shape),
+            nn.Linear(1024, overview.data.output_shape1*overview.data.output_shape2),
             nn.LeakyReLU(0.9)
         )
 

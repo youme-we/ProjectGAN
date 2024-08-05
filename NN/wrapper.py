@@ -19,17 +19,6 @@ def print_error(e):
     print(traceback.format_exc())
 
 
-class Dataloader:
-    def __init__(self):
-        self.device = device()
-
-    def load_Dataset(self):
-        return torch.load('data/data.pt', map_location=torch.device(self.device))
-
-
-Dataloader = Dataloader()
-
-
 class Watcher(FileSystemEventHandler):
     def reset(self):
         self.mutated = False
@@ -37,17 +26,17 @@ class Watcher(FileSystemEventHandler):
     def on_modified(self, event):
         self.tracked_path = event.src_path
         self.mutated = True
-
+ 
 
 Watcher = Watcher()
 
 # implements the Observer
-Observer = Observer()
+Observer = Observer()# external libaray
 Observer.schedule(Watcher, path='./', recursive=False)
 Observer.start()
 
 # vars which should be loaded only once
-Dataset = Dataloader.load_Dataset()
+Dataset = torch.load('data/data.pt', map_location=torch.device(device()))
 ###########################
 
 

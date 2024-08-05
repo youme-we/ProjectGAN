@@ -19,14 +19,13 @@ Operator = Operator()
 class Main:
     def __init__(self, Dataset):
         self.overview = Operator.overview
-        self.input_shape = Dataset[0][0].shape[0]
-        self.output_shape = torch.flatten(Dataset[0][1]).shape[0]
+        self.Dataset = Dataset
         # checking if NN runs with the latest Data(comparing shape of parameters.json and given data)
         checking_data_actuality(
-            self.input_shape, self.output_shape, self.overview.data)
+            self.Dataset, self.overview)
 
         self.model = NeuralNetwork(
-            self.input_shape, self.output_shape)
+            self.overview)
         self.Dataset = Dataset
 
     async def NN(self):
