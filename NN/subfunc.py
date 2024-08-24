@@ -21,10 +21,16 @@ def load_json(file):
     return data
 
 def checking_data_actuality(Dataset, overview):
-    input_shape = Dataset[0][0].shape[0]
-    output_shape = torch.flatten(Dataset[0][1]).shape[0]
-    if input_shape != overview.data.input_shape or output_shape != overview.data.output_shape1*overview.data.output_shape2*3:
+    input_shape_Dataset = Dataset[0][0].shape[0]
+    input_shape_overview = overview.data.output_shape1*overview.data.output_shape2*3
+
+    output_shape_Dataset = torch.flatten(Dataset[0][1]).shape[0]
+    ouput_shape_overview = overview.data.input_shape
+
+    if input_shape_Dataset != input_shape_overview or output_shape_Dataset != ouput_shape_overview:
         print(Fore.RED)
         print("Warning!: NN does not run with the latest data format")
         print(Style.RESET_ALL)
+
+    return Dataset
  

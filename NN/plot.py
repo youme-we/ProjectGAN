@@ -4,7 +4,7 @@ import numpy as np
 import torch
 from torchvision.utils import save_image
 from PIL import Image
-from torchvision import transforms
+from torchvision import datasets, transforms
 import base64
 import os
 from io import BytesIO
@@ -22,47 +22,48 @@ def plot_example_data():
     print(f"Using {device} device")
 
 
-class Plot_Data():
-    def __init__(self):
+class Plotter():
+    def __init__(self, overview, Dataset, model, SOCKET_CONNECTION):
+        self.Dataset = Dataset
+        self.overview = overview
+        self.model = model
+        self.SOCKET_CONNECTION = SOCKET_CONNECTION
         self.epochs = []
         self.losses = []
 
-    async def plot(self, epoch, model, Dataset, parameters, SOCKET_CONNECTION):
-        self.model = model
-        self.Dataset = Dataset
-        self.parameters = parameters
+    async def plot(self, epoch):
         self.epochs.append(epoch)
-        self.losses.append(model.loss.item())
+        self.losses.append(self.model.loss)
         # print(self.model.linear_relu_stack[0].weight.tolist())
 
-        if epoch % self.parameters.plot.show_information_rate == 0:
-            generated_data = self.pack_generated_data()
-            await SOCKET_CONNECTION.emit('/nn_metrics_s', {'epoch': self.epochs,
-                                                                         'loss': self.losses,
-                                                                         'generated_data': generated_data[1],
-                                                                         'imitated_data': generated_data[0],
-                                                                         'weights': torch.flatten(self.model.linear_relu_stack[0].weight[0:2]).tolist()
-                                                                         })
+        if epoch % self.overview.plot.show_information_rate == 0:
+            samples = self.pack_samples()
+            await self.SOCKET_CONNECTION.emit('/nn_metrics_s', {'epoch': self.epochs,
+                                                           'loss': self.losses,
+                                                           'training_sample': samples[0],
+                                                           'test_sample': samples[1],
+                                                           'weights': torch.flatten(self.model.linear_relu_stack[0].weight[0:2]).tolist()
+                                                           })
 
-    def pack_generated_data(self):
+    def pack_samples(self):
         self.model.eval()
 
         train = self.Dataset[0:10][0]
         test = self.Dataset[-10:][0]
 
         pred_tr = self.model(train)
-        pred_tr_0 = self.prepare_data(pred_tr[0])
+        pred_tr_0 = self.denormalizing(pred_tr[0])
         pred_tr_b64 = self.to_base64(pred_tr_0)
 
         pred_te = self.model(test)
-        pred_te_0 = self.prepare_data(pred_te[0])
+        pred_te_0 = self.denormalizing(pred_te[0])
         pred_te_b64 = self.to_base64(pred_te_0)
 
         return [pred_tr_b64, pred_te_b64]
 
-    def prepare_data(self, data):
-        shape_1 = self.parameters.data.shape_1
-        shape_2 = self.parameters.data.shape_2
+    def denormalizing(self, data):
+        shape_1 = self.overview.data.output_shape1
+        shape_2 = self.overview.data.output_shape2
 
         data = torch.mul(data, self.Dataset.var)
         data = torch.add(data, self.Dataset.mean).int()

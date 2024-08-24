@@ -10,11 +10,12 @@ sio = socketio.AsyncSimpleClient()
 
 class Operator():
 
-    def __init__(self):
+    def __init__(self, overview):
         self.pause = False
         self.save = False
         self.run = True
-        self.overview = load_json("../overview.json")
+        self.overview  = overview
+        
 
     async def pps_GUI(self, SOCKET_CONNECTION):
         while True:
@@ -24,13 +25,12 @@ class Operator():
                 self.pause = event[1]["pause"]
                 self.save = event[1]["save"]
                 self.run = event[1]["run"]
-                print(event[0])
+                await self.print_processing_status()
             if event[0] == "/tune_nn":
                 data = event[1]["overview"]
-                overview = json.loads(data, object_hook=lambda d: SimpleNamespace(**d)).overview
+                overview = json.loads(
+                    data, object_hook=lambda d: SimpleNamespace(**d)).overview
                 self.overview = overview
-
-            await self.print_processing_status()
 
     async def pps_terminal(self):
         with KeyPoller() as keyPoller:
@@ -39,11 +39,9 @@ class Operator():
                 await asyncio.sleep(0)
                 key = keyPoller.poll()
                 if not key is None:
-                    # when the b key gets pressed, the Main calss gets terminated
                     if key == "b":
                         self.run = False
                         self.pause = False
-                    # when the p key gets pressed, the calculation gets paused
                     if key == "p":
                         self.pause = not self.pause
                         await self.print_processing_status()
@@ -75,4 +73,3 @@ class Operator():
             # pauses the program while listening to the socket in parellel
             await asyncio.sleep(0)
             # program continues when Operator.play is set to True
-

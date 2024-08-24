@@ -1,64 +1,61 @@
 import torch
-import asyncio
 from tqdm import tqdm
 from torch import func, nn, optim
 from torch.utils.data import Dataset, sampler, DataLoader
-from NN import NeuralNetwork
-from subfunc import device, checking_data_actuality
+from NN import GAN
+from subfunc import device, checking_data_actuality, load_json
 from operating import Operator
-from plot import Plot_Data
+from plot import Plotter
 import socketio
-from types import SimpleNamespace
 
 sio = socketio.AsyncSimpleClient()
 torch.set_default_device(device())
-Plot_Data = Plot_Data()
-Operator = Operator()
 
 
-class Main:
+class Trainer:
     def __init__(self, Dataset):
-        self.overview = Operator.overview
-        self.Dataset = Dataset
-        # checking if NN runs with the latest Data(comparing shape of parameters.json and given data)
-        checking_data_actuality(
-            self.Dataset, self.overview)
+        self.__overview = load_json("../overview.json")
+        self.Dataset = checking_data_actuality(
+            Dataset, self.__overview)
+        self.model = GAN(
+            self.__overview)
 
-        self.model = NeuralNetwork(
-            self.overview)
-        self.Dataset = Dataset
-
-    async def NN(self):
+    async def init(self):
         await sio.connect('http://localhost:3001')
         SOCKET_CONNECTION = sio
 
-        operator = await Operator.listen(SOCKET_CONNECTION)
+        self.__operator = Operator(self.__overview)
+        self.__plotter = Plotter(self.__overview, self.Dataset,
+                                   self.model, SOCKET_CONNECTION)
+        # !should run automatically when starting epoch for loop!
+        await self.__operator.listen(SOCKET_CONNECTION)
 
-        for epoch in tqdm(range(self.overview.hyperparameters.epochs)):
-            overview = Operator.overview
-            if epoch%10 ==0:
-                print(overview.hyperparameters.learning_rate)
+    @property
+    def overview(self):
+        return self.__overview
+
+    @overview.setter
+    def overview(self, overview):
+        self.__overview = overview
+
+    async def train(self):
+        for epoch in tqdm(range(self.__overview.hyperparameters.epochs)):
             optimizer = torch.optim.SGD(
-                self.model.parameters(), lr=overview.hyperparameters.learning_rate, momentum=overview.hyperparameters.momentum)
+                self.model.parameters(), lr=self.__overview.hyperparameters.learning_rate, momentum=self.__overview.hyperparameters.momentum)
             scheduler = torch.optim.lr_scheduler.StepLR(
                 optimizer, step_size=1, gamma=0.99999)
             samplers_data = sampler.SubsetRandomSampler(
-                indices=torch.arange(overview.hyperparameters.N_samples))
+                indices=torch.arange(self.__overview.hyperparameters.N_samples))
             training_dataloader = DataLoader(
-                self.Dataset, sampler=samplers_data, batch_size=overview.hyperparameters.batch_size)
+                self.Dataset, sampler=samplers_data, batch_size=self.__overview.hyperparameters.batch_size)
 
             for batch, (X, y) in enumerate(training_dataloader):
-                    # trains model
-                    self.model.iter(X, y, self.model, nn.MSELoss(),
-                                    optimizer, scheduler)
+                self.model.iter(X, y, nn.MSELoss(),
+                                optimizer, scheduler)
 
-                    # for param_group in optimizer.param_groups:
-                    # print(param_group['lr'])
+                await self.__operator.operate()
+                if self.__operator.run == False:
+                    self.__operator.group.cancel()
+                    return
 
-                    await Operator.operate()
-                    if Operator.run == False:
-                        Operator.group.cancel()
-                        return
-
-            # saves the epoch and the loss in a key value pair and seds it every nth epoch to the server/plot api over Socket.IO
-            await Plot_Data.plot(epoch, self.model, self.Dataset, overview, SOCKET_CONNECTION)
+            await self.__plotter.plot(epoch)

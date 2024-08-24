@@ -5,7 +5,7 @@ from matplotlib import pyplot as plt
 from subfunc import device
 
 
-class NeuralNetwork(nn.Module):
+class GAN(nn.Module):
     def __init__(self, overview):
         super().__init__()
         self.flatten = nn.Flatten()
@@ -14,7 +14,8 @@ class NeuralNetwork(nn.Module):
             nn.Tanh(),
             nn.Linear(1024, 1024),
             nn.Tanh(),
-            nn.Linear(1024, overview.data.output_shape1*overview.data.output_shape2),
+            nn.Linear(1024, overview.data.output_shape1 *
+                      overview.data.output_shape2*3),
             nn.LeakyReLU(0.9)
         )
 
@@ -22,21 +23,22 @@ class NeuralNetwork(nn.Module):
         logits = self.linear_relu_stack(x)
         return logits
 
-    def iter(self, X, y, model, loss_fn, optimizer, scheduler):
-        model.train()  # prepers the model for training. sets all states like drop out... but doesn't train
+    def iter(self, X, y, loss_fn, optimizer, scheduler):
+        self.train()  # prepers the model for training. sets all states like drop out... but doesn't train
         X, y = X, y
         y = self.flatten(y)
         # Compute prediction error
 
-        pred = model(X)
+        pred = self.forward(X)
         loss = loss_fn(pred, y)
 
         # Backpropagation
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
-        #scheduler.step()
-
-        self.lable = y
+        # scheduler.step()
+            
         self.pred = pred
-        self.loss = loss
+        self.leble = y
+        self.loss = loss.item()
+

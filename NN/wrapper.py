@@ -54,9 +54,10 @@ async def wrapper():
             ##########################
 
             # imports and runs the Main class --> NN function
-            from main import Main
-            Main = Main(Dataset)
-            await Main.NN()
+            from main import Trainer
+            Trainer = Trainer(Dataset)
+            await Trainer.init()
+            await Trainer.train()
 
         except Exception as e:
             print("error at running NN()")
