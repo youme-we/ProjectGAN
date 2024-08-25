@@ -2,7 +2,6 @@ import asyncio
 from colorama import Fore, Back, Style
 import socketio
 from keyboard import KeyPoller
-from subfunc import device, load_json
 import json
 from types import SimpleNamespace
 sio = socketio.AsyncSimpleClient()
@@ -17,41 +16,41 @@ class Operator():
         self.props = props
 
     async def listen(self, SOCKET_CONNECTION):
-        # makes listening to and receiving from sockets asynchronous
-        self.task1 = asyncio.create_task(
-            self.pps_GUI(SOCKET_CONNECTION)
+        task1 = asyncio.create_task(
+            self.on_GUI_handler(SOCKET_CONNECTION)
         )
-        self.task2 = asyncio.create_task(
-            self.pps_terminal()
+        task2 = asyncio.create_task(
+            self.on_terminal_handler()
         )
 
-        self.group = asyncio.gather(self.task2, self.task1)
+        self.group = asyncio.gather(task1, task2)
 
     async def operate(self):
-        # gives the Progmram "time" to empty the stack and clear/execute the event loop
         await asyncio.sleep(0.1)
         while self.pause:
-            # pauses the program while listening to the socket in parellel
             await asyncio.sleep(0)
-            # program continues when Operator.play is set to True
 
-    async def pps_GUI(self, SOCKET_CONNECTION):
+    async def on_GUI_handler(self, SOCKET_CONNECTION):
         while True:
             event = await SOCKET_CONNECTION.receive()
-            # the event is structured as follows: list["origin", "message(json)"]
             if event[0] == "/pps_nn":
-                self.pause = event[1]["pause"]
-                self.save = event[1]["save"]
-                self.run = event[1]["run"]
-                await self.print_processing_status()
+                self.pps_handler(event)
             if event[0] == "/tune_nn":
-                self.props.overview = json.loads(
-                    event[1]["overview"], object_hook=lambda d: SimpleNamespace(**d)).overview
+                await self.overview_handler(event)
 
-    async def pps_terminal(self):
+    def pps_handler(self, event):
+        self.pause = event[1]["pause"]
+        self.save = event[1]["save"]
+        self.run = event[1]["run"]
+        self.print_processing_status()
+
+    async def overview_handler(self, event):
+        self.props.overview = json.loads(
+            event[1]["overview"], object_hook=lambda d: SimpleNamespace(**d)).overview
+
+    async def on_terminal_handler(self):
         with KeyPoller() as keyPoller:
             while True:
-                # is needed so that the rest of the programm gets time(the bigger that timeperiod, the rest of the program gets more time to be run) to be run
                 await asyncio.sleep(0)
                 key = keyPoller.poll()
                 if not key is None:
@@ -60,13 +59,13 @@ class Operator():
                         self.pause = False
                     if key == "p":
                         self.pause = not self.pause
-                        await self.print_processing_status()
+                        self.print_processing_status()
 
-    async def print_processing_status(self):
+    def print_processing_status(self):
         if self.pause:
             print(Fore.GREEN+"The calculation was paused")
             print(Style.RESET_ALL)
 
-        if self.run == False:
+        if not self.run:
             print(Fore.GREEN+"The calculation was ended & the weights were saved")
             print(Style.RESET_ALL)
