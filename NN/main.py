@@ -22,21 +22,19 @@ class Trainer:
 
     async def init(self):
         await sio.connect('http://localhost:3001')
-        SOCKET_CONNECTION = sio
-
-        self.__operator = Operator(self.__overview)
-        self.__plotter = Plotter(self.__overview, self.Dataset,
-                                   self.model, SOCKET_CONNECTION)
+        self.SOCKET_CONNECTION = sio
+        self.__operator = Operator(self)
         # !should run automatically when starting epoch for loop!
-        await self.__operator.listen(SOCKET_CONNECTION)
+        await self.__operator.listen(self.SOCKET_CONNECTION)
+        self.__plotter = Plotter(self)
 
     @property
     def overview(self):
         return self.__overview
 
     @overview.setter
-    def overview(self, overview):
-        self.__overview = overview
+    def overview(self, new_overview):
+        self.__overview = new_overview
 
     async def train(self):
         for epoch in tqdm(range(self.__overview.hyperparameters.epochs)):

@@ -10,12 +10,30 @@ sio = socketio.AsyncSimpleClient()
 
 class Operator():
 
-    def __init__(self, overview):
+    def __init__(self, props):
         self.pause = False
         self.save = False
         self.run = True
-        self.overview  = overview
-        
+        self.props = props
+
+    async def listen(self, SOCKET_CONNECTION):
+        # makes listening to and receiving from sockets asynchronous
+        self.task1 = asyncio.create_task(
+            self.pps_GUI(SOCKET_CONNECTION)
+        )
+        self.task2 = asyncio.create_task(
+            self.pps_terminal()
+        )
+
+        self.group = asyncio.gather(self.task2, self.task1)
+
+    async def operate(self):
+        # gives the Progmram "time" to empty the stack and clear/execute the event loop
+        await asyncio.sleep(0.1)
+        while self.pause:
+            # pauses the program while listening to the socket in parellel
+            await asyncio.sleep(0)
+            # program continues when Operator.play is set to True
 
     async def pps_GUI(self, SOCKET_CONNECTION):
         while True:
@@ -27,10 +45,8 @@ class Operator():
                 self.run = event[1]["run"]
                 await self.print_processing_status()
             if event[0] == "/tune_nn":
-                data = event[1]["overview"]
-                overview = json.loads(
-                    data, object_hook=lambda d: SimpleNamespace(**d)).overview
-                self.overview = overview
+                self.props.overview = json.loads(
+                    event[1]["overview"], object_hook=lambda d: SimpleNamespace(**d)).overview
 
     async def pps_terminal(self):
         with KeyPoller() as keyPoller:
@@ -54,22 +70,3 @@ class Operator():
         if self.run == False:
             print(Fore.GREEN+"The calculation was ended & the weights were saved")
             print(Style.RESET_ALL)
-
-    async def listen(self, SOCKET_CONNECTION):
-        # makes listening to and receiving from sockets asynchronous
-        self.task1 = asyncio.create_task(
-            self.pps_GUI(SOCKET_CONNECTION)
-        )
-        self.task2 = asyncio.create_task(
-            self.pps_terminal()
-        )
-
-        self.group = asyncio.gather(self.task2, self.task1)
-
-    async def operate(self):
-        # gives the Progmram "time" to empty the stack and clear/execute the event loop
-        await asyncio.sleep(0.1)
-        while self.pause:
-            # pauses the program while listening to the socket in parellel
-            await asyncio.sleep(0)
-            # program continues when Operator.play is set to True
