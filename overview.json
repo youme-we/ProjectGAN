@@ -2,8 +2,8 @@
   "_id":"",
   "prj_name":"",
   "hyperparameters": {
-    "N_samples": 1,
-    "batch_size":1,
+    "N_samples": 16,
+    "batch_size":16,
     "learning_rate": 1,
     "momentum": 0.9,
     "epochs": 50000

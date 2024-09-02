@@ -6,7 +6,7 @@ from prepare_data import normalization
 from torch.utils.data import TensorDataset
 sys.path.insert(0, '/Users/skost/coding-s/ProjectGAN/NN/')
 from subfunc import load_json  # beacuse of formater this line often moves to the top
-data_p = load_json('/Users/skost/coding-s/ProjectGAN/NN/parameters.json').data
+data_p = load_json('/Users/skost/coding-s/ProjectGAN/overview.json').data
 dtype = torch.float32
 
 class Load_Dataset():
@@ -60,7 +60,7 @@ class Load_Dataset():
 
 
 main_Dataset_i = Load_Dataset(
-    data_p.folder_dir, data_p.input_shape, data_p.shape_1, data_p.shape_2)
+    data_p.folder_dir, data_p.input_shape, data_p.output_shape1, data_p.output_shape2)
 main_Dataset = main_Dataset_i.torch_Dataset()  # make data to torch Dataset
 main_Dataset_i.save(main_Dataset)  # save data as .pt file
 print("your data was succesfully compressed")

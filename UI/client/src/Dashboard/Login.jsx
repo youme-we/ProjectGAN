@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from "react-router-dom"
-import { socket } from "./socket";
+import { socket } from "./sub_functions/socket";
 
-function Login({setoverview}) {
+export default function Login() {
   const [prj_name, setprj_name] = useState("")
   const navigate = useNavigate();
 
 
-
-  const Send = () => {
-    fetch('http://localhost:3001/login', {
+  const send = () => {
+    fetch("http://localhost:3001/login", {
       method: "POST",
-      headers: { 'Content-Type': 'application/json' },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ prj_name }),
-      mode: 'cors',
+      mode: "cors",
       credentials: "include",
     })
       .then(res => res.json())
@@ -21,9 +20,9 @@ function Login({setoverview}) {
         if (res) {
           navigate("/project")
           socket.emit("/tune_s", {
-            res
+            overview: JSON.stringify(res)
           });
-          setoverview(res)
+          sessionStorage.setItem("overview", JSON.stringify(res))
         }
         else { alert("Project doesn't exist") }
       })
@@ -35,11 +34,10 @@ function Login({setoverview}) {
     <div className="App">
       <h3>enter Project_ID</h3>
       <input type={"text"} value={prj_name} onChange={(e) => setprj_name(e.target.value)}></input>
-      <button onClick={Send}>login</button>
+      <button onClick={send}>login</button>
     </div>
   );
 }
 
-export default Login;
 
 

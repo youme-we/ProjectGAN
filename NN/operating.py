@@ -10,10 +10,10 @@ sio = socketio.AsyncSimpleClient()
 class Operator():
 
     def __init__(self, props):
+        self.props = props
         self.pause = False
         self.save = False
         self.run = True
-        self.props = props
 
     async def listen(self, SOCKET_CONNECTION):
         task1 = asyncio.create_task(

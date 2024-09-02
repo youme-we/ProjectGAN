@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { socket } from "./socket";
+import { socket } from "./sub_functions/socket";
 
-export default function Create({ setoverview }) {
+export default function Create() {
   const [prj_name, setprj_name] = useState("")
   const navigate = useNavigate();
+
+
   const send = () => {
     fetch("http://localhost:3001/create", {
       method: "POST",
@@ -18,17 +20,17 @@ export default function Create({ setoverview }) {
         if (res) {
           navigate("/project")
           socket.emit("/tune_s", {
-            overview:JSON.stringify({res})
+            overview: JSON.stringify(res)
           });
-          setoverview(res)
+          sessionStorage.setItem("overview", JSON.stringify(res))
         }
-        else { alert("Project_ID already exists") }
+        else { alert("Project already exists") }
       })
   }
 
   return (
     <div className="App">
-      <h3>enter a Project_ID to create new Project</h3>
+      <h3>enter a Project_ID to create a new Project</h3>
       <input
         type={"text"}
         value={prj_name}

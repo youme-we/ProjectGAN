@@ -13,7 +13,6 @@ const socket_endpoints = (server) => {
     });
 
     socket.on("/tune_s", (data) => {
-      console.log("data was braodcasted")
       socket.broadcast.emit("/tune_nn", data)
     })
 

@@ -16,6 +16,7 @@
     "@testing-library/user-event": "^13.5.0",
     "echarts": "^5.4.3",
     "echarts-for-react": "^3.0.2",
+    "immer": "^10.1.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.11.2",
@@ -23,6 +24,7 @@
     "rsuite": "^5.43.0",
     "socket.io": "^4.7.2",
     "socket.io-client": "^4.7.2",
+    "use-immer": "^0.10.0",
     "uuid": "^9.0.1",
     "web-vitals": "^2.1.4"
   },

@@ -1,22 +1,20 @@
 import express from "express";
 import cors from "cors";
 import sessions from "express-session";
-import cookieParser from "cookie-parser";
 import path from "path";
 const path_build = "/Users/skost/coding-s/ProjectGAN/UI/client/build";
-const setup_express =  () => {
+const setup_express = () => {
   const app = express();
   app.use(
     sessions({
-      secret: "test",
+      secret: "secret-key",
       saveUninitialized: false, //when false the cookie only gets stored in the Brwoser when it get's modified by for example setting req.session.authentication = true;
-      cookie: { maxAge: 1000000 }, //milliseconds
+      cookie: { maxAge: null },
       resave: false,
       secure: false, //if this is true the cookie only gets send over a https secure connection
     })
   );
 
-  app.use(cookieParser()); // don't need this because express-session includes it
   app.use(express.json()); // <==== parse request body as JSON
   app.use(
     cors({

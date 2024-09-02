@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { socket } from "./socket";
+import { useImmer } from "use-immer";
+import { socket } from "../sub_functions/socket.jsx";
 import ReactEcharts from "echarts-for-react";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import PlayDisabledIcon from "@mui/icons-material/PlayDisabled";
 import PauseIcon from "@mui/icons-material/Pause";
-import Network from "./Network.jsx"
-import { over } from "lodash";
+import overview_template from "./overview_template.json"
+import Network from "./Network.jsx";
 
-function Project({ overview, setoverview }) {
+
+export default function Project() {
+  const [overview, setoverview] = useImmer(JSON.parse(sessionStorage.getItem('overview')))
   const [metrics, setmetrics] = useState([]);
-  const [metrics_initialized,setmetrics_initialized] = useState(false);
+
   socket.on("/nn_metrics_c", (metrics) => {
     setmetrics(metrics);
-    setmetrics_initialized(true);
   });
 
   const pps = (pause, save, run) => {
@@ -20,19 +22,26 @@ function Project({ overview, setoverview }) {
       pause: pause,
       save: save,
       run: run
-
-    });
+    })
   };
 
-  const onChange_overview = (e, keyname) => {
-    let new_overview = { ...overview }
-    new_overview.hyperparameters[keyname] = parseFloat(e.target.value)
-    socket.emit("/tune_s", {
-      overview: JSON.stringify({overview})
-    })
-    console.log(new_overview)
-    setoverview(new_overview)
+
+  const onTune_overview = (e) => {
+    if (e.key === "Enter") {
+      sessionStorage.setItem("overview", JSON.stringify(overview))
+      socket.emit("/tune_s", {
+        overview: JSON.stringify({ overview })
+      })
+    }
   }
+
+
+  const onChange_overview = (e, keyname) => {
+    setoverview((draft) => {
+      draft.hyperparameters[keyname] = parseFloat(e.target.value)
+    })
+  }
+
 
 
   // Draw the chart
@@ -77,20 +86,28 @@ function Project({ overview, setoverview }) {
       {Object.keys(overview.hyperparameters).map((keyname, index) => (
         <div key={index} >
           <div>{keyname}</div>
-          <input type="range" value={overview.hyperparameters[keyname]} onChange={(e) => { onChange_overview(e, keyname) }} />
+          <input type={overview_template.hyperparameters[keyname].type}
+            min={overview_template.hyperparameters[keyname].min}
+            max={overview_template.hyperparameters[keyname].max}
+            step={overview_template.hyperparameters[keyname].step}
+            value={overview.hyperparameters[keyname]}
+            onChange={(e) => { onChange_overview(e, keyname) }}
+          //onKeyDown={(e) => { onTune_overview(e) }}
+          />
         </div>)
       )}
-      <ReactEcharts option={option} />
 
-      {metrics_initialized === true &&
+
+      {metrics.epoch &&
         <>
+          <ReactEcharts option={option} />
           <img
             style={{ width: "400px", height: "auto" }}
-            src={`data:image/png;base64,${metrics.generated_data}`}
+            src={`data:image/png;base64,${metrics.training_sample}`}
           />
           <img
             style={{ width: "400px", height: "auto" }}
-            src={`data:image/png;base64,${metrics.imitated_data}`}
+            src={`data:image/png;base64,${metrics.test_sample}`}
           />
           <Network weights={metrics.weights} />
         </>
@@ -99,4 +116,3 @@ function Project({ overview, setoverview }) {
   );
 }
 
-export default Project;

@@ -3,6 +3,7 @@ import json
 from types import SimpleNamespace
 from colorama import Fore, Back, Style
 
+
 def device():
     device = (
         "cuda"
@@ -20,12 +21,13 @@ def load_json(file):
             data_file, object_hook=lambda d: SimpleNamespace(**d))
     return data
 
+
 def checking_data_actuality(Dataset, overview):
     input_shape_Dataset = Dataset[0][0].shape[0]
-    input_shape_overview = overview.data.output_shape1*overview.data.output_shape2*3
+    input_shape_overview = overview.data.input_shape
 
     output_shape_Dataset = torch.flatten(Dataset[0][1]).shape[0]
-    ouput_shape_overview = overview.data.input_shape
+    ouput_shape_overview = overview.data.output_shape1*overview.data.output_shape2*3
 
     if input_shape_Dataset != input_shape_overview or output_shape_Dataset != ouput_shape_overview:
         print(Fore.RED)
@@ -33,4 +35,3 @@ def checking_data_actuality(Dataset, overview):
         print(Style.RESET_ALL)
 
     return Dataset
- 

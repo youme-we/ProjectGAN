@@ -24,7 +24,6 @@ class Trainer:
         await sio.connect('http://localhost:3001')
         self.SOCKET_CONNECTION = sio
         self.__operator = Operator(self)
-        # !should run automatically when starting epoch for loop!
         await self.__operator.listen(self.SOCKET_CONNECTION)
         self.__plotter = Plotter(self)
 
@@ -41,7 +40,7 @@ class Trainer:
             optimizer = torch.optim.SGD(
                 self.model.parameters(), lr=self.__overview.hyperparameters.learning_rate, momentum=self.__overview.hyperparameters.momentum)
             scheduler = torch.optim.lr_scheduler.StepLR(
-                optimizer, step_size=1, gamma=0.99999)
+                optimizer, step_size=1, gamma=0.9)
             samplers_data = sampler.SubsetRandomSampler(
                 indices=torch.arange(self.__overview.hyperparameters.N_samples))
             training_dataloader = DataLoader(
@@ -52,7 +51,7 @@ class Trainer:
                                 optimizer, scheduler)
 
                 await self.__operator.operate()
-                if self.__operator.run == False:
+                if not self.__operator.run:
                     self.__operator.group.cancel()
                     return
 

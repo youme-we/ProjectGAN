@@ -20,7 +20,6 @@ class Plotter():
     async def plot(self, epoch):
         self.epochs.append(epoch)
         self.losses.append(self.props.model.loss)
-        # print(self.model.linear_relu_stack[0].weight.tolist())
 
         if epoch % self.props.overview.plot.show_information_rate == 0:
             samples = self.pack_samples()
@@ -34,15 +33,15 @@ class Plotter():
     def pack_samples(self):
         self.props.model.eval()
 
-        train = self.props.Dataset[0:10][0]
-        test = self.props.Dataset[-10:][0]
+        train = self.props.Dataset[0][0]
+        test = self.props.Dataset[-1][0]
 
         pred_tr = self.props.model(train)
-        pred_tr_0 = self.denormalizing(pred_tr[0])
+        pred_tr_0 = self.denormalizing(pred_tr)
         pred_tr_b64 = self.to_base64(pred_tr_0)
 
         pred_te = self.props.model(test)
-        pred_te_0 = self.denormalizing(pred_te[0])
+        pred_te_0 = self.denormalizing(pred_te)
         pred_te_b64 = self.to_base64(pred_te_0)
 
         return [pred_tr_b64, pred_te_b64]
