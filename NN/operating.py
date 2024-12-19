@@ -1,16 +1,14 @@
 import asyncio
 from colorama import Fore, Back, Style
 import socketio
-from keyboard import KeyPoller
 import json
 from types import SimpleNamespace
 sio = socketio.AsyncSimpleClient()
 
 
 class Operator():
-
-    def __init__(self, props):
-        self.props = props
+    def __init__(self, update_overview):
+        self.update_overview = update_overview
         self.pause = False
         self.save = False
         self.run = True
@@ -45,8 +43,8 @@ class Operator():
         self.print_processing_status()
 
     async def overview_handler(self, event):
-        self.props.overview = json.loads(
-            event[1]["overview"], object_hook=lambda d: SimpleNamespace(**d)).overview
+        self.set_overview(json.loads(
+            event[1]["overview"], object_hook=lambda d: SimpleNamespace(**d)).overview)
 
     async def on_terminal_handler(self):
         with KeyPoller() as keyPoller:

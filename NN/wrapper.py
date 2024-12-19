@@ -10,7 +10,7 @@ from watchdog.events import FileSystemEventHandler, LoggingEventHandler
 from watchdog.observers import Observer
 from importlib import reload
 from importlib.machinery import SourceFileLoader
-from subfunc import device, load_json
+from utils import device, load_json
 
 
 def print_error(e):

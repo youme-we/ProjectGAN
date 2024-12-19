@@ -9,11 +9,11 @@ const http_endpoints = (app, db) => {
   });
 
   app.post("/create", async (req, res) => {
-    if (await db.get_prj(req.body.prj_name)) {
+    const prj = await db.create_prj(req.body.prj_name)
+    if (prj) {
       res.send(false)
     }
     else {
-      const prj = await db.create_prj(req.body.prj_name)
       res.send(prj)
     }
   })

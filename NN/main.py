@@ -1,58 +1,47 @@
-import torch
-from tqdm import tqdm
-from torch import func, nn, optim
-from torch.utils.data import Dataset, sampler, DataLoader
-from NN import GAN
-from subfunc import device, checking_data_actuality, load_json
-from operating import Operator
-from plot import Plotter
+from typing import overload
+
 import socketio
+import torch
+from torch import func, nn, optim
+from torch.utils.data import DataLoader, sampler
+from tqdm import tqdm
+
+from Dataset import Dataset
+from nn_architectures import GAN
+from operating import Operator
+from plotting2 import Plotters
+from utils import checking_data_actuality, device, load_json
 
 sio = socketio.AsyncSimpleClient()
 torch.set_default_device(device())
 
 
 class Trainer:
-    def __init__(self, Dataset):
-        self.__overview = load_json("../overview.json")
-        self.Dataset = checking_data_actuality(
-            Dataset, self.__overview)
-        self.model = GAN(
-            self.__overview)
+    def __init__(self, data):
+        overview = load_json("../overview.json")
+        for key, value in vars(overview.trainer).items():
+            setattr(self, key, value)
+        self.dataset = Dataset(data, overview.metadata)
+        self.model = GAN(overview.hyperparameters, self.dataset)
+        self.__plotter = Plotters(overview.plots)
+        self.__operator = Operator(self.update_overview)
 
     async def init(self):
-        await sio.connect('http://localhost:3001')
-        self.SOCKET_CONNECTION = sio
-        self.__operator = Operator(self)
-        await self.__operator.listen(self.SOCKET_CONNECTION)
-        self.__plotter = Plotter(self)
+        await sio.connect("http://localhost:3001")
+        SOCKET_CONNECTION = sio
+        await self.__operator.listen(SOCKET_CONNECTION)
+        await self.__plotter.listen(SOCKET_CONNECTION)
 
-    @property
-    def overview(self):
-        return self.__overview
-
-    @overview.setter
-    def overview(self, new_overview):
-        self.__overview = new_overview
+    def update_overview(self, new_overview):
+        self.dataset.__update__(new_overview.metadata)
+        self.model.__update__(new_overview.hyperparameters)
 
     async def train(self):
-        for epoch in tqdm(range(self.__overview.hyperparameters.epochs)):
-            optimizer = torch.optim.SGD(
-                self.model.parameters(), lr=self.__overview.hyperparameters.learning_rate, momentum=self.__overview.hyperparameters.momentum)
-            scheduler = torch.optim.lr_scheduler.StepLR(
-                optimizer, step_size=1, gamma=0.9)
-            samplers_data = sampler.SubsetRandomSampler(
-                indices=torch.arange(self.__overview.hyperparameters.N_samples))
-            training_dataloader = DataLoader(
-                self.Dataset, sampler=samplers_data, batch_size=self.__overview.hyperparameters.batch_size)
+        for epoch in tqdm(range(self.epochs)):
+            self.model.iter()
+            await self.__operator.operate()
+            if not self.__operator.run:
+                self.__operator.group.cancel()
+                return
 
-            for batch, (X, y) in enumerate(training_dataloader):
-                self.model.iter(X, y, nn.MSELoss(),
-                                optimizer, scheduler)
-
-                await self.__operator.operate()
-                if not self.__operator.run:
-                    self.__operator.group.cancel()
-                    return
-
-            await self.__plotter.plot(epoch)
+            await self.__plotter.plot(epoch, self.model)
