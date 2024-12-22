@@ -1,12 +1,12 @@
 run: 
-	cd NN && python3 wrapper.py #NN
+	@cd NN && python3 wrapper.py
 
 plot:
-	cd UI && cd server && npx nodemon server.js #starts server
+	@cd UI && cd server && npx nodemon server.js 
 
 development:
-	cd UI && cd client && npm start #starts client
+	@cd UI && cd client && npm start 
 
-compress:
-	cd NN && cd datamanagement && python3 compress_data.py
+compille:
+	@cd NN && cd datamanagement && python3 compille_data.py
 

@@ -11,7 +11,6 @@ class GAN(nn.Module):
     def __init__(self, hyperparameters, dataset):
         for key, value in vars(hyperparameters).items():
             setattr(self, key, value)
-        self.dataset = dataset
         super().__init__()
         self.flatten = nn.Flatten()
         self.linear_relu_stack = nn.Sequential(
@@ -23,20 +22,25 @@ class GAN(nn.Module):
             nn.Tanh(),
         )
 
-        optimizer = torch.optim.SGD(
+        self.samplers_data = sampler.SubsetRandomSampler(
+            indices=torch.arange(self.n_samples)
+        )
+        self.training_dataloader = DataLoader(
+            dataset,
+            sampler=self.samplers_data,
+            batch_size=self.batch_size,
+        )
+
+        self.optimizer = torch.optim.SGD(
             self.parameters(),
             lr=self.learning_rate,
             momentum=self.momentum,
         )
-        scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=1, gamma=0.9)
-        samplers_data = sampler.SubsetRandomSampler(
-            indices=torch.arange(self.n_samples)
+        self.scheduler = torch.optim.lr_scheduler.StepLR(
+            self.optimizer, step_size=1, gamma=0.9
         )
-        self.training_dataloader = DataLoader(
-            self.dataset,
-            sampler=samplers_data,
-            batch_size=self.batch_size,
-        )
+
+        self.loss_fn = nn.MSELoss()
 
     def forward(self, x):
         logits = self.linear_relu_stack(x)
@@ -49,12 +53,12 @@ class GAN(nn.Module):
             # Compute prediction error
 
             pred = self.forward(X)
-            loss = loss_fn(pred, y)
+            loss = self.loss_fn(pred, y)
 
             # Backpropagation
-            optimizer.zero_grad()
+            self.optimizer.zero_grad()
             loss.backward()
-            optimizer.step()
+            self.optimizer.step()
             # scheduler.step()
 
             self.pred = pred

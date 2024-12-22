@@ -1,22 +1,17 @@
-import torch
-import os
-import time
-import sys
-import traceback
 import asyncio
-import warnings
-from colorama import Fore, Back, Style
-from watchdog.events import FileSystemEventHandler, LoggingEventHandler
-from watchdog.observers import Observer
+import os
 from importlib import reload
 from importlib.machinery import SourceFileLoader
+
+import torch
+from colorama import Back, Fore, Style
+from watchdog.events import FileSystemEventHandler, LoggingEventHandler
+from watchdog.observers import Observer
+
+import devel_utils
 from utils import device, load_json
 
-
-def print_error(e):
-    print(Fore.RED+"Error:")
-    print(Style.RESET_ALL)
-    print(traceback.format_exc())
+overview = load_json("../overview.json")
 
 
 class Watcher(FileSystemEventHandler):
@@ -26,24 +21,34 @@ class Watcher(FileSystemEventHandler):
     def on_modified(self, event):
         self.tracked_path = event.src_path
         self.mutated = True
- 
+
 
 Watcher = Watcher()
 
 # implements the Observer
-Observer = Observer()# external libaray
-Observer.schedule(Watcher, path='./', recursive=False)
+Observer = Observer()  # external libaray
+Observer.schedule(Watcher, path="./", recursive=False)
 Observer.start()
 
 # vars which should be loaded only once
-Dataset = torch.load('data/data.pt', map_location=torch.device(device()))
-###########################
+inputs = torch.load(
+    os.path.join(overview.metadata.folder_dir, "inputs.pt"),
+    map_location=torch.device(device()),
+    weights_only=False,
+)
+
+labels = torch.load(
+    os.path.join(overview.metadata.folder_dir, "labels.pt"),
+    map_location=torch.device(device()),
+    weights_only=False,
+)
 
 
 async def wrapper():
     i = 0
     try:
         import main
+
         i = 1
     except:
         pass
@@ -55,24 +60,23 @@ async def wrapper():
 
             # imports and runs the Main class --> NN function
             from main import Trainer
-            Trainer = Trainer(Dataset)
+
+            Trainer = Trainer(inputs, labels)
             await Trainer.init()
             await Trainer.train()
 
         except Exception as e:
-            print("error at running NN()")
-            print_error(e)
-       
-        print("save the script to rerun, or press ctrl-z to exit")
-        print("  ")
-        print(Fore.GREEN+"#######################################")
-        print(Style.RESET_ALL)
-        print("  ")
-        print("  ")
+            diagnostics(e, "error")
+            diagnostics("error at runtime", "wrapper_info")
+
+        print("save the script to rerun, or press Ctrl-z to exit\n")
+        print(Fore.GREEN + "#################################################\n\n")
 
         while True:
             Watcher.reset()
-            while True:  # runs as long as the Observer observes a change in the defined directory
+            while (
+                True
+            ):  # runs as long as the Observer observes a change in the defined directory
                 mutated = Watcher.mutated
                 if mutated:
                     break
@@ -85,8 +89,7 @@ async def wrapper():
             try:
                 if ext == ".py" and root != "/Users/skost/coding-s/ProjectGAN/NN/main":
                     Filename = os.path.basename(os.path.normpath(root))
-                    sub = SourceFileLoader(
-                        Filename, tracked_path).load_module()
+                    sub = SourceFileLoader(Filename, tracked_path).load_module()
                     reload(sub)  # reloads sub_module which was Modified
                     if i == 0:
                         import main
@@ -105,7 +108,8 @@ async def wrapper():
                     break
 
             except Exception as e:
-                print("error at reloading modules")
-                print_error(e)
+                diagnostics(e, "error")
+                diagnostics("error at reloading modules", "wrapper_info")
+
 
 asyncio.run(wrapper())

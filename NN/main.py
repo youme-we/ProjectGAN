@@ -1,27 +1,23 @@
-from typing import overload
-
 import socketio
 import torch
-from torch import func, nn, optim
-from torch.utils.data import DataLoader, sampler
 from tqdm import tqdm
 
 from Dataset import Dataset
 from nn_architectures import GAN
 from operating import Operator
 from plotting2 import Plotters
-from utils import checking_data_actuality, device, load_json
+from utils import device, load_json
 
 sio = socketio.AsyncSimpleClient()
 torch.set_default_device(device())
 
 
 class Trainer:
-    def __init__(self, data):
+    def __init__(self, inputs, lables):
         overview = load_json("../overview.json")
         for key, value in vars(overview.trainer).items():
             setattr(self, key, value)
-        self.dataset = Dataset(data, overview.metadata)
+        self.dataset = Dataset(overview.metadata, inputs, lables)
         self.model = GAN(overview.hyperparameters, self.dataset)
         self.__plotter = Plotters(overview.plots)
         self.__operator = Operator(self.update_overview)
