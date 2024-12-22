@@ -8,9 +8,11 @@ from utils import device
 
 
 class GAN(nn.Module):
-    def __init__(self, hyperparameters, dataset):
+    def __init__(self, hyperparameters, dataset, input_transformer, target_transfomer):
         for key, value in vars(hyperparameters).items():
             setattr(self, key, value)
+        self.input_transformer = input_transformer
+        self.target_transfomer = target_transfomer
         super().__init__()
         self.flatten = nn.Flatten()
         self.linear_relu_stack = nn.Sequential(
@@ -47,15 +49,17 @@ class GAN(nn.Module):
         return logits
 
     def iter(self):
-        for batch, (X, y) in enumerate(self.training_dataloader):
-            self.train()  # prepers the model for training. sets all states like drop out... but doesn't train
+        self.train()
+        for batch, (input, target) in enumerate(self.training_dataloader):
+            X, y = self.input_transformer.normalize(
+                input
+            ), self.target_transfomer.normalize(target)
+            self.train()
             y = self.flatten(y)
-            # Compute prediction error
 
             pred = self.forward(X)
             loss = self.loss_fn(pred, y)
 
-            # Backpropagation
             self.optimizer.zero_grad()
             loss.backward()
             self.optimizer.step()
@@ -64,3 +68,9 @@ class GAN(nn.Module):
             self.pred = pred
             self.lable = y
             self.loss = loss.item()
+
+    def predict(self, input):
+        self.eval()
+        X = self.input_transformer.normalize(input)
+        pred = self.forward(X)
+        return self.target_transfomer.denormalize(pred).int()

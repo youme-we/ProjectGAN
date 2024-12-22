@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-export default function Samples_TT({ metrics }) {
+export default function SamplesTT({ metrics }) {
   console.log(metrics)
   return (
     <div className="flex relative top-48 bg-dark-gray">

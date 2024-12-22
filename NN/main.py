@@ -1,5 +1,8 @@
+from asyncio import DatagramTransport
+
 import socketio
 import torch
+from DataTransformer import DataTransformer
 from tqdm import tqdm
 
 from Dataset import Dataset
@@ -14,11 +17,16 @@ torch.set_default_device(device())
 
 class Trainer:
     def __init__(self, inputs, lables):
+        # rename lables to-> targets
         overview = load_json("../overview.json")
         for key, value in vars(overview.trainer).items():
             setattr(self, key, value)
+        input_transformer = DataTransformer(inputs)
+        target_transfomer = DataTransformer(lables)
         self.dataset = Dataset(overview.metadata, inputs, lables)
-        self.model = GAN(overview.hyperparameters, self.dataset)
+        self.model = GAN(
+            overview.hyperparameters, self.dataset, input_transformer, target_transfomer
+        )
         self.__plotter = Plotters(overview.plots)
         self.__operator = Operator(self.update_overview)
 
@@ -33,11 +41,11 @@ class Trainer:
         self.model.__update__(new_overview.hyperparameters)
 
     async def train(self):
-        for epoch in tqdm(range(self.epochs)):
+        for epoch in tqdm(range(1, self.epochs)):
             self.model.iter()
             await self.__operator.operate()
             if not self.__operator.run:
                 self.__operator.group.cancel()
                 return
 
-            await self.__plotter.plot(epoch, self.model)
+            await self.__plotter.plot(epoch, self.model, self.dataset)

@@ -15,7 +15,11 @@
     "dtype": "torch.float32",
     "input_shape": 32,
     "output_shape1": 100,
-    "output_shape2": 120
+    "output_shape2": 120,
+    "transformations": {
+      "featrues": "",
+      "targets": ""
+    }
   },
   "plots": {
     "el_plot": {

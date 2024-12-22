@@ -8,7 +8,7 @@
           </div>
               }
           <div className="flex justify-evenly relative top-16 bg-dark-green">
-            <Samples_TT metrics={metrics} />
+            <SamplesTT metrics={metrics} />
           </div>
           <Network weights={metrics.weights} />
         }

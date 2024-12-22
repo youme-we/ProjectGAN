@@ -5,7 +5,7 @@ import overview_template from "./overview_template.json"
 import Controllers_pps from "./Controllers_pps"
 import Inputfields_Hyperparameters from "./Inputfields_Hyperparameters"
 import Chart_EL from "./Chart_EL"
-import Samples_TT from "./Samples_TT"
+import SamplesTT from "./SamplesTT"
 import Network from "./Network";
 
 export default function Project() {
@@ -26,7 +26,7 @@ export default function Project() {
             <Chart_EL metrics={metrics} />
             <Inputfields_Hyperparameters overview={overview} setoverview={setoverview} overview_template={overview_template} socket={socket} />
           </div>
-            <Samples_TT metrics={metrics} />
+            <SamplesTT metrics={metrics} />
             <Network weights={metrics.Network.weights} />
         </div>
       }
