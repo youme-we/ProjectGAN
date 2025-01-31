@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 export default function SamplesTT({ metrics }) {
-  console.log(metrics)
   return (
     <div className="flex relative top-48 bg-dark-gray">
       <div className="grid grid-cols-custom gap-x-32 gap-y-16 relative left-64">
@@ -26,6 +25,5 @@ export default function SamplesTT({ metrics }) {
         />
       </div>
     </div>
-  )
+  );
 }
-

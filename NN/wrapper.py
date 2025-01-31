@@ -74,9 +74,8 @@ async def wrapper():
 
         while True:
             Watcher.reset()
-            while (
-                True
-            ):  # runs as long as the Observer observes a change in the defined directory
+            while True:
+                # runs as long as the Observer observes a change in the defined directory
                 mutated = Watcher.mutated
                 if mutated:
                     break
@@ -98,7 +97,7 @@ async def wrapper():
                         reload(main)  # reloads main_module
                     i = 1
                     break
-                elif ext == ".py":
+                elif ext == ".py" or ".json":
                     if i == 0:
                         import main
 

@@ -2,13 +2,13 @@ from asyncio import DatagramTransport
 
 import socketio
 import torch
-from DataTransformer import DataTransformer
 from tqdm import tqdm
 
 from Dataset import Dataset
+from DataTransformer import DataTransformer
 from nn_architectures import GAN
 from operating import Operator
-from plotting2 import Plotters
+from plotting import Plotters
 from utils import device, load_json
 
 sio = socketio.AsyncSimpleClient()
@@ -16,14 +16,13 @@ torch.set_default_device(device())
 
 
 class Trainer:
-    def __init__(self, inputs, lables):
-        # rename lables to-> targets
+    def __init__(self, inputs, targets):
         overview = load_json("../overview.json")
         for key, value in vars(overview.trainer).items():
             setattr(self, key, value)
         input_transformer = DataTransformer(inputs)
-        target_transfomer = DataTransformer(lables)
-        self.dataset = Dataset(overview.metadata, inputs, lables)
+        target_transfomer = DataTransformer(targets)
+        self.dataset = Dataset(overview.metadata, inputs, targets)
         self.model = GAN(
             overview.hyperparameters, self.dataset, input_transformer, target_transfomer
         )
