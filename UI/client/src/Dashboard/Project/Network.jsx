@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 class Network extends Component {
   Neuronal_Net = () => {
-    let markcolor = ["#628E25","#6286AD"];
+    let markcolor = ["#628E25", "#6286AD"];
     const style = {
       //stroke: '#628E25', //#628E25,#6286AD '
       position: "relative",
@@ -25,9 +25,9 @@ class Network extends Component {
     const size_net = lyers_shape_neurons.size_net;
     //var lyers_shape = lyers_shape_neurons.lyers_shape
 
-    const lyers_shape = [1,2]; //shape of NN
+    const lyers_shape = [1, 2]; //shape of NN
     //Array.from(lyers_shape.toString()).map(Number);
-    
+
     var strong_lyers_shape = this.props.weights; //weights of NN;
 
     var second_lyer_a = []; //nimmt jeden zwieten Wert von lyers_shape :jede ungerade Stelle der Array
@@ -75,119 +75,111 @@ class Network extends Component {
     var x_of_resize_dot = 0;
     var y_of_resize_dot = 0;
     return (
-      <svg
-        style={{
-          // width: item.size[0],
-          position: "fixed",
-          zIndex: "-2",
-          top: "-500",
-          left: "100",
-          overflow: "visible",
-          backgroundColor: "red",
-        }}
-      >
-        {x_values_a.map((x_values_p, x_values) =>
-          line_values[0][x_values].map((first_lyer_p, first_lyer) =>
-            line_values[1][x_values].map((second_lyer_p, second_lyer) => {
-              if (Math.sign(strong_lyers_shape[i]) === 1) {
-                //Wenn stronge_lyers_shape(die Gewichte) poitiv sind, ist stroke_color grün und wenn es negativ ist es rot
-                var stroke_color = markcolor[0];
-              } else {
-                stroke_color = markcolor[1];
-              }
-              x_of_resize_dot = x_values_p + left - scale_x;
-              y_of_resize_dot =
-                first_lyer_p *
+      <div className="basis-2/3">
+        <svg>
+          {x_values_a.map((x_values_p, x_values) =>
+            line_values[0][x_values].map((first_lyer_p, first_lyer) =>
+              line_values[1][x_values].map((second_lyer_p, second_lyer) => {
+                if (Math.sign(strong_lyers_shape[i]) === 1) {
+                  //Wenn stronge_lyers_shape(die Gewichte) poitiv sind, ist stroke_color grün und wenn es negativ ist es rot
+                  var stroke_color = markcolor[0];
+                } else {
+                  stroke_color = markcolor[1];
+                }
+                x_of_resize_dot = x_values_p + left - scale_x;
+                y_of_resize_dot =
+                  first_lyer_p *
                   (size_net / (line_values[0][x_values].length + 1)) +
-                top;
-              return (
-                <g key={i}>
-                  <rect
-                    width="90"
-                    height="90"
-                    fill=""
-                    fillOpacity="0"
-                    x={x_values_p + left - scale_x - 50}
-                    y={
-                      first_lyer_p *
+                  top;
+                return (
+                  <g key={i}>
+                    <rect
+                      width="90"
+                      height="90"
+                      fill=""
+                      fillOpacity="0"
+                      x={x_values_p + left - scale_x - 50}
+                      y={
+                        first_lyer_p *
                         (size_net / (line_values[0][x_values].length + 1)) +
-                      top -
-                      50
-                    }
-                  />
-                  <rect
-                    width="40"
-                    height="40"
-                    fill=""
-                    fillOpacity="0"
-                    x={x_values_p + left}
-                    y={
-                      second_lyer_p *
+                        top -
+                        50
+                      }
+                    />
+                    <rect
+                      width="40"
+                      height="40"
+                      fill=""
+                      fillOpacity="0"
+                      x={x_values_p + left}
+                      y={
+                        second_lyer_p *
                         (size_net / (line_values[1][x_values].length + 1)) +
-                      top -
-                      50
-                    }
-                  />
-                  <line
-                    style={style}
-                    x1={
-                      x_values_p -
-                      scale_x +
-                      radius_neurons +
-                      left /* 800-700+10+100*/
-                    }
-                    x2={x_values_p - radius_neurons + left}
-                    y1={
-                      first_lyer_p *
+                        top -
+                        50
+                      }
+                    />
+                    <line
+                      style={style}
+                      x1={
+                        x_values_p -
+                        scale_x +
+                        radius_neurons +
+                        left /* 800-700+10+100*/
+                      }
+                      x2={x_values_p - radius_neurons + left}
+                      y1={
+                        first_lyer_p *
                         (size_net / (line_values[0][x_values].length + 1)) +
-                      top
-                    }
-                    y2={
-                      second_lyer_p *
+                        top
+                      }
+                      y2={
+                        second_lyer_p *
                         (size_net / (line_values[1][x_values].length + 1)) +
-                      top
-                    }
-                    strokeWidth={
-                      Math.abs(strong_lyers_shape[i]) +
-                      0.6 /*Es werden alle Werte positiv gemacht und noch 0.6 addiert, falls ein Gewicht < 0.5 ist, da mann sonst nicht die Line erkennen kann*/
-                    }
-                    stroke={stroke_color}
-                  >
-                    {" "}
-                  </line>
-                  ,
-                  <circle
-                    cx={x_values_p + left}
-                    cy={
-                      second_lyer_p *
+                        top
+                      }
+                      strokeWidth={
+                        Math.abs(strong_lyers_shape[i]) +
+                        0.6 /*Es werden alle Werte positiv gemacht und noch 0.6 addiert, falls ein Gewicht < 0.5 ist, da mann sonst nicht die Line erkennen kann*/
+                      }
+                      stroke={stroke_color}
+                    >
+                      {" "}
+                    </line>
+                    ,
+                    <circle
+                      cx={x_values_p + left}
+                      cy={
+                        second_lyer_p *
                         (size_net / (line_values[1][x_values].length + 1)) +
-                      top
-                    }
-                    r={radius_neurons}
-                    stroke="black"
-                    strokeWidth="3"
-                    fill="white"
-                  />
-                  ,
-                  <circle
-                    cx={x_values_p + left - scale_x}
-                    cy={
-                      first_lyer_p *
+                        top
+                      }
+                      r={radius_neurons}
+                      stroke="black"
+                      strokeWidth="3"
+                      fill="white"
+                    />
+                    ,
+                    <circle
+                      cx={x_values_p + left - scale_x}
+                      cy={
+                        first_lyer_p *
                         (size_net / (line_values[0][x_values].length + 1)) +
-                      top
-                    }
-                    r={radius_neurons}
-                    stroke="black"
-                    strokeWidth="3"
-                    fill="white"
-                  />
-                  ,{(i = i + 1)}
-                </g>
-              );
-            })
-          )
-        )}
-      </svg>
+                        top
+                      }
+                      r={radius_neurons}
+                      stroke="black"
+                      strokeWidth="3"
+                      fill="white"
+                    />
+                    ,{(i = i + 1)}
+                  </g>
+                );
+              })
+            )
+          )}
+        </svg>
+      </div>
     );
   };
 

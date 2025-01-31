@@ -1,20 +1,29 @@
 {
-  "_id":"",
-  "prj_name":"",
-  "hyperparameters": {
-    "N_samples": 16,
-    "batch_size":16,
-    "learning_rate": 1,
-    "momentum": 0.9,
-    "epochs": 50000
+  "_id": "",
+  "prj_name": "",
+  "trainer": {
+    "epochs": 200
   },
-  "data": {
-    "folder_dir": "/Users/skost/coding-s/Data/Images/cars",
+  "hyperparameters": {
+    "n_samples": 16,
+    "batch_size": 16,
+    "learning_rate": 10,
+    "momentum": 0.9
+  },
+  "metadata": {
+    "folder_dir": "/Users/skost/coding-s/ProjectGAN/NN/data/cars",
+    "dtype": "torch.float32",
     "input_shape": 32,
     "output_shape1": 100,
-    "output_shape2": 120
+    "output_shape2": 120,
+    "transformations": {
+      "featrues": "",
+      "targets": ""
+    }
   },
-  "plot": {
-    "show_information_rate": 1
+  "plots": {
+    "el_plot": {
+      "rate": 1
+    }
   }
 }
