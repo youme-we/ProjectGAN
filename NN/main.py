@@ -36,8 +36,8 @@ class Trainer:
         await self.__plotter.listen(SOCKET_CONNECTION)
 
     def update_overview(self, new_overview):
-        self.dataset.__update__(new_overview.metadata)
-        self.model.__update__(new_overview.hyperparameters)
+        # self.dataset.__update__(new_overview.metadata)
+        self.model.__update__(new_overview.hyperparameters, self.dataset)
 
     async def train(self):
         for epoch in tqdm(range(1, self.epochs)):

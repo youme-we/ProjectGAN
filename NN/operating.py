@@ -3,7 +3,6 @@ import json
 from types import SimpleNamespace
 
 import socketio
-from colorama import Back, Fore, Style
 
 from utils import KeyPoller
 
@@ -43,9 +42,7 @@ class Operator:
 
     async def overview_handler(self, event):
         self.update_overview(
-            json.loads(
-                event[1]["overview"], object_hook=lambda d: SimpleNamespace(**d)
-            ).overview
+            json.loads(event[1]["overview"], object_hook=lambda d: SimpleNamespace(**d))
         )
 
     async def on_terminal_handler(self):
@@ -63,9 +60,7 @@ class Operator:
 
     def print_processing_status(self):
         if self.pause:
-            print(Fore.GREEN + "The calculation was paused")
-            print(Style.RESET_ALL)
+            diagnostics("The calculation was paused")
 
         if not self.run:
-            print(Fore.GREEN + "The calculation was ended & the weights were saved")
-            print(Style.RESET_ALL)
+            diagnostics("The calculation was ended & the weights were saved")

@@ -14,8 +14,8 @@
     "folder_dir": "/Users/skost/coding-s/ProjectGAN/NN/data/cars",
     "dtype": "torch.float32",
     "input_shape": 32,
-    "output_shape1": 40,
-    "output_shape2": 60,
+    "output_shape1": 140,
+    "output_shape2": 160,
     "transformations": {
       "featrues": "",
       "targets": ""

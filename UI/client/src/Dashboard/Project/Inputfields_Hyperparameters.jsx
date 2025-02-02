@@ -7,8 +7,9 @@ export default function Inputfields_Hyperparameters({
   const onTune_overview = (e, keyname) => {
     if (e.key === "Enter") {
       sessionStorage.setItem("overview", JSON.stringify(overview));
+      console.log(JSON.stringify(overview));
       socket.emit("/tune_s", {
-        overview: JSON.stringify({ overview }),
+        overview: JSON.stringify(overview),
       });
       document.getElementById(`inputfield_${keyname}`).blur();
     }
@@ -24,6 +25,7 @@ export default function Inputfields_Hyperparameters({
     <div className="relative object-center basis-1/8">
       {Object.keys(overview.hyperparameters).map((keyname, index) => (
         <div key={index}>
+          {console.log(keyname)}
           <div className="font-serif text-lg subpixel-antialiased text-white-brown">
             {keyname}
           </div>

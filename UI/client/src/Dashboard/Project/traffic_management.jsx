@@ -6,7 +6,6 @@ export default class Metrics {
     this.loss = [];
     this.training_sample = null;
     this.test_sample = null;
-    this.weights = null;
   }
   push(metrics_record) {
     const keys = Object.keys(metrics_record);

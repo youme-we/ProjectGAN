@@ -15,8 +15,8 @@ class Dataset:
         self.checking_data_actuality()
 
     def __update__(self, metadata):
-        for key, value in vars(data, metadata).item():
-            setatter(self, key, value)
+        for key, value in vars(metadata).items():
+            setattr(self, key, value)
 
     def __len__(self):
         return len(self.img_labels)

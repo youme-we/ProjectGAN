@@ -21,11 +21,9 @@ class Plotters:
                     "epoch": epoch,
                     "loss": model.loss,
                     "training_sample": samplesTT[0],
-                    "test_sample": samplesTT[1]
-
-
-
-                            )
+                    "test_sample": samplesTT[1],
+                },
+            )
 
     def plotting_el(self, epoch, loss):
         self.epochs.append(epoch)

@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react'
-import { useNavigate } from "react-router-dom"
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { socket } from "./sub_functions/socket";
 
 export default function Login() {
-  const [prj_name, setprj_name] = useState("")
+  const [prj_name, setprj_name] = useState("");
   const navigate = useNavigate();
-
 
   const send = () => {
     fetch("http://localhost:3001/login", {
@@ -15,29 +14,29 @@ export default function Login() {
       mode: "cors",
       credentials: "include",
     })
-      .then(res => res.json())
-      .then(res => {
+      .then((res) => res.json())
+      .then((res) => {
         if (res) {
-          navigate("/project")
+          navigate("/project");
           socket.emit("/tune_s", {
-            overview: JSON.stringify(res)
+            overview: JSON.stringify(res),
           });
-          sessionStorage.setItem("overview", JSON.stringify(res))
+          sessionStorage.setItem("overview", JSON.stringify(res));
+        } else {
+          alert("Project doesn't exist");
         }
-        else { alert("Project doesn't exist") }
-      })
-  }
-
-
+      });
+  };
 
   return (
     <div className="App">
       <h3>enter Project_ID</h3>
-      <input type={"text"} value={prj_name} onChange={(e) => setprj_name(e.target.value)}></input>
+      <input
+        type={"text"}
+        value={prj_name}
+        onChange={(e) => setprj_name(e.target.value)}
+      ></input>
       <button onClick={send}>login</button>
     </div>
   );
 }
-
-
-
