@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import ReactEcharts from "echarts-for-react";
 
-export default function Chart_EL({ metrics }) {
-  //sessionStorage.setItem("metrics.epoch", JSON.stringify(metrics.Chart_EL.epoch))
+export default function Chart_EL({ epoch, loss }) {
   const option = {
     xAxis: {
       type: "category",
-      data: metrics.epoch,
+      data: epoch,
       axisLine: {
         lineStyle: {
           color: "F5F9E9",
@@ -25,7 +24,7 @@ export default function Chart_EL({ metrics }) {
     },
     series: [
       {
-        data: metrics.loss,
+        data: loss,
         type: "line",
         smooth: true,
         lineStyle: { color: "#F5F9E9" },

@@ -2,11 +2,11 @@
   "_id": "",
   "prj_name": "",
   "trainer": {
-    "epochs": 200
+    "epochs": 2000
   },
   "hyperparameters": {
-    "n_samples": 16,
-    "batch_size": 16,
+    "n_samples": 512,
+    "batch_size": 512,
     "learning_rate": 10,
     "momentum": 0.9
   },
@@ -14,8 +14,8 @@
     "folder_dir": "/Users/skost/coding-s/ProjectGAN/NN/data/cars",
     "dtype": "torch.float32",
     "input_shape": 32,
-    "output_shape1": 100,
-    "output_shape2": 120,
+    "output_shape1": 40,
+    "output_shape2": 60,
     "transformations": {
       "featrues": "",
       "targets": ""

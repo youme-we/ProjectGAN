@@ -16,11 +16,11 @@ class GAN(nn.Module):
         super().__init__()
         self.flatten = nn.Flatten()
         self.linear_relu_stack = nn.Sequential(
-            nn.Linear(dataset.input_shape, 1024),
+            nn.Linear(dataset.input_shape, 128),
             nn.Tanh(),
-            nn.Linear(1024, 1024),
+            nn.Linear(128, 128),
             nn.Tanh(),
-            nn.Linear(1024, dataset.output_shape1 * dataset.output_shape2 * 3),
+            nn.Linear(128, dataset.output_shape1 * dataset.output_shape2 * 3),
             nn.Tanh(),
         )
 
