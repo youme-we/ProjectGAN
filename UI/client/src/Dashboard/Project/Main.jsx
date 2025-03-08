@@ -30,8 +30,12 @@ export default function Project() {
       <Controllers_pps socket={socket} />
       <div>
         <div className="flex h-full justify-evenly items-center relative top-48 bg-dark-green">
+          <div className="font-serif text-3xl subpixel-antialiased bg-dark-gray text-white-brown">
+            {metrics.epoch.at(-1)}
+          </div>
           <Chart_EL epoch={metrics.epoch} loss={metrics.loss} />
           <Inputfields_Hyperparameters
+            erparameters
             overview={overview}
             setoverview={setoverview}
             overview_template={overview_template}

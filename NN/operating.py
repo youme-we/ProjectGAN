@@ -48,7 +48,7 @@ class Operator:
     async def on_terminal_handler(self):
         with KeyPoller() as keyPoller:
             while True:
-                await asyncio.sleep(0)
+                await asyncio.sleep(0.01)
                 key = keyPoller.poll()
                 if key:
                     if key == "b":
