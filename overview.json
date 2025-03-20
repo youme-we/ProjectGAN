@@ -2,20 +2,20 @@
   "_id": "",
   "prj_name": "",
   "trainer": {
-    "epochs": 200
+    "epochs": 2000
   },
   "hyperparameters": {
-    "n_samples": 16,
-    "batch_size": 16,
-    "learning_rate": 10,
-    "momentum": 0.9
+    "n_samples": 1,
+    "batch_size": 1,
+    "learning_rate": 1,
+    "momentum": 0
   },
   "metadata": {
     "folder_dir": "/Users/skost/coding-s/ProjectGAN/NN/data/cars",
     "dtype": "torch.float32",
     "input_shape": 32,
-    "output_shape1": 100,
-    "output_shape2": 120,
+    "output_shape1": 64,
+    "output_shape2": 84,
     "transformations": {
       "featrues": "",
       "targets": ""

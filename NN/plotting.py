@@ -18,13 +18,10 @@ class Plotters:
             await self.SOCKET_CONNECTION.emit(
                 "/nn_metrics_s",
                 {
-                    "epoch": self.epochs,
-                    "loss": self.losses,
+                    "epoch": epoch,
+                    "loss": model.loss,
                     "training_sample": samplesTT[0],
                     "test_sample": samplesTT[1],
-                    "weights": torch.flatten(
-                        model.linear_relu_stack[0].weight[0:2]
-                    ).tolist(),
                 },
             )
 
@@ -33,8 +30,8 @@ class Plotters:
         self.losses.append(loss)
 
     def plotting_samplesTT(self, epoch, model, dataset):
-        pred_tr = model.predict(dataset[-1][0])
+        pred_tr = model.predict(dataset[0][0])
         pred_tr_b64 = dataset.to_base64(pred_tr)
-        pred_te = model.predict(dataset[0][0])
+        pred_te = model.predict(dataset[-1][0])
         pred_te_b64 = dataset.to_base64(pred_te)
         return [pred_tr_b64, pred_te_b64]

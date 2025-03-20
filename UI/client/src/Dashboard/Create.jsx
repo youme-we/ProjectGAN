@@ -3,9 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { socket } from "./sub_functions/socket";
 
 export default function Create() {
-  const [prj_name, setprj_name] = useState("")
+  const [prj_name, setprj_name] = useState("");
   const navigate = useNavigate();
-
 
   const send = () => {
     fetch("http://localhost:3001/create", {
@@ -15,18 +14,19 @@ export default function Create() {
       mode: "cors",
       credentials: "include",
     })
-      .then(res => res.json())
-      .then(res => {
+      .then((res) => res.json())
+      .then((res) => {
         if (res) {
-          navigate("/project")
+          navigate("/project");
           socket.emit("/tune_s", {
-            overview: JSON.stringify(res)
+            overview: JSON.stringify(res),
           });
-          sessionStorage.setItem("overview", JSON.stringify(res))
+          sessionStorage.setItem("overview", JSON.stringify(res));
+        } else {
+          alert("Project already exists");
         }
-        else { alert("Project already exists") }
-      })
-  }
+      });
+  };
 
   return (
     <div className="App">
@@ -38,8 +38,5 @@ export default function Create() {
       ></input>
       <button onClick={send}>create</button>
     </div>
-
-  )
-
+  );
 }
-

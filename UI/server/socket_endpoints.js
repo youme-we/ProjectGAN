@@ -1,20 +1,17 @@
-import http from "http";
 import { Server } from "socket.io";
-import express from "express";
-const app = express();
 
-const socket_endpoints = (server) => {
+const socket_endpoints = (server, metrics) => {
   const io = setup_socket_server(server);
   io.on("connection", (socket) => {
-    //receive a message from the client
-    socket.on("/nn_metrics_s", (data) => {
-      // send data to the client
-      socket.broadcast.emit("/nn_metrics_c", data);
+    socket.on("/nn_metrics_s", (metrics_record) => {
+      metrics.push(metrics_record);
+      socket.broadcast.emit("/nn_metrics_c", metrics_record);
     });
 
     socket.on("/tune_s", (data) => {
-      socket.broadcast.emit("/tune_nn", data)
-    })
+      console.log("receiving", data);
+      socket.broadcast.emit("/tune_nn", data);
+    });
 
     socket.on("/pps_s", (data) => {
       socket.broadcast.emit("/pps_nn", data);

@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-export default function SamplesTT({ metrics }) {
+export default function SamplesTT({ training_sample, test_sample }) {
   return (
     <div className="flex relative top-48 bg-dark-gray">
       <div className="grid grid-cols-custom gap-x-32 gap-y-16 relative left-64">
@@ -15,13 +14,25 @@ export default function SamplesTT({ metrics }) {
         <div className="font-serif text-2xl subpixel-antialiased bg-dark-gray text-white-brown">
           1.
         </div>
+
         <img
-          src={`data:image/png;base64,${metrics.training_sample}`}
+          src={
+            training_sample
+              ? `data:image/png;base64,${training_sample}`
+              : "/placeholder.png"
+          }
           className="relative l-16 w-64 h-64"
+          alt="Training Sample"
         />
+
         <img
-          src={`data:image/png;base64,${metrics.test_sample}`}
-          className="relative l-4 w-64 h-64"
+          src={
+            test_sample
+              ? `data:image/png;base64,${test_sample}`
+              : "/placeholder.png"
+          }
+          className="relative l-16 w-64 h-64"
+          alt="Test Sample"
         />
       </div>
     </div>

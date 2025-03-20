@@ -13,15 +13,16 @@ export default class DB {
   }
 
   async get_prj(prj_name) {
-    return this.projects.findOne({ prj_name });
+    //return this.projects.findOne({ prj_name });
+    return require("../../overview.json");
   }
 
   async create_prj(prj_name) {
-    const overview = require('../../overview.json')
-    const prj = overview
-    prj.prj_name = prj_name
-    prj._id = new ObjectId()
+    const overview = require("../../overview.json");
+    const prj = overview;
+    prj.prj_name = prj_name;
+    prj._id = new ObjectId();
     await this.projects.insertOne(prj); //saves created Project to the DB
-    return prj
+    return prj;
   }
 }

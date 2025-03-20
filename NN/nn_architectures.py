@@ -9,18 +9,21 @@ from utils import device
 
 class GAN(nn.Module):
     def __init__(self, hyperparameters, dataset, input_transformer, target_transfomer):
-        for key, value in vars(hyperparameters).items():
-            setattr(self, key, value)
         self.input_transformer = input_transformer
         self.target_transfomer = target_transfomer
+        self.__update__(hyperparameters, dataset)
+
+    def __update__(self, hyperparameters, dataset):
+        for key, value in vars(hyperparameters).items():
+            setattr(self, key, value)
         super().__init__()
         self.flatten = nn.Flatten()
         self.linear_relu_stack = nn.Sequential(
-            nn.Linear(dataset.input_shape, 1024),
+            nn.Linear(dataset.input_shape, 64),
             nn.Tanh(),
-            nn.Linear(1024, 1024),
+            nn.Linear(64, 128),
             nn.Tanh(),
-            nn.Linear(1024, dataset.output_shape1 * dataset.output_shape2 * 3),
+            nn.Linear(128, dataset.output_shape1 * dataset.output_shape2 * 3),
             nn.Tanh(),
         )
 

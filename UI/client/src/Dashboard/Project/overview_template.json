@@ -1,71 +1,35 @@
 {
-    "_id": {
-        "type": "text"
+  "hyperparameters": {
+    "n_samples": {
+      "type": "number",
+      "min": 1,
+      "max": 1024,
+      "step": 1
     },
-    "prj_name": {
-        "type": "text"
+    "batch_size": {
+      "type": "number",
+      "min": 1,
+      "max": 1024,
+      "step": 1
     },
-    "hyperparameters": {
-        "N_samples": {
-            "type": "number",
-            "min": 1,
-            "max": 1024,
-            "step": 1
-        },
-        "batch_size": {
-            "type": "number",
-            "min": 1,
-            "max": 1024,
-            "step": 1
-        },
-        "learning_rate": {
-            "type": "number",
-            "min": 0,
-            "max": 100,
-            "step": 0.01
-        },
-        "momentum": {
-            "type": "number",
-            "min": 0,
-            "max": 10,
-            "step": 0.001
-        },
-        "epochs": {
-            "type": "number",
-            "min": 1,
-            "max": 100000,
-            "step": 1
-        }
+    "learning_rate": {
+      "type": "number",
+      "min": 0,
+      "max": 100,
+      "step": 0.01
     },
-    "data": {
-        "folder_dir": {
-            "type": "text"
-        },
-        "input_shape": {
-            "type": "number",
-            "min": 1,
-            "max": 2048,
-            "step": 8
-        },
-        "output_shape1": {
-            "type": "number",
-            "min": 1,
-            "max": 1024,
-            "step": 8
-        },
-        "output_shape2": {
-            "type": "number",
-            "min": 1,
-            "max": 1024,
-            "step": ""
-        }
+    "momentum": {
+      "type": "number",
+      "min": 0,
+      "max": 10,
+      "step": 0.001
     },
-    "plot": {
-        "show_information_rate": {
-            "type": "number",
-            "min": 1,
-            "max": 100,
-            "step": 1
-        }
+    "epochs": {
+      "type": "number",
+      "min": 1,
+      "max": 100000,
+      "step": 1
     }
+  }
 }
+
