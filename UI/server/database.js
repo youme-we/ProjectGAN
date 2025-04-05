@@ -5,7 +5,8 @@ const require = createRequire(import.meta.url);
 export default class DB {
   constructor(db_name, collection_name) {
     //make data in the collection with the given collection_name excessable
-    const uri = "mongodb://localhost:27017/";
+    const uri = "mongodb://host.docker.internal:27017/";
+    console.log(uri);
     const client = new MongoClient(uri);
     client.connect();
     const database = client.db(db_name);

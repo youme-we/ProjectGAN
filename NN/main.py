@@ -16,6 +16,7 @@ torch.set_default_device(device())
 
 
 class Trainer:
+
     def __init__(self, inputs, targets):
         overview = load_json("../overview.json")
         for key, value in vars(overview.trainer).items():

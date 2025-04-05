@@ -14,16 +14,18 @@ class GAN(nn.Module):
         self.__update__(hyperparameters, dataset)
 
     def __update__(self, hyperparameters, dataset):
+        super().__init__()
         for key, value in vars(hyperparameters).items():
             setattr(self, key, value)
-        super().__init__()
         self.flatten = nn.Flatten()
         self.linear_relu_stack = nn.Sequential(
-            nn.Linear(dataset.input_shape, 64),
+            nn.Linear(dataset.input_shape, 1024),
             nn.Tanh(),
-            nn.Linear(64, 128),
+            nn.Linear(1024, 1024),
             nn.Tanh(),
-            nn.Linear(128, dataset.output_shape1 * dataset.output_shape2 * 3),
+            nn.Linear(1024, 2048),
+            nn.Tanh(),
+            nn.Linear(2048, dataset.output_shape1 * dataset.output_shape2 * 3),
             nn.Tanh(),
         )
 

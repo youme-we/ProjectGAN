@@ -5,8 +5,8 @@
     "epochs": 2000
   },
   "hyperparameters": {
-    "n_samples": 1,
-    "batch_size": 1,
+    "n_samples": 512,
+    "batch_size": 512,
     "learning_rate": 1,
     "momentum": 0
   },
