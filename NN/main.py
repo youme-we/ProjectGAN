@@ -1,14 +1,14 @@
+import os
 from asyncio import DatagramTransport
 
 import socketio
 import torch
-from tqdm import tqdm
-
 from Dataset import Dataset
 from DataTransformer import DataTransformer
 from nn_architectures import GAN
 from operating import Operator
 from plotting import Plotters
+from tqdm import tqdm
 from utils import device, load_json
 
 sio = socketio.AsyncSimpleClient()
@@ -18,7 +18,7 @@ torch.set_default_device(device())
 class Trainer:
 
     def __init__(self, inputs, targets):
-        overview = load_json("../overview.json")
+        overview = load_json("./overview.json")
         for key, value in vars(overview.trainer).items():
             setattr(self, key, value)
         input_transformer = DataTransformer(inputs)
@@ -31,7 +31,7 @@ class Trainer:
         self.__operator = Operator(self.update_overview)
 
     async def init(self):
-        await sio.connect("http://localhost:3001")
+        await sio.connect(f"http://localhost:3001")
         SOCKET_CONNECTION = sio
         await self.__operator.listen(SOCKET_CONNECTION)
         await self.__plotter.listen(SOCKET_CONNECTION)

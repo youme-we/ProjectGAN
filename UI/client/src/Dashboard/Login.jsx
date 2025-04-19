@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { socket } from "./sub_functions/socket";
+const PORT = process.env.PORT || 3001;
 
 export default function Login() {
   const [prj_name, setprj_name] = useState("");
   const navigate = useNavigate();
 
   const send = () => {
-    fetch("http://localhost:3001/login", {
+    fetch(`http://localhost:${PORT}/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ prj_name }),

@@ -8,7 +8,7 @@ from tqdm import tqdm
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from utils import load_json
 
-overview = load_json("../../overview.json")
+overview = load_json("../overview.json")
 folder_dir = overview.metadata.folder_dir
 input_shape = overview.metadata.input_shape
 output_shape1 = overview.metadata.output_shape1

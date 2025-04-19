@@ -11,7 +11,7 @@ from watchdog.observers import Observer
 import devel_utils
 from utils import device, load_json
 
-overview = load_json("../overview.json")
+overview = load_json("./overview.json")
 
 
 class Watcher(FileSystemEventHandler):
