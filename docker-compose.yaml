@@ -4,8 +4,8 @@ services:
     volumes:
       - ./NN:/app
     env_file: ".host.env"
-    stdin_open: true # docker run -i
-    tty: true # docker run -t
+    stdin_open: true
+    tty: true
 
   server:
     image: youme-we/projectgan_ui_server:latest
