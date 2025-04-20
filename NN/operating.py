@@ -63,7 +63,11 @@ class Operator:
                         self.pause = False
                     if key == "p":
                         self.pause = not self.pause
-                        if self.pause:
-                            print(
-                                "\n[ Info ] The calculation was paused — press p to continue"
-                            )
+                        self.print_processing_status()
+
+    def print_processing_status(self):
+        if self.pause:
+            print(
+                Fore.YELLOW + "\n[ INFO ]:",
+                "The calculation was paused — press p to continue",
+            )

@@ -1,22 +1,18 @@
-import asyncio
 import os
+import torch
+import asyncio
+import socketio
 from importlib import reload
 from importlib.machinery import SourceFileLoader
-
-import torch
 from colorama import Back, Fore, Style
-from watchdog.events import FileSystemEventHandler, LoggingEventHandler
+from watchdog.events import FileSystemEventHandler
 from watchdog.observers import Observer
-
-import devel_utils
 from utils import device, load_json
-
-overview = load_json("./overview.json")
-
-
-import socketio
+import traceback
+import dev_utils
 
 sio = socketio.AsyncSimpleClient()
+overview = load_json("./overview.json")
 
 
 class Watcher(FileSystemEventHandler):
@@ -30,12 +26,12 @@ class Watcher(FileSystemEventHandler):
 
 Watcher = Watcher()
 
-# implements the Observer
 Observer = Observer()  # external libaray
 Observer.schedule(Watcher, path="./", recursive=False)
 Observer.start()
 
-# vars which should be loaded only once
+
+######### vars which should be loaded only once
 inputs = torch.load(
     os.path.join(overview.metadata.folder_dir, "inputs.pt"),
     map_location=torch.device(device()),
@@ -47,6 +43,7 @@ labels = torch.load(
     map_location=torch.device(device()),
     weights_only=False,
 )
+#########
 
 
 async def wrapper():
@@ -60,12 +57,8 @@ async def wrapper():
     except:
         pass
 
-    while True:  # runs as long as you do not InterruptedError
+    while True:
         try:
-            # vars which should be reloaded after every run
-            ##########################
-
-            # imports and runs the Main class --> NN function
             from main import Trainer
 
             Trainer = Trainer(inputs, labels)
@@ -73,22 +66,25 @@ async def wrapper():
             await Trainer.train()
 
         except Exception as e:
-            diagnostics(e, "error")
-            diagnostics("error at runtime", "wrapper_info")
-        print("\n[ Info ] Save the script to rerun — press Ctrl+Z to exit")
-        print(
-            Fore.GREEN + "--------------------------------------------------------\n\n"
-        )
+            print(Fore.RED + "\nERROR:", traceback.format_exc())
         while True:
+            print(
+                Fore.YELLOW + "[ INFO ]:",
+                "Save the script to rerun — press Ctrl+Z to exit",
+            )
+            print(
+                Fore.GREEN
+                + "---------------------------------------------------------\n\n"
+            )
+
             Watcher.reset()
             while True:
                 await asyncio.sleep(0)
-                # runs as long as the Observer observes a change in the defined directory
                 mutated = Watcher.mutated
                 if mutated:
                     break
 
-            while True:  # runs as long as the File itself gets updated
+            while True:
                 tracked_path = Watcher.tracked_path
                 root, ext = os.path.splitext(tracked_path)
                 if ext:
@@ -97,12 +93,12 @@ async def wrapper():
                 if ext == ".py" and os.path.basename(root) != "main":
                     Filename = os.path.basename(os.path.normpath(root))
                     sub = SourceFileLoader(Filename, tracked_path).load_module()
-                    reload(sub)  # reloads sub_module which was Modified
+                    reload(sub)
                     if i == 0:
                         import main
 
                     else:
-                        reload(main)  # reloads main_module
+                        reload(main)
                     i = 1
                     break
                 elif ext == ".py" or ".json":
@@ -110,13 +106,12 @@ async def wrapper():
                         import main
 
                     else:
-                        reload(main)  # reloads main_module
+                        reload(main)
                     i = 1
                     break
 
             except Exception as e:
-                diagnostics(e, "error")
-                diagnostics("error at reloading modules", "wrapper_info")
+                print(Fore.RED + "\nERROR:", traceback.format_exc())
 
 
 asyncio.run(wrapper())
