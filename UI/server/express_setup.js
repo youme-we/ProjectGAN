@@ -30,6 +30,6 @@ const setup_express = () => {
     res.sendFile(path.join(path_build, "index.html"));
   });
   return app;
-}
+};
 
 export default setup_express;

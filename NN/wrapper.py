@@ -10,8 +10,14 @@ from watchdog.observers import Observer
 
 import devel_utils
 from utils import device, load_json
+import readchar
 
 overview = load_json("./overview.json")
+
+
+import socketio
+
+sio = socketio.AsyncSimpleClient()
 
 
 class Watcher(FileSystemEventHandler):
@@ -62,7 +68,9 @@ async def wrapper():
             from main import Trainer
 
             Trainer = Trainer(inputs, labels)
-            await Trainer.init()
+            PORT_SERVER = os.getenv("PORT_SERVER", 3001)
+            await sio.connect(f"http://server:{PORT_SERVER}")
+            await Trainer.init(sio)
             await Trainer.train()
 
         except Exception as e:
@@ -75,6 +83,9 @@ async def wrapper():
         while True:
             Watcher.reset()
             while True:
+                if readchar.readchar() == "\x1a":
+                    await sio.disconnect()
+                    return
                 # runs as long as the Observer observes a change in the defined directory
                 mutated = Watcher.mutated
                 if mutated:

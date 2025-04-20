@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { socket } from "./sub_functions/socket";
-const PORT = process.env.PORT || 3001;
+const PORT_SERVER = process.env.PORT_SERVER || 3001;
+const HOST_SERVER = process.env.HOST_SERVER || "localhost";
 
 export default function Create() {
   const [prj_name, setprj_name] = useState("");
   const navigate = useNavigate();
 
   const send = () => {
-    fetch(`http://localhost:${PORT}/create`, {
+    fetch(`http://${HOST_SERVER}:${PORT_SERVER}/create`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ prj_name }),

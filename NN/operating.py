@@ -26,6 +26,13 @@ class Operator:
         while self.pause:
             await asyncio.sleep(0)
 
+    async def close(self):
+        self.group.cancel()
+        try:
+            await self.group
+        except asyncio.CancelledError:
+            pass
+
     async def on_GUI_handler(self, SOCKET_CONNECTION):
         while True:
             event = await SOCKET_CONNECTION.receive()

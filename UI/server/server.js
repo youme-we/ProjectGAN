@@ -12,7 +12,7 @@ let metrics = new Metrics();
 http_endpoints(app, db);
 socket_endpoints(server, metrics);
 
-const PORT = process.env.PORT || 3001;
-server.listen(PORT, () => {
-  console.log("socket is listening on PORT:", PORT);
+const PORT_SERVER = process.env.PORT_SERVER || 3001;
+server.listen(PORT_SERVER, () => {
+  console.log("server is listening on PORT_SERVER:", PORT_SERVER);
 });

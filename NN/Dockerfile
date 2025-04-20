@@ -7,8 +7,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-EXPOSE 3002
+ENV PORT=3002
 
-ENV PORT=3001
+EXPOSE 3002
 
 CMD ["python3", "wrapper.py"]
