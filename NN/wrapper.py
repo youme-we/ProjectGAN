@@ -10,7 +10,6 @@ from watchdog.observers import Observer
 
 import devel_utils
 from utils import device, load_json
-import readchar
 
 overview = load_json("./overview.json")
 
@@ -51,6 +50,8 @@ labels = torch.load(
 
 
 async def wrapper():
+    PORT_SERVER = os.getenv("PORT_SERVER", 3001)
+    await sio.connect(f"http://host.docker.internal:{PORT_SERVER}")
     i = 0
     try:
         import main
@@ -68,24 +69,20 @@ async def wrapper():
             from main import Trainer
 
             Trainer = Trainer(inputs, labels)
-            PORT_SERVER = os.getenv("PORT_SERVER", 3001)
-            await sio.connect(f"http://server:{PORT_SERVER}")
             await Trainer.init(sio)
             await Trainer.train()
 
         except Exception as e:
             diagnostics(e, "error")
             diagnostics("error at runtime", "wrapper_info")
-
-        print("save the script to rerun, or press Ctrl-z to exit\n")
-        print(Fore.GREEN + "#################################################\n\n")
-
+        print("\n[ Info ] Save the script to rerun — press Ctrl+Z to exit")
+        print(
+            Fore.GREEN + "--------------------------------------------------------\n\n"
+        )
         while True:
             Watcher.reset()
             while True:
-                if readchar.readchar() == "\x1a":
-                    await sio.disconnect()
-                    return
+                await asyncio.sleep(0)
                 # runs as long as the Observer observes a change in the defined directory
                 mutated = Watcher.mutated
                 if mutated:
@@ -97,7 +94,7 @@ async def wrapper():
                 if ext:
                     break
             try:
-                if ext == ".py" and root != "/Users/skost/coding-s/ProjectGAN/NN/main":
+                if ext == ".py" and os.path.basename(root) != "main":
                     Filename = os.path.basename(os.path.normpath(root))
                     sub = SourceFileLoader(Filename, tracked_path).load_module()
                     reload(sub)  # reloads sub_module which was Modified

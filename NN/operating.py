@@ -1,7 +1,7 @@
 import asyncio
 import json
 from types import SimpleNamespace
-
+from colorama import Fore
 import socketio
 
 from utils import KeyPoller
@@ -63,11 +63,7 @@ class Operator:
                         self.pause = False
                     if key == "p":
                         self.pause = not self.pause
-                        self.print_processing_status()
-
-    def print_processing_status(self):
-        if self.pause:
-            diagnostics("The calculation was paused")
-
-        if not self.run:
-            diagnostics("The calculation was ended & the weights were saved")
+                        if self.pause:
+                            print(
+                                "\n[ Info ] The calculation was paused — press p to continue"
+                            )

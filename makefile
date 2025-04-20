@@ -1,3 +1,7 @@
+ProjectGAN:
+	@docker compose up -d
+	@docker attach projectgan-NN-1
+
 run: 
 	@cd NN && python3 wrapper.py
 
