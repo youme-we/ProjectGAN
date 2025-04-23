@@ -1,17 +1,18 @@
-import asyncio
 import os
+import torch
+import asyncio
+import socketio
 from importlib import reload
 from importlib.machinery import SourceFileLoader
-
-import torch
 from colorama import Back, Fore, Style
-from watchdog.events import FileSystemEventHandler, LoggingEventHandler
+from watchdog.events import FileSystemEventHandler
 from watchdog.observers import Observer
-
-import devel_utils
 from utils import device, load_json
+import traceback
+import dev_utils
 
-overview = load_json("../overview.json")
+sio = socketio.AsyncSimpleClient()
+overview = load_json("./overview.json")
 
 
 class Watcher(FileSystemEventHandler):
@@ -25,12 +26,12 @@ class Watcher(FileSystemEventHandler):
 
 Watcher = Watcher()
 
-# implements the Observer
 Observer = Observer()  # external libaray
 Observer.schedule(Watcher, path="./", recursive=False)
 Observer.start()
 
-# vars which should be loaded only once
+
+######### vars which should be loaded only once
 inputs = torch.load(
     os.path.join(overview.metadata.folder_dir, "inputs.pt"),
     map_location=torch.device(device()),
@@ -42,9 +43,12 @@ labels = torch.load(
     map_location=torch.device(device()),
     weights_only=False,
 )
+#########
 
 
 async def wrapper():
+    PORT_SERVER = os.getenv("PORT_SERVER", 3001)
+    await sio.connect(f"http://host.docker.internal:{PORT_SERVER}")
     i = 0
     try:
         import main
@@ -53,48 +57,48 @@ async def wrapper():
     except:
         pass
 
-    while True:  # runs as long as you do not InterruptedError
+    while True:
         try:
-            # vars which should be reloaded after every run
-            ##########################
-
-            # imports and runs the Main class --> NN function
             from main import Trainer
 
             Trainer = Trainer(inputs, labels)
-            await Trainer.init()
+            await Trainer.init(sio)
             await Trainer.train()
 
         except Exception as e:
-            diagnostics(e, "error")
-            diagnostics("error at runtime", "wrapper_info")
-
-        print("save the script to rerun, or press Ctrl-z to exit\n")
-        print(Fore.GREEN + "#################################################\n\n")
-
+            print(Fore.RED + "\nERROR:", traceback.format_exc())
         while True:
+            print(
+                Fore.YELLOW + "[ INFO ]:",
+                "Save the script to rerun — press Ctrl+Z to exit",
+            )
+            print(
+                Fore.GREEN
+                + "---------------------------------------------------------\n\n"
+            )
+
             Watcher.reset()
             while True:
-                # runs as long as the Observer observes a change in the defined directory
+                await asyncio.sleep(0)
                 mutated = Watcher.mutated
                 if mutated:
                     break
 
-            while True:  # runs as long as the File itself gets updated
+            while True:
                 tracked_path = Watcher.tracked_path
                 root, ext = os.path.splitext(tracked_path)
                 if ext:
                     break
             try:
-                if ext == ".py" and root != "/Users/skost/coding-s/ProjectGAN/NN/main":
+                if ext == ".py" and os.path.basename(root) != "main":
                     Filename = os.path.basename(os.path.normpath(root))
                     sub = SourceFileLoader(Filename, tracked_path).load_module()
-                    reload(sub)  # reloads sub_module which was Modified
+                    reload(sub)
                     if i == 0:
                         import main
 
                     else:
-                        reload(main)  # reloads main_module
+                        reload(main)
                     i = 1
                     break
                 elif ext == ".py" or ".json":
@@ -102,13 +106,12 @@ async def wrapper():
                         import main
 
                     else:
-                        reload(main)  # reloads main_module
+                        reload(main)
                     i = 1
                     break
 
             except Exception as e:
-                diagnostics(e, "error")
-                diagnostics("error at reloading modules", "wrapper_info")
+                print(Fore.RED + "\nERROR:", traceback.format_exc())
 
 
 asyncio.run(wrapper())

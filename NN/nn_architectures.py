@@ -3,12 +3,13 @@ import torch
 from matplotlib import pyplot as plt
 from torch import imag, nn, softmax
 from torch.utils.data import DataLoader, sampler
-
 from utils import device
 
 
 class GAN(nn.Module):
     def __init__(self, hyperparameters, dataset, input_transformer, target_transfomer):
+        super().__init__()
+        self.flatten = nn.Flatten()
         self.input_transformer = input_transformer
         self.target_transfomer = target_transfomer
         self.__update__(hyperparameters, dataset)
@@ -16,14 +17,14 @@ class GAN(nn.Module):
     def __update__(self, hyperparameters, dataset):
         for key, value in vars(hyperparameters).items():
             setattr(self, key, value)
-        super().__init__()
-        self.flatten = nn.Flatten()
         self.linear_relu_stack = nn.Sequential(
-            nn.Linear(dataset.input_shape, 64),
+            nn.Linear(dataset.input_shape, 1024),
             nn.Tanh(),
-            nn.Linear(64, 128),
+            nn.Linear(1024, 1024),
             nn.Tanh(),
-            nn.Linear(128, dataset.output_shape1 * dataset.output_shape2 * 3),
+            nn.Linear(1024, 2048),
+            nn.Tanh(),
+            nn.Linear(2048, dataset.output_shape1 * dataset.output_shape2 * 3),
             nn.Tanh(),
         )
 
@@ -54,10 +55,8 @@ class GAN(nn.Module):
     def iter(self):
         self.train()
         for batch, (input, target) in enumerate(self.training_dataloader):
-            X, y = self.input_transformer.normalize(
-                input
-            ), self.target_transfomer.normalize(target)
-            self.train()
+            X = self.input_transformer.normalize(input)
+            y = self.target_transfomer.normalize(target)
             y = self.flatten(y)
 
             pred = self.forward(X)

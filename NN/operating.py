@@ -1,7 +1,7 @@
 import asyncio
 import json
 from types import SimpleNamespace
-
+from colorama import Fore
 import socketio
 
 from utils import KeyPoller
@@ -25,6 +25,13 @@ class Operator:
         await asyncio.sleep(0.1)
         while self.pause:
             await asyncio.sleep(0)
+
+    async def close(self):
+        self.group.cancel()
+        try:
+            await self.group
+        except asyncio.CancelledError:
+            pass
 
     async def on_GUI_handler(self, SOCKET_CONNECTION):
         while True:
@@ -60,7 +67,7 @@ class Operator:
 
     def print_processing_status(self):
         if self.pause:
-            diagnostics("The calculation was paused")
-
-        if not self.run:
-            diagnostics("The calculation was ended & the weights were saved")
+            print(
+                Fore.YELLOW + "\n[ INFO ]:",
+                "The calculation was paused — press p to continue",
+            )

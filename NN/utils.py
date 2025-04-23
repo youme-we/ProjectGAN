@@ -12,7 +12,7 @@ def device():
         else "mps" if torch.backends.mps.is_available() else "cpu"
     )
 
-    return device
+    return "cpu"
 
 
 def load_json(file):

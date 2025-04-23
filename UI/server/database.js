@@ -5,7 +5,9 @@ const require = createRequire(import.meta.url);
 export default class DB {
   constructor(db_name, collection_name) {
     //make data in the collection with the given collection_name excessable
-    const uri = "mongodb://localhost:27017/";
+    const HOST_DB = process.env.HOST_DB || "localhost";
+    const uri = `mongodb://${HOST_DB}:27017/`;
+    console.log(uri);
     const client = new MongoClient(uri);
     client.connect();
     const database = client.db(db_name);
@@ -14,11 +16,11 @@ export default class DB {
 
   async get_prj(prj_name) {
     //return this.projects.findOne({ prj_name });
-    return require("../../overview.json");
+    return require("./overview.json");
   }
 
   async create_prj(prj_name) {
-    const overview = require("../../overview.json");
+    const overview = require("./overview.json");
     const prj = overview;
     prj.prj_name = prj_name;
     prj._id = new ObjectId();

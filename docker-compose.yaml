@@ -1,0 +1,25 @@
+services:
+  NN:
+    image: youme-we/projectgan_ui_nn:latest
+    volumes:
+      - ./NN:/app
+    env_file: ".host.env"
+    stdin_open: true
+    tty: true
+
+  server:
+    image: youme-we/projectgan_ui_server:latest
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./UI/server:/app
+    env_file: ".host.env"
+
+  client:
+    image: youme-we/projectgan_ui_client:latest
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./UI/client:/app
+      #- /app/node_modules
+    env_file: ".host.env"

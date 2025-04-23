@@ -4,15 +4,15 @@ import socket_endpoints from "./socket_endpoints.js";
 import setup_express from "./express_setup.js";
 import http_endpoints from "./http_endpoints.js";
 import Metrics from "./traffic_management.js";
-const PORT = 3001;
 const app = setup_express();
-
 const server = http.createServer(app);
-server.listen(PORT, () => {
-  console.log("socket is listening on PORT:", PORT);
-});
 
 let db = new DB("ProjectGAN", "Projects");
 let metrics = new Metrics();
 http_endpoints(app, db);
 socket_endpoints(server, metrics);
+
+const PORT_SERVER = process.env.PORT_SERVER || 3001;
+server.listen(PORT_SERVER, () => {
+  console.log("server is listening on PORT_SERVER:", PORT_SERVER);
+});
