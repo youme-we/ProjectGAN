@@ -23,3 +23,13 @@ services:
       - ./UI/client:/app
       #- /app/node_modules
     env_file: ".host.env"
+
+  mongodb:
+    image: mongodb/mongodb-community-server:6.0-ubi8
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=user
+      - MONGO_INITDB_ROOT_PASSWORD=pass
+    volumes:
+      - type: bind
+        source: ./data
+        target: /data/db

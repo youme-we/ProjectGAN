@@ -2,11 +2,7 @@ import asyncio
 import json
 from types import SimpleNamespace
 from colorama import Fore
-import socketio
-
 from utils import KeyPoller
-
-sio = socketio.AsyncSimpleClient()
 
 
 class Operator:
