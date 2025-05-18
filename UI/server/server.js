@@ -6,8 +6,7 @@ import http_endpoints from "./http_endpoints.js";
 import Metrics from "./traffic_management.js";
 const app = setup_express();
 const server = http.createServer(app);
-
-let db = new DB("ProjectGAN", "Projects");
+let db = new DB("ProjectGAN", "prj_overviews");
 let metrics = new Metrics();
 http_endpoints(app, db);
 socket_endpoints(server, metrics);

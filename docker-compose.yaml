@@ -27,10 +27,10 @@ services:
   mongodb:
     image: mongodb/mongodb-community-server:6.0-ubi8
     ports:
-      - "27018:27018"
+      - "27018:27017"
     environment:
       - MONGO_INITDB_ROOT_USERNAME=root
-      - MONGO_INITDB_ROOT_PASSWORD=Filder2631
+      - MONGO_INITDB_ROOT_PASSWORD=pass
     volumes:
       - type: bind
         source: ./data

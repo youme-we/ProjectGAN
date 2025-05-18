@@ -3,9 +3,9 @@ import ReactDOM from "react-dom/client";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./index.css";
-import Home from "./Home";
-import Create_prj from "./Create_prj";
-import Project from "./Dashboard/Project/Main";
+import Home from "./Center/Home";
+import Create_prj from "./Center/Create_prj";
+//import Project from "./Dashboards/Project679f99ddf4a9d4f1ba69bf8e/Main";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -14,7 +14,9 @@ root.render(
       <Routes>
         <Route path="/home" element={<Home />} />
         <Route path="/create_prj" element={<Create_prj />} />
+        {/*
         <Route path="/dashboard" element={<Project />} />
+          */}
       </Routes>
     </BrowserRouter>{" "}
   </React.StrictMode>

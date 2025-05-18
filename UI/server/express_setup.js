@@ -18,7 +18,7 @@ const setup_express = () => {
   app.use(express.json()); // <==== parse request body as JSON
   app.use(
     cors({
-      origin: ["http://localhost:3000"], //alows requests from this PORT
+      origin: ["http://localhost:3000", "http://localhost:3001"], //alows requests from this PORT
       credentials: true,
     })
   );
