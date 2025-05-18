@@ -7,7 +7,6 @@ export default function Inputfields_Hyperparameters({
   const onTune_overview = (e, keyname) => {
     if (e.key === "Enter") {
       sessionStorage.setItem("overview", JSON.stringify(overview));
-      console.log(JSON.stringify(overview));
       socket.emit("/tune_s", {
         overview: JSON.stringify(overview),
       });

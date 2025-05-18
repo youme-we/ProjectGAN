@@ -1,4 +1,11 @@
 import { immerable } from "immer";
+import { io } from "socket.io-client";
+
+// "undefined" means the URL will be computed from the `window.location` object
+const HOST_SERVER = process.env.HOST_SERVER || "localhost";
+const PORT_SERVER = process.env.PORT_SERVER || 3001;
+export const socket = io(`http://${HOST_SERVER}:${PORT_SERVER}`);
+
 export default class Metrics {
   [immerable] = true;
   constructor() {

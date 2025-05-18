@@ -1,5 +1,5 @@
 services:
-  NN:
+  nn:
     image: youme-we/projectgan_ui_nn:latest
     volumes:
       - ./NN:/app
@@ -26,9 +26,11 @@ services:
 
   mongodb:
     image: mongodb/mongodb-community-server:6.0-ubi8
+    ports:
+      - "27018:27018"
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=user
-      - MONGO_INITDB_ROOT_PASSWORD=pass
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=Filder2631
     volumes:
       - type: bind
         source: ./data

@@ -7,7 +7,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-ENV PORT=3002
+ENV PORT_NN=3002
 
 EXPOSE 3002
 

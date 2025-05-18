@@ -9,7 +9,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from utils import load_json
 
 overview = load_json("../overview.json")
-folder_dir = overview.metadata.folder_dir
+data_dir = overview.metadata.data_dir
 input_shape = overview.metadata.input_shape
 output_shape1 = overview.metadata.output_shape1
 output_shape2 = overview.metadata.output_shape2
@@ -25,8 +25,8 @@ dtype_map = {
 
 
 class ImageDatasetCompiler:
-    def __init__(self, folder_dir, input_shape, output_shape1, output_shape2, dtype):
-        self.folder_dir = folder_dir
+    def __init__(self, data_dir, input_shape, output_shape1, output_shape2, dtype):
+        self.data_dir = os.path.join("../data", data_dir)
         self.input_shape = input_shape
         self.output_shape1 = output_shape1
         self.output_shape2 = output_shape2
@@ -36,9 +36,9 @@ class ImageDatasetCompiler:
         )
 
     def create_labels(self):
-        for image in tqdm(os.listdir(os.path.join(self.folder_dir, "original"))):
+        for image in tqdm(os.listdir(os.path.join(self.data_dir, "original"))):
             if image.endswith(".jpg"):
-                img_path = os.path.join(self.folder_dir, "original", image)
+                img_path = os.path.join(self.data_dir, "original", image)
                 img = (
                     Image.open(img_path)
                     .resize((self.output_shape2, self.output_shape1))
@@ -49,16 +49,16 @@ class ImageDatasetCompiler:
                 )
                 self.all_images = torch.cat((self.all_images, img_tensor), dim=0)
             else:
-                os.remove(os.path.join(self.folder_dir, "original", image))
-        torch.save(self.all_images, os.path.join(self.folder_dir, "labels.pt"))
+                os.remove(os.path.join(self.data_dir, "original", image))
+        torch.save(self.all_images, os.path.join(self.data_dir, "labels.pt"))
 
     def create_inputs(self):
         inputs = torch.rand(len(self.all_images), self.input_shape, dtype=self.dtype)
-        torch.save(inputs, os.path.join(self.folder_dir, "inputs.pt"))
+        torch.save(inputs, os.path.join(self.data_dir, "inputs.pt"))
 
 
 compiller = ImageDatasetCompiler(
-    folder_dir, input_shape, output_shape1, output_shape2, dtype
+    data_dir, input_shape, output_shape1, output_shape2, dtype
 )
 print("compilling data...")
 compiller.create_labels()

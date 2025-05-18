@@ -3,6 +3,8 @@ import ReactDOM from "react-dom/client";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./index.css";
+import Home from "./Home";
+import Create_prj from "./Create_prj";
 import Project from "./Dashboard/Project/Main";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
@@ -10,7 +12,9 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path="/project" element={<Project />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/create_prj" element={<Create_prj />} />
+        <Route path="/dashboard" element={<Project />} />
       </Routes>
     </BrowserRouter>{" "}
   </React.StrictMode>

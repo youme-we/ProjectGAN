@@ -33,13 +33,13 @@ Observer.start()
 
 ######### vars which should be loaded only once
 inputs = torch.load(
-    os.path.join(overview.metadata.folder_dir, "inputs.pt"),
+    os.path.join("./data", overview.metadata.data_dir, "inputs.pt"),
     map_location=torch.device(device()),
     weights_only=False,
 )
 
 labels = torch.load(
-    os.path.join(overview.metadata.folder_dir, "labels.pt"),
+    os.path.join("./data", overview.metadata.data_dir, "labels.pt"),
     map_location=torch.device(device()),
     weights_only=False,
 )
@@ -47,8 +47,9 @@ labels = torch.load(
 
 
 async def wrapper():
+    HOST_SERVER = os.getenv("HOST_SERVER", "localhost")
     PORT_SERVER = os.getenv("PORT_SERVER", 3001)
-    await sio.connect(f"http://host.docker.internal:{PORT_SERVER}")
+    await sio.connect(f"http://{HOST_SERVER}:{PORT_SERVER}")
     i = 0
     try:
         import main
