@@ -16,7 +16,6 @@ class Plotters:
     async def plot(self, epoch, model, dataset):
         self.plotting_el(epoch, model.loss)
         samplesTT = self.plotting_samplesTT(epoch, model, dataset)
-        print(len(samplesTT))
         if epoch % self.el_plot == 0:
             await self.SOCKET_CONNECTION.emit(
                 "/nn_metrics_s",

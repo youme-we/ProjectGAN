@@ -39,7 +39,6 @@ export default function Create_prj({ overview, setoverview }) {
 
   const onClick_create_prj_overview = async () => {
     const res = await create_prj_overview(overview);
-    console.log(res);
     if (res.acknowledged) {
       sessionStorage.setItem(
         `${overview.prj_info.name}_overview`,

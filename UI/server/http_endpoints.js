@@ -10,7 +10,6 @@ const http_endpoints = (app, db) => {
   });
 
   app.post("/update_prj_overview", async (req, res) => {
-    console.log("working", req.body.prj_name, req.body.fields);
     const status = await db.update_prj_overview(
       req.body.prj_name,
       req.body.fields

@@ -63,21 +63,47 @@ export default function DashboardGAN({ overview, setoverview }) {
             <h1 className="text-3xl font-bold text-white tracking-tight">
               ProjectGAN
             </h1>
-            <button
-              className="fill-dark-gray"
-              onClick={() =>
-                update_prj_overview(overview.prj_info.name, overview)
+            <div>
+              {
+                //TODO:Move button to Components folder
               }
-            >
-              Save overview
-            </button>
-            <Controllers_pps socket={socket} />
+              <button
+                className="flex items-center m-4 gap-2 px-4 py-2 rounded-xl bg-white-brown text-dark-gray font-medium shadow hover:shadow-lg hover:bg-white transition duration-200"
+                onClick={() =>
+                  update_prj_overview(overview.prj_info.name, overview)
+                }
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M17 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zM12 19c-1.1 0-2-.9-2-2s.9-2 
+             2-2 2 .9 2 2-.9 2-2 2zm2-10H6V5h8v4z"
+                  />
+                </svg>
+                Save Overview
+              </button>
+              <Controllers_pps socket={socket} />
+            </div>
           </div>
           <div>
             <div className="flex h-full justify-evenly items-center relative top-48 bg-dark-green">
-              <div className="font-serif text-3xl subpixel-antialiased bg-dark-gray text-white-brown">
-                {metrics.epoch.at(-1)}
+              <div className="font-serif text-white-brown bg-dark-gray p-6 rounded-2xl shadow-md w-fit">
+                <div className="text-xl mb-2">
+                  Epoch:{" "}
+                  <span className="font-bold">{metrics.epoch.at(-1)}</span>
+                </div>
+                <div className="text-xl">
+                  Loss:{" "}
+                  <span className="font-bold">
+                    {metrics.loss.at(-1)?.toFixed(4)}
+                  </span>
+                </div>
               </div>
+
               <Chart_EL epoch={metrics.epoch} loss={metrics.loss} />
               <Inputfields_overview
                 section_name={"hyperparameters"}
@@ -91,6 +117,33 @@ export default function DashboardGAN({ overview, setoverview }) {
               test_samples={metrics.test_samples}
             />
             {/*<Network weights={metrics.weights} />*/}
+            <div className="flex h-full justify-evenly items-center relative top-48 bg-dark-green">
+              <Inputfields_overview
+                section_name={"prj_info"}
+                overview_section={overview.prj_info}
+                onTune_overview={onTune_overview}
+                onChange_overview={onChange_overview}
+              />
+              <Inputfields_overview
+                section_name={"trainer"}
+                overview_section={overview.trainer}
+                onTune_overview={onTune_overview}
+                onChange_overview={onChange_overview}
+              />
+              <Inputfields_overview
+                section_name={"plot_rates"}
+                overview_section={overview.plot_rates}
+                onTune_overview={onTune_overview}
+                onChange_overview={onChange_overview}
+              />
+
+              <Inputfields_overview
+                section_name={"metadata"}
+                overview_section={overview.metadata}
+                onTune_overview={onTune_overview}
+                onChange_overview={onChange_overview}
+              />
+            </div>
           </div>
         </>
       )}

@@ -19,9 +19,13 @@ function Home({ overview, setoverview }) {
 
   const onClick_open_prj = () => {
     read_prj_overview(prj_name).then((overview_prj) => {
-      setoverview(overview_prj);
-      sessionStorage.setItem("overview", JSON.stringify(overview_prj));
-      navigate(`/${overview_prj.prj_info.dashboard}`);
+      if (overview_prj) {
+        setoverview(overview_prj);
+        sessionStorage.setItem("overview", JSON.stringify(overview_prj));
+        navigate(`/${overview_prj.prj_info.dashboard}`);
+      } else {
+        alert("The requested project doesn't exist or is unavailable");
+      }
     });
   };
   return (

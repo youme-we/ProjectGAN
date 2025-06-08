@@ -36,14 +36,13 @@ export default class DB {
       },
       { projection: { _id: 0 } }
     );
-    return prj_overview;
+    return prj_overview || false;
   }
   async update_prj_overview(prj_name, fields) {
     const status = await this.prj_overviews.updateOne(
       { "prj_info.name": prj_name },
       { $set: fields }
     );
-    console.log(status);
     return status;
   }
   async delete_prj_overview(prj_name) {
