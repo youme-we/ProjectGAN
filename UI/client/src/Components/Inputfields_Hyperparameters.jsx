@@ -21,29 +21,29 @@ export default function Inputfields_Hyperparameters({
   };
 
   return (
-    <div className="relative object-center basis-1/8">
+    <div className="relative basis-1/4 space-y-4">
       {Object.keys(overview.hyperparameters).map((keyname, index) => (
-        <div key={index}>
-          {console.log(keyname)}
-          <div className="font-serif text-lg subpixel-antialiased text-white-brown">
+        <div key={index} className="space-y-1">
+          {/* Label */}
+          <label
+            htmlFor={`inputfield_${keyname}`}
+            className="block text-sm font-medium text-gray-300 tracking-wide"
+          >
             {keyname}
-          </div>
+          </label>
+
+          {/* Input Field */}
           <input
             id={`inputfield_${keyname}`}
-            className="font-serif text-lg subpixel-antialiased bg-dark-gray text-white-brown"
+            className="w-full px-3 py-2 rounded-md bg-gray-800 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all duration-200"
             type={overview_template.hyperparameters[keyname].type}
             min={overview_template.hyperparameters[keyname].min}
             max={overview_template.hyperparameters[keyname].max}
             step={overview_template.hyperparameters[keyname].step}
             value={overview.hyperparameters[keyname]}
-            onChange={(e) => {
-              onChange_overview(e, keyname);
-            }}
-            onKeyDown={(e) => {
-              onTune_overview(e, keyname);
-            }}
+            onChange={(e) => onChange_overview(e, keyname)}
+            onKeyDown={(e) => onTune_overview(e, keyname)}
           />
-          <p></p>
         </div>
       ))}
     </div>

@@ -9,11 +9,11 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from utils import load_json
 
 overview = load_json("../overview.json")
-data_dir = overview.metadata.data_dir
-input_shape = overview.metadata.input_shape
-output_shape1 = overview.metadata.output_shape1
-output_shape2 = overview.metadata.output_shape2
-dtype = overview.metadata.dtype
+data_dir = "../data/cars"
+input_shape = 32
+output_shape1 = 64
+output_shape2 = 84
+dtype = "torch.float32"
 
 dtype_map = {
     "float32": torch.float32,

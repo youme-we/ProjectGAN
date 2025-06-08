@@ -12,22 +12,19 @@ class GAN(nn.Module):
         self.flatten = nn.Flatten()
         self.input_transformer = input_transformer
         self.target_transfomer = target_transfomer
-        self.__update__(hyperparameters, dataset)
-
-    def __update__(self, hyperparameters, dataset):
-        for key, value in vars(hyperparameters).items():
-            setattr(self, key, value)
         self.linear_relu_stack = nn.Sequential(
-            nn.Linear(dataset.input_shape, 1024),
-            nn.Tanh(),
-            nn.Linear(1024, 1024),
-            nn.Tanh(),
-            nn.Linear(1024, 2048),
-            nn.Tanh(),
-            nn.Linear(2048, dataset.output_shape1 * dataset.output_shape2 * 3),
+            nn.Linear(dataset.input_shape, 256),
+            nn.ReLU(),
+            nn.Linear(256, 512),
+            nn.ReLU(),
+            nn.Linear(512, dataset.output_shape1 * dataset.output_shape2 * 3),
             nn.Tanh(),
         )
 
+        self.__update__(hyperparameters, dataset)
+
+    def __update__(self, hyperparameters, dataset):
+        self.__dict__.update(hyperparameters)
         self.samplers_data = sampler.SubsetRandomSampler(
             indices=torch.arange(self.n_samples)
         )

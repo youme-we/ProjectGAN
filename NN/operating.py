@@ -44,9 +44,7 @@ class Operator:
         self.print_processing_status()
 
     async def overview_handler(self, event):
-        self.update_overview(
-            json.loads(event[1]["overview"], object_hook=lambda d: SimpleNamespace(**d))
-        )
+        self.update_overview(json.loads(event[1]["overview"]))
 
     async def on_terminal_handler(self):
         with KeyPoller() as keyPoller:

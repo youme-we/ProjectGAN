@@ -1,24 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import reportWebVitals from "./reportWebVitals";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { useImmer } from "use-immer";
 import "./index.css";
-import Home from "./Center/Home";
-import Create_prj from "./Center/Create_prj";
-//import Project from "./Dashboards/Project679f99ddf4a9d4f1ba69bf8e/Main";
+import App from "./App.jsx";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/home" element={<Home />} />
-        <Route path="/create_prj" element={<Create_prj />} />
-        {/*
-        <Route path="/dashboard" element={<Project />} />
-          */}
-      </Routes>
-    </BrowserRouter>{" "}
+    <App />
   </React.StrictMode>
 );
 

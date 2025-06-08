@@ -8,15 +8,13 @@ from numpy import imag
 
 class Dataset:
     def __init__(self, metadata, inputs, labels):
-        for key, value in vars(metadata).items():
-            setattr(self, key, value)
+        self.__update__(metadata)
         self.inputs = inputs
         self.labels = labels
         self.checking_data_actuality()
 
     def __update__(self, metadata):
-        for key, value in vars(metadata).items():
-            setattr(self, key, value)
+        self.__dict__.update(metadata)
 
     def __len__(self):
         return len(self.img_labels)
@@ -39,17 +37,19 @@ class Dataset:
         ):
             diagnostics("NN does not run with the latest data format", "warning")
 
-    def to_base64(self, image_vector):
-        image_vector = torch.div(image_vector, 255)
-        image_vector[image_vector > 1] = 1
-        image_vector[image_vector < 0] = 0
-
-        image_vector = torch.reshape(
-            image_vector, (self.output_shape1, self.output_shape2, 3)
-        )
-        image_vector = image_vector.to("cpu").detach().numpy()
-        buf = BytesIO()
-        plt.imsave(buf, image_vector, format="jpeg")
-        image_vector = buf.getvalue()
-        image_vector = base64.b64encode(image_vector).decode()
-        return image_vector
+    def to_base64(self, image_vectors):
+        base64_images = []
+        image_vectors = torch.div(image_vectors, 255)
+        image_vectors[image_vectors > 1] = 1
+        image_vectors[image_vectors < 0] = 0
+        for image_vector in image_vectors:
+            image_vector = torch.reshape(
+                image_vector, (self.output_shape1, self.output_shape2, 3)
+            )
+            image_vector = image_vector.to("cpu").detach().numpy()
+            buf = BytesIO()
+            plt.imsave(buf, image_vector, format="jpeg")
+            image_vector = buf.getvalue()
+            base64_image = base64.b64encode(image_vector).decode()
+            base64_images.append(base64_image)
+        return base64_images

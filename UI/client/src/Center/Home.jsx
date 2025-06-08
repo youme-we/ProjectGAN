@@ -1,16 +1,29 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-function Home() {
+import {
+  create_prj_overview,
+  read_prj_overview,
+  update_prj_overview,
+  delete_prj_overview,
+} from "../traffic_management";
+function Home({ overview, setoverview }) {
   const navigate = useNavigate();
-  const [prj_id, setprj_id] = useState("");
-
-  const handleRedirect = () => {
-    if (prj_id.trim()) {
-      navigate(`/Project${prj_id}`);
-    }
+  const [prj_name, setprj_name] = useState("");
+  const onClick_create_prj = () => {
+    read_prj_overview("template").then((overview_template) => {
+      setoverview(overview_template);
+      sessionStorage.setItem("overview", JSON.stringify(overview_template));
+      navigate("/create_prj");
+    });
   };
 
+  const onClick_open_prj = () => {
+    read_prj_overview(prj_name).then((overview_prj) => {
+      setoverview(overview_prj);
+      sessionStorage.setItem("overview", JSON.stringify(overview_prj));
+      navigate(`/${overview_prj.prj_info.dashboard}`);
+    });
+  };
   return (
     <div className="min-h-screen bg-white-brown flex items-center justify-center px-4">
       <div className="bg-white rounded-3xl shadow-xl p-10 max-w-md w-full text-center">
@@ -23,7 +36,7 @@ function Home() {
 
         {/* Create Project Button */}
         <button
-          onClick={() => navigate("/create_prj")}
+          onClick={() => onClick_create_prj()}
           className="bg-dark-green hover:bg-blue-gray text-white font-semibold py-3 px-6 rounded-xl shadow-md transition-all w-full mb-6"
         >
           Create New Project
@@ -40,15 +53,15 @@ function Home() {
         <input
           type="text"
           placeholder="Enter project ID or name"
-          value={prj_id}
-          onChange={(e) => setprj_id(e.target.value)}
+          value={prj_name}
+          onChange={(e) => setprj_name(e.target.value)}
           className="border border-light-brown rounded-xl px-4 py-2 mb-4 w-full text-sm text-dark-gray focus:outline-none focus:ring-2 focus:ring-dark-green"
         />
         <button
-          onClick={handleRedirect}
+          onClick={() => onClick_open_prj()}
           className="bg-light-brown hover:bg-dark-gray text-white font-medium py-2 px-6 rounded-xl w-full transition-all"
         >
-          Go to Project
+          Open Project
         </button>
       </div>
     </div>

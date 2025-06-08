@@ -13,6 +13,6 @@ socket_endpoints(server, metrics);
 
 const HOST_SERVER = process.env.HOST_SERVER || "localhost";
 const PORT_SERVER = process.env.PORT_SERVER || 3001;
-server.listen(PORT_SERVER, () => {
+server.listen(PORT_SERVER, "0.0.0.0", () => {
   console.log("server is listening on PORT_SERVER:", PORT_SERVER);
 });

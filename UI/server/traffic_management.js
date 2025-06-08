@@ -2,8 +2,8 @@ export default class Metrics {
   constructor() {
     this.epoch = [];
     this.loss = [];
-    this.training_sample = null;
-    this.test_sample = null;
+    this.training_samples = null;
+    this.test_samples = null;
   }
   push(metrics_record) {
     const keys = Object.keys(metrics_record);

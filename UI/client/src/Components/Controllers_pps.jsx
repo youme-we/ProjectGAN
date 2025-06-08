@@ -18,7 +18,7 @@ export default function Controllers_pps({ socket }) {
   };
 
   return (
-    <div className="absolute top-0 right-0 m-2 border-4 border-dark-black border-solid rounded w-max">
+    <div className="m-2 border-4 border-dark-black border-solid rounded w-max">
       <PlayArrowIcon
         onClick={() => pps(false, false, true)}
         style={ButtonStyle}

@@ -5,10 +5,10 @@
     "epochs": 2000
   },
   "hyperparameters": {
-    "n_samples": 8,
-    "batch_size": 8,
-    "learning_rate": 1,
-    "momentum": 0
+    "n_samples": 512,
+    "batch_size": 512,
+    "learning_rate": 10,
+    "momentum": 0.1
   },
   "metadata": {
     "data_dir": "cars",
