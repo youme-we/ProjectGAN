@@ -8,9 +8,9 @@ class DataTransformer:
     def normalize(self, data):
         mean = torch.mean(self.reference_data)
         std = torch.std(self.reference_data)
-        return (data - mean) / std
+        return torch.tanh((data - mean) / std)
 
     def denormalize(self, data):
         mean = torch.mean(self.reference_data)
         std = torch.std(self.reference_data)
-        return data * std + mean
+        return torch.atanh(data) * std + mean

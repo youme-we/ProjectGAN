@@ -20,7 +20,7 @@ class Operator:
     async def operate(self):
         await asyncio.sleep(0.1)
         while self.pause:
-            await asyncio.sleep(0)
+            await asyncio.sleep(0.001)
 
     async def close(self):
         self.group.cancel()

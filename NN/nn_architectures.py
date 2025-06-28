@@ -13,11 +13,13 @@ class GAN(nn.Module):
         self.input_transformer = input_transformer
         self.target_transfomer = target_transfomer
         self.linear_relu_stack = nn.Sequential(
-            nn.Linear(dataset.input_shape, 256),
+            nn.Linear(dataset.input_shape, 1024),
             nn.ReLU(),
-            nn.Linear(256, 512),
+            nn.Linear(1024, 1024),
             nn.ReLU(),
-            nn.Linear(512, dataset.output_shape1 * dataset.output_shape2 * 3),
+            nn.Linear(1024, 2048),
+            nn.ReLU(),
+            nn.Linear(2048, dataset.output_shape1 * dataset.output_shape2 * 3),
             nn.Tanh(),
         )
 
