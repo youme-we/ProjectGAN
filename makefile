@@ -1,6 +1,10 @@
 ProjectGAN:
 	@docker compose up -d && docker attach projectgan-nn-1
 
+ProjectGAN_server:
+	@docker compose -f docker-compose_server.yaml up -d
+
+
 run: 
 	@cd NN && python3 wrapper.py
 

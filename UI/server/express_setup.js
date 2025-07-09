@@ -1,8 +1,6 @@
 import express from "express";
 import cors from "cors";
 import sessions from "express-session";
-import path from "path";
-const path_build = "/Users/skost/coding-s/ProjectGAN/UI/client/build";
 const setup_express = () => {
   const app = express();
   app.use(
@@ -12,23 +10,21 @@ const setup_express = () => {
       cookie: { maxAge: null },
       resave: false,
       secure: false, //if this is true the cookie only gets send over a https secure connection
-    })
+    }),
   );
 
   app.use(express.json()); // <==== parse request body as JSON
   app.use(
     cors({
-      origin: ["http://localhost:3000"], //alows requests from this PORT
+      origin: true,
       credentials: true,
-    })
+    }),
   );
+  app.options("*", cors());
   //For more information look at the note in Notablitiy
 
   //this is serving the React app from the build folder
-  app.use(express.static(path_build));
-  app.get(["/", "/create", "/login", "/project"], async (req, res) => {
-    res.sendFile(path.join(path_build, "index.html"));
-  });
+
   return app;
 };
 

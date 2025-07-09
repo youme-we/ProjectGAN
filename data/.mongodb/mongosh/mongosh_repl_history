@@ -1,7 +1,0 @@
-show dbs
-use admin
-show dbs
-dbs
-db.version
-db version
-Math.random()
