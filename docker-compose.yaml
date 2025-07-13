@@ -42,18 +42,20 @@ services:
         condition: service_healthy
 
   mongodb:
-    image: mongodb/mongodb-community-server:6.0-ubi8
+    image: mongodb/mongodb-community-server:latest
     ports:
       - "27018:27017"
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=root
-      - MONGO_INITDB_ROOT_PASSWORD=pass
+      - MONGODB_INITDB_ROOT_USERNAME=root
+      - MONGODB_INITDB_ROOT_PASSWORD=pass
     volumes:
-      - type: bind
-        source: ./data
-        target: /data/db
+      - mongodb-data:/data/db
     healthcheck:
       test: ["CMD", "mongosh", "--eval", "db.runCommand({ping: 1})"]
       interval: 10s
       timeout: 5s
       retries: 2
+
+volumes:
+  mongodb-data:
+    name: "mongodb-data"
