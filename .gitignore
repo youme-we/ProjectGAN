@@ -2,6 +2,7 @@
 data/
 NN/data
 NN/plots
+.host.env
 #NOTE:End Custom 
 
 #NOTE:Start NodeJS
