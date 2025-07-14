@@ -10,15 +10,15 @@ const setup_express = () => {
       cookie: { maxAge: null },
       resave: false,
       secure: false, //if this is true the cookie only gets send over a https secure connection
-    }),
+    })
   );
 
   app.use(express.json()); // <==== parse request body as JSON
   app.use(
     cors({
-      origin: true,
+      origin: ["http://localhost:3000"],
       credentials: true,
-    }),
+    })
   );
   app.options("*", cors());
   //For more information look at the note in Notablitiy

@@ -8,7 +8,8 @@ export default class DB {
     const PORT_MONGODB = process.env.PORT_MONGODB || 27018;
     const USER_MONGODB = process.env.USER_MONGODB;
     const PASS_MONGODB = process.env.PASS_MONGODB;
-    const uri = `mongodb://${USER_MONGODB}:${PASS_MONGODB}@${HOST_MONGODB}:${PORT_MONGODB}/?authSource=admin`;
+    const AUTHSOURCE_MONGODB = process.env.AUTHSOURCE_MONGODB;
+    const uri = `mongodb://${USER_MONGODB}:${PASS_MONGODB}@${HOST_MONGODB}:${PORT_MONGODB}/?authSource=${AUTHSOURCE_MONGODB}`;
     const client = new MongoClient(uri);
     client.connect();
     const database = client.db(db_name);
