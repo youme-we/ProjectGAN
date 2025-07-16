@@ -1,41 +1,43 @@
 import base64
 from io import BytesIO
-
+from colorama import Back, Fore, Style
 import torch
 from matplotlib import pyplot as plt
 from numpy import imag
 
 
-class Dataset:
-    def __init__(self, metadata, inputs, labels):
+class Dataset1:
+    def __init__(self, metadata, inputs, targets):
         self.__update__(metadata)
         self.inputs = inputs
-        self.labels = labels
+        self.targets = targets
         self.checking_data_actuality()
 
     def __update__(self, metadata):
         self.__dict__.update(metadata)
 
     def __len__(self):
-        return len(self.img_labels)
+        return len(self.targets)
 
     def __getitem__(self, idx):
         input = self.inputs[idx]
-        label = self.labels[idx]
-        return input, label
+        target = self.targets[idx]
+        return input, target
 
     def checking_data_actuality(self):
         input_shape_Dataset = self[0][0].shape[0]
         input_shape_overview = self.input_shape
 
         output_shape_Dataset = torch.flatten(self[0][1]).shape[0]
-        ouput_shape_overview = self.output_shape1 * self.output_shape2 * 3
-
+        output_shape_overview = self.output_shape1 * self.output_shape2 * 3
         if (
             input_shape_Dataset != input_shape_overview
-            or output_shape_Dataset != ouput_shape_overview
+            or output_shape_Dataset != output_shape_overview
         ):
-            diagnostics("NN does not run with the latest data format", "warning")
+            print(
+                Fore.RED + "WARNING:",
+                "Neural network is incompatible with the current data format",
+            )
 
     def to_base64(self, image_vectors):
         base64_images = []

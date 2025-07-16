@@ -6,7 +6,7 @@ from torch.utils.data import DataLoader, sampler
 from utils import device
 
 
-class GAN(nn.Module):
+class GAN1(nn.Module):
     def __init__(self, hyperparameters, dataset, input_transformer, target_transfomer):
         super().__init__()
         self.flatten = nn.Flatten()

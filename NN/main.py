@@ -3,9 +3,9 @@ import asyncio
 from tqdm import tqdm
 import requests
 import os
-from Dataset import Dataset
-from DataTransformer import DataTransformer
-from nn_architectures import GAN
+from datasets import Dataset1
+from data_transformers import DataTransformer1
+from models import GAN1
 from operating import Operator
 from plotting import Plotters
 from utils import device, load_json
@@ -17,10 +17,10 @@ torch.set_default_device(device())
 class Trainer:
     def __init__(self, overview, inputs, targets):
         self.__dict__.update(overview["trainer"])
-        input_transformer = DataTransformer(inputs)
-        target_transfomer = DataTransformer(targets)
-        self.dataset = Dataset(overview["metadata"], inputs, targets)
-        self.model = GAN(
+        input_transformer = DataTransformer1(inputs)
+        target_transfomer = DataTransformer1(targets)
+        self.dataset = Dataset1(overview["metadata"], inputs, targets)
+        self.model = GAN1(
             overview["hyperparameters"],
             self.dataset,
             input_transformer,
