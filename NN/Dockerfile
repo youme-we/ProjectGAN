@@ -1,17 +1,15 @@
-FROM python:3
+# Use a Python image with uv pre-installed
+FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim
 
 WORKDIR /app
 
-COPY requirements.txt ./
-
-RUN pip install --no-cache-dir -r requirements.txt
-
 COPY . .
 
+RUN uv sync --locked
+
+ENV PROJECT_NAME="GAN1"
 ENV PORT_NN=3002
 
 EXPOSE 3002
 
-ENV PROJECT_NAME="GAN1"
-
-CMD ["python3", "wrapper.py"]
+CMD ["uv", "run", "wrapper.py"]
