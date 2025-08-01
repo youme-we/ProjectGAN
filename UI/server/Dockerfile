@@ -8,8 +8,7 @@ RUN npm install
 
 COPY . .
 
-ENV DB_HOST="host.docker.internal"
-ENV PORT=3001
+ENV PORT_SERVER=3001
 
 EXPOSE 3001
 

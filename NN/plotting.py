@@ -3,10 +3,12 @@ import torch
 
 class Plotters:
     def __init__(self, plots):
-        for key, value in vars(plots).items():
-            setattr(self, key, value)
+        self.__update__(plots)
         self.epochs = []
         self.losses = []
+
+    def __update__(self, plots):
+        self.__dict__.update(plots)
 
     async def listen(self, SOCKET_CONNECTION):
         self.SOCKET_CONNECTION = SOCKET_CONNECTION
@@ -14,14 +16,14 @@ class Plotters:
     async def plot(self, epoch, model, dataset):
         self.plotting_el(epoch, model.loss)
         samplesTT = self.plotting_samplesTT(epoch, model, dataset)
-        if epoch % self.el_plot.rate == 0:
+        if epoch % self.el_plot == 0:
             await self.SOCKET_CONNECTION.emit(
                 "/nn_metrics_s",
                 {
                     "epoch": epoch,
                     "loss": model.loss,
-                    "training_sample": samplesTT[0],
-                    "test_sample": samplesTT[1],
+                    "training_samples": samplesTT[0],
+                    "test_samples": samplesTT[1],
                 },
             )
 
@@ -30,8 +32,8 @@ class Plotters:
         self.losses.append(loss)
 
     def plotting_samplesTT(self, epoch, model, dataset):
-        pred_tr = model.predict(dataset[0][0])
+        pred_tr = model.predict(dataset[0:2][0])
         pred_tr_b64 = dataset.to_base64(pred_tr)
-        pred_te = model.predict(dataset[-1][0])
+        pred_te = model.predict(dataset[-2:][0])
         pred_te_b64 = dataset.to_base64(pred_te)
         return [pred_tr_b64, pred_te_b64]

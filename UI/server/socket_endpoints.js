@@ -9,7 +9,6 @@ const socket_endpoints = (server, metrics) => {
     });
 
     socket.on("/tune_s", (data) => {
-      console.log("receiving", data);
       socket.broadcast.emit("/tune_nn", data);
     });
 

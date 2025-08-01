@@ -2,11 +2,7 @@ import asyncio
 import json
 from types import SimpleNamespace
 from colorama import Fore
-import socketio
-
 from utils import KeyPoller
-
-sio = socketio.AsyncSimpleClient()
 
 
 class Operator:
@@ -24,7 +20,7 @@ class Operator:
     async def operate(self):
         await asyncio.sleep(0.1)
         while self.pause:
-            await asyncio.sleep(0)
+            await asyncio.sleep(0.001)
 
     async def close(self):
         self.group.cancel()
@@ -48,9 +44,7 @@ class Operator:
         self.print_processing_status()
 
     async def overview_handler(self, event):
-        self.update_overview(
-            json.loads(event[1]["overview"], object_hook=lambda d: SimpleNamespace(**d))
-        )
+        self.update_overview(json.loads(event[1]["overview"]))
 
     async def on_terminal_handler(self):
         with KeyPoller() as keyPoller:

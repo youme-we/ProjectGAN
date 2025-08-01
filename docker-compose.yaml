@@ -1,25 +1,61 @@
 services:
-  NN:
-    image: youme-we/projectgan_ui_nn:latest
+  nn:
+    image: youme-we/projectgan_nn_gan1:latest
+    ports:
+      - "3002:3002"
     volumes:
       - ./NN:/app
     env_file: ".host.env"
     stdin_open: true
     tty: true
+    depends_on:
+      server:
+        condition: service_healthy
 
   server:
-    image: youme-we/projectgan_ui_server:latest
+    image: youme-we/projectgan_server:latest
     ports:
       - "3001:3001"
     volumes:
       - ./UI/server:/app
     env_file: ".host.env"
+    healthcheck:
+      test: ["CMD", "curl", "http://localhost:3001/healthcheck"]
+      interval: 1s
+      timeout: 5s
+      retries: 2
+    depends_on:
+      mongodb:
+        condition: service_healthy
 
   client:
-    image: youme-we/projectgan_ui_client:latest
+    image: youme-we/projectgan_client:latest
     ports:
       - "3000:3000"
+
+    env_file: ".host.env"
     volumes:
       - ./UI/client:/app
       #- /app/node_modules
-    env_file: ".host.env"
+    depends_on:
+      server:
+        condition: service_healthy
+
+  mongodb:
+    image: mongodb/mongodb-community-server:latest
+    ports:
+      - "27018:27017"
+    environment:
+      - MONGODB_INITDB_ROOT_USERNAME=root
+      - MONGODB_INITDB_ROOT_PASSWORD=pass
+    volumes:
+      - mongodb-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.runCommand({ping: 1})"]
+      interval: 10s
+      timeout: 5s
+      retries: 2
+
+volumes:
+  mongodb-data:
+    name: "mongodb-data"

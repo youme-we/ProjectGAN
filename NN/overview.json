@@ -7,11 +7,11 @@
   "hyperparameters": {
     "n_samples": 512,
     "batch_size": 512,
-    "learning_rate": 1,
-    "momentum": 0
+    "learning_rate": 10,
+    "momentum": 0.1
   },
   "metadata": {
-    "folder_dir": "./data/cars",
+    "data_dir": "cars",
     "dtype": "torch.float32",
     "input_shape": 32,
     "output_shape1": 64,

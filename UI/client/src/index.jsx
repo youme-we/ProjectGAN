@@ -1,24 +1,15 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import reportWebVitals from './reportWebVitals';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import "./index.css"
-import Home from './Dashboard/Home';
-import Create from './Dashboard/Create';
-import Login from './Dashboard/Login';
-import Project from './Dashboard/Project/Main';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import reportWebVitals from "./reportWebVitals";
+import { useImmer } from "use-immer";
+import "./index.css";
+import App from "./App.jsx";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-  <BrowserRouter>
-      <Routes>
-        <Route path='/' element={<Home />} />
-        <Route path='/login' element={<Login />} />
-        <Route path='/create' element={<Create />} />
-        <Route path='/project' element={<Project />} />
-      </Routes>
-    </BrowserRouter>  </React.StrictMode>
+    <App />
+  </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

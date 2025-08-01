@@ -4,27 +4,50 @@ const require = createRequire(import.meta.url);
 
 export default class DB {
   constructor(db_name, collection_name) {
-    //make data in the collection with the given collection_name excessable
-    const HOST_DB = process.env.HOST_DB || "localhost";
-    const uri = `mongodb://${HOST_DB}:27017/`;
-    console.log(uri);
+    const HOST_MONGODB = process.env.HOST_MONGODB || "localhost";
+    const PORT_MONGODB = process.env.PORT_MONGODB || 27018;
+    const USER_MONGODB = process.env.USER_MONGODB;
+    const PASS_MONGODB = process.env.PASS_MONGODB;
+    const AUTHSOURCE_MONGODB = process.env.AUTHSOURCE_MONGODB;
+    const uri = `mongodb://${USER_MONGODB}:${PASS_MONGODB}@${HOST_MONGODB}:${PORT_MONGODB}/?authSource=${AUTHSOURCE_MONGODB}`;
     const client = new MongoClient(uri);
     client.connect();
     const database = client.db(db_name);
-    this.projects = database.collection(collection_name);
+    // TODO:this.db instead of this.prj_overviews
+    this.prj_overviews = database.collection(collection_name);
   }
 
-  async get_prj(prj_name) {
-    //return this.projects.findOne({ prj_name });
-    return require("./overview.json");
+  async create_prj_overview(prj_overview) {
+    try {
+      prj_overview._id = new ObjectId();
+      const status = await this.prj_overviews.insertOne(prj_overview);
+      return { acknowledged: true, insertedId: status.insertedId };
+    } catch (error) {
+      return {
+        acknowledged: false,
+        errorCode: error.code,
+        keyValue: error.keyValue,
+      };
+    }
   }
-
-  async create_prj(prj_name) {
-    const overview = require("./overview.json");
-    const prj = overview;
-    prj.prj_name = prj_name;
-    prj._id = new ObjectId();
-    await this.projects.insertOne(prj); //saves created Project to the DB
-    return prj;
+  async read_prj_overview(prj_name) {
+    const prj_overview = await this.prj_overviews.findOne(
+      {
+        "prj_info.name": prj_name,
+      },
+      { projection: { _id: 0 } }
+    );
+    return prj_overview || false;
+  }
+  async update_prj_overview(prj_name, fields) {
+    const status = await this.prj_overviews.updateOne(
+      { "prj_info.name": prj_name },
+      { $set: fields }
+    );
+    return status;
+  }
+  async delete_prj_overview(prj_name) {
+    const status = await this.prj_overviews.deleteOne({ name: prj_name });
+    return status;
   }
 }
