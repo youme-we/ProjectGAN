@@ -10,7 +10,7 @@ from utils import load_json
 
 overview = load_json("../overview.json")
 data_dir = "../data/cars"
-input_shape = 1024
+input_shape = 2048
 output_shape1 = 64
 output_shape2 = 84
 dtype = "torch.float32"
