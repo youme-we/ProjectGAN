@@ -15,5 +15,5 @@ development:
 	@cd UI && cd client && npm start 
 
 compille:
-	@cd NN && cd datamanagement && python3 compille_data.py
+	@cd HOST && python3 compille_data.py
 

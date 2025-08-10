@@ -4,7 +4,7 @@ services:
     ports:
       - "3002:3002"
     volumes:
-      - ./NN:/app
+      - ./HOST:/app
     env_file: ".host.env"
     stdin_open: true
     tty: true
