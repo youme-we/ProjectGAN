@@ -3,8 +3,6 @@ import torch
 
 class Plotter1:
     def __init__(self, plots):
-        self.epochs = []
-        self.losses = []
         self.__update__(plots)
 
     def __update__(self, plots):
@@ -14,9 +12,8 @@ class Plotter1:
         self.SOCKET_CONNECTION = SOCKET_CONNECTION
 
     async def plot(self, epoch, model, dataset):
-        self.plotting_el(epoch, model.loss)
-        samplesTT = self.plotting_samplesTT(epoch, model, dataset)
         if epoch % self.el_plot == 0:
+            samplesTT = self.plotting_samplesTT(epoch, model, dataset)
             await self.SOCKET_CONNECTION.emit(
                 "/nn_metrics_s",
                 {
@@ -26,10 +23,6 @@ class Plotter1:
                     "test_samples": samplesTT[1],
                 },
             )
-
-    def plotting_el(self, epoch, loss):
-        self.epochs.append(epoch)
-        self.losses.append(loss)
 
     def plotting_samplesTT(self, epoch, model, dataset):
         pred_tr = model.predict(dataset[0:2][0])
