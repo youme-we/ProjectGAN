@@ -1,4 +1,6 @@
+import importlib
 import requests
+import sys
 from colorama import Back, Fore, Style
 import torch
 import os
@@ -43,11 +45,14 @@ class Executor1:
 
     async def reload_Trainer(self):
         try:
-            if "trainer" not in locals():
-                import Trainer.trainers as trainers
+            if "Trainer.trainers" not in sys.modules:
+                import Trainer.trainers
+
+                trainers = Trainer.trainers
             else:
-                trainers.reload_submodules()
-                reload(trainers)
+                trainers = importlib.reload(sys.modules["Trainer.trainers"])
+
+            trainers.reload_submodules()
             __trainer = trainers.Trainer1(self.__overview, self.inputs, self.targets)
             await __trainer.listen(self.__sio)
             await __trainer.train()

@@ -5,9 +5,9 @@ import PauseIcon from "@mui/icons-material/Pause";
 export default function Controllers_pps({ socket }) {
   const pps = (pause, save, run) => {
     socket.emit("/pps_s", {
-      pause: pause,
-      save: save,
-      run: run,
+      pause_trainer: pause,
+      save_trainer: save,
+      break_trainer: run,
     });
   };
 
@@ -22,17 +22,17 @@ export default function Controllers_pps({ socket }) {
       {[
         {
           icon: "M8 5v14l11-7z",
-          action: () => pps(false, false, true),
+          action: () => pps(false, false, false),
           label: "Play",
         },
         {
           icon: "M6 19h4V5H6v14zm8-14v14h4V5h-4z",
-          action: () => pps(true, false, true),
+          action: () => pps(true, false, false),
           label: "Pause",
         },
         {
           icon: "M3 6h18M8 6v12a2 2 0 002 2h4a2 2 0 002-2V6m-6 0V4a1 1 0 011-1h2a1 1 0 011 1v2",
-          action: () => pps(false, true, false),
+          action: () => pps(false, false, true),
           label: "Stop",
         },
       ].map(({ icon, action, label }) => (

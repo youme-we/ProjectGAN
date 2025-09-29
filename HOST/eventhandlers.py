@@ -34,6 +34,6 @@ class EventHandler1:
                 elif last_modified != current_modified:
                     self.executor.pull_overview()
                     await self.executor.reload_Trainer()
-                    last_modified = current_modified
+                    last_modified = os.path.getmtime("./Trainer")
                 else:
                     await asyncio.sleep(0)

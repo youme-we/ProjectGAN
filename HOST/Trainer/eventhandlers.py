@@ -30,9 +30,9 @@ class EventHandler1:
         while not self.break_trainer:
             event = await SOCKET_CONNECTION.receive()
             if event[0] == "/pps_nn":
-                self.pause = event[1]["pause"]
-                self.save = event[1]["save"]
-                self.run = event[1]["run"]
+                self.pause_trainer = event[1]["pause_trainer"]
+                self.save_trainer = event[1]["save_trainer"]
+                self.break_trainer = event[1]["break_trainer"]
             if event[0] == "/tune_nn":
                 await self.overview_handler(event)
 

@@ -12,7 +12,7 @@ import executors as executors
 import eventhandlers as eventhandlers
 
 
-class Host:
+class Host1:
     def __init__(self, PROJECT_NAME):
         self.PROJECT_NAME = PROJECT_NAME
         self.__sio = socketio.AsyncSimpleClient()
@@ -27,9 +27,9 @@ class Host:
 
 
 if __name__ == "__main__":
-    Host1 = Host(os.getenv("PROJECT_NAME"))
+    __host = Host1(os.getenv("PROJECT_NAME"))
     asyncio.run(
-        Host1.listen(
+        __host.listen(
             f"http://{os.getenv("HOST_SERVER", "localhost")}:{os.getenv("PORT_SERVER", 3001)}"
         )
     )
