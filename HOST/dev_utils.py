@@ -1,3 +1,3 @@
-from colorama import Back, Fore, Style, init
+from colorama import init
 
 init(autoreset=True)

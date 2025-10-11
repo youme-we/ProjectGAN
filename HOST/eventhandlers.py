@@ -2,11 +2,12 @@ import asyncio
 from colorama import Fore
 from utils import KeyPoller
 import os
+from datetime import datetime
 
 
 class EventHandler1:
     def __init__(self, executor):
-        self.executor = executor
+        self.__executor = executor
 
     async def listen(self, CONNECTION_STRING, __sio):
         self.CONNECTION_STRING = CONNECTION_STRING
@@ -27,13 +28,15 @@ class EventHandler1:
                 key = keyPoller.poll()
                 if key is not None:
                     if key == "r":
-                        self.executor.pull_overview()
-                        await self.executor.reload_Trainer()
+                        print(datetime.now())
+                        self.__executor.pull_overview()
+                        print(datetime.now())
+                        await self.__executor.reload_Trainer()
                     elif key == "z":
                         return
                 elif last_modified != current_modified:
-                    self.executor.pull_overview()
-                    await self.executor.reload_Trainer()
+                    self.__executor.pull_overview()
+                    await self.__executor.reload_Trainer()
                     last_modified = os.path.getmtime("./Trainer")
                 else:
                     await asyncio.sleep(0)
