@@ -24,6 +24,11 @@ class Host1:
         await self.__executor.listen(CONNECTION_STRING, self.__sio)
         await self.__executor.starter()
         await self.__eventhandler.listen(CONNECTION_STRING, self.__sio)
+        await self.shutdown()
+
+    async def shutdown(self):
+        await self.__sio.disconnect()
+
 
 
 if __name__ == "__main__":

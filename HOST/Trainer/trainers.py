@@ -60,8 +60,6 @@ class Trainer1:
                     await asyncio.sleep(0)
                 pbar.colour = "white"
             elif self.__eventhandler.break_trainer:
-                await self.__eventhandler.close()
                 return
             else:
                 await asyncio.sleep(0)
-        await self.__eventhandler.close()
