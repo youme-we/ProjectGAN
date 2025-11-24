@@ -27,10 +27,10 @@ class Trainer1:
     def __init__(self, __overview, inputs, targets):
         input_transformer = datatransformers.DataTransformer1(inputs)
         target_transfomer = datatransformers.DataTransformer1(targets)
-        self.dataset = datasets.Dataset1(__overview["metadata"], inputs, targets)
-        self.model = models.GAN1(
+        self.__dataset = datasets.Dataset1(__overview["metadata"], inputs, targets)
+        self.__model = models.GAN1(
             __overview["hyperparameters"],
-            self.dataset,
+            self.__dataset,
             input_transformer,
             target_transfomer,
         )
@@ -40,8 +40,8 @@ class Trainer1:
 
     def __update__(self, __overview):
         self.__dict__.update(__overview["trainer"])
-        self.dataset.__update__(__overview["metadata"])
-        self.model.__update__(__overview["hyperparameters"], self.dataset)
+        self.__dataset.__update__(__overview["metadata"])
+        self.__model.__update__(__overview["hyperparameters"], self.__dataset)
         self.__plotter.__update__(__overview["plot_rates"])
 
     async def listen(self, SOCKET_CONNECTION):
@@ -51,8 +51,8 @@ class Trainer1:
     async def train(self):
         pbar = tqdm(range(1, self.epochs + 1), desc="Training", unit="Epoch")
         for epoch in pbar:
-            self.model.iter()
-            await self.__plotter.plot(epoch, self.model, self.dataset)
+            self.__model.iter()
+            await self.__plotter.plot(epoch, self.__model, self.__dataset)
             if self.__eventhandler.pause_trainer:
                 pbar.colour = "yellow"
                 pbar.refresh()
@@ -60,8 +60,6 @@ class Trainer1:
                     await asyncio.sleep(0)
                 pbar.colour = "white"
             elif self.__eventhandler.break_trainer:
-                await self.__eventhandler.close()
                 return
             else:
                 await asyncio.sleep(0)
-        await self.__eventhandler.close()

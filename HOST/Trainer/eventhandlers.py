@@ -17,14 +17,7 @@ class EventHandler1:
     async def listen(self, SOCKET_CONNECTION):
         task1 = asyncio.create_task(self.on_GUI_handler(SOCKET_CONNECTION))
         task2 = asyncio.create_task(self.on_terminal_handler())
-        self.tasks = asyncio.gather(task1, task2)
 
-    async def close(self):
-        self.tasks.cancel()
-        try:
-            await self.tasks
-        except asyncio.CancelledError:
-            pass
 
     async def on_GUI_handler(self, SOCKET_CONNECTION):
         while not self.break_trainer:
