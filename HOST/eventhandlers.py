@@ -25,17 +25,17 @@ class EventHandler1:
         last_modified = os.path.getmtime("./Trainer")
         with KeyPoller() as keyPoller:
             while self.hosting:
-                    current_modified = os.path.getmtime("./Trainer")
-                    key = keyPoller.poll()
-                    if key is not None:
-                        if key == "r":
-                            self.__executor.pull_overview()
-                            await self.__executor.reload_Trainer()
-                        elif key == "z":
-                            self.hosting = False
-                    elif last_modified != current_modified:
-                        self.__executor.pull_overview()
+                current_modified = os.path.getmtime("./Trainer")
+                key = keyPoller.poll()
+                if key is not None:
+                    if key == "r":
+                        self.__executor.pull_project_config()
                         await self.__executor.reload_Trainer()
-                        last_modified = os.path.getmtime("./Trainer")
-                    else:
-                        await asyncio.sleep(0)
+                    elif key == "z":
+                        self.hosting = False
+                elif last_modified != current_modified:
+                    self.__executor.pull_project_config()
+                    await self.__executor.reload_Trainer()
+                    last_modified = os.path.getmtime("./Trainer")
+                else:
+                    await asyncio.sleep(0)

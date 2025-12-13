@@ -1,28 +1,34 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  create_prj_overview,
-  read_prj_overview,
-  update_prj_overview,
-  delete_prj_overview,
+  create_project_config,
+  read_project_config,
+  update_project_config,
+  delete_project_config,
 } from "../traffic_management";
-function Home({ overview, setoverview }) {
+function Home({ project_config, setproject_config }) {
   const navigate = useNavigate();
   const [prj_name, setprj_name] = useState("");
   const onClick_create_prj = () => {
-    read_prj_overview("template").then((overview_template) => {
-      setoverview(overview_template);
-      sessionStorage.setItem("overview", JSON.stringify(overview_template));
+    read_project_config("template").then((project_config_template) => {
+      setproject_config(project_config_template);
+      sessionStorage.setItem(
+        "project_config",
+        JSON.stringify(project_config_template)
+      );
       navigate("/create_prj");
     });
   };
 
   const onClick_open_prj = () => {
-    read_prj_overview(prj_name).then((overview_prj) => {
-      if (overview_prj) {
-        setoverview(overview_prj);
-        sessionStorage.setItem("overview", JSON.stringify(overview_prj));
-        navigate(`/${overview_prj.prj_info.dashboard}`);
+    read_project_config(prj_name).then((project_config_prj) => {
+      if (project_config_prj) {
+        setproject_config(project_config_prj);
+        sessionStorage.setItem(
+          "project_config",
+          JSON.stringify(project_config_prj)
+        );
+        navigate(`/${project_config_prj.prj_info.dashboard}`);
       } else {
         alert("The requested project doesn't exist or is unavailable");
       }

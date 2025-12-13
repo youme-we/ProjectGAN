@@ -17,31 +17,35 @@ class Executor1:
         self.__sio = __sio
 
     async def starter(self):
-        self.pull_overview()
+        self.pull_project_config()
         self.load_inputs()
         self.load_targets()
         await self.reload_Trainer()
 
     def load_inputs(self):
         self.inputs = torch.load(
-            os.path.join("./data", self.__overview["metadata"]["data"], "inputs.pt"),
+            os.path.join(
+                "./data", self.__project_config["metadata"]["data"], "inputs.pt"
+            ),
             map_location=torch.device(device()),
             weights_only=False,
         )
 
     def load_targets(self):
         self.targets = torch.load(
-            os.path.join("./data", self.__overview["metadata"]["data"], "targets.pt"),
+            os.path.join(
+                "./data", self.__project_config["metadata"]["data"], "targets.pt"
+            ),
             map_location=torch.device(device()),
             weights_only=False,
         )
 
-    def pull_overview(self):
+    def pull_project_config(self):
         res = requests.post(
-            f"{self.CONNECTION_STRING}/read_prj_overview",
+            f"{self.CONNECTION_STRING}/read_project_config",
             json={"prj_name": self.PROJECT_NAME},
         )
-        self.__overview = res.json()
+        self.__project_config = res.json()
 
     async def reload_Trainer(self):
         try:
@@ -53,7 +57,9 @@ class Executor1:
                 trainers = importlib.reload(sys.modules["Trainer.trainers"])
 
             trainers.reload_submodules()
-            __trainer = trainers.Trainer1(self.__overview, self.inputs, self.targets)
+            __trainer = trainers.Trainer1(
+                self.__project_config, self.inputs, self.targets
+            )
             await __trainer.listen(self.__sio)
             await __trainer.train()
         except BaseException as e:
