@@ -18,7 +18,6 @@ class EventHandler1:
         task1 = asyncio.create_task(self.on_GUI_handler(SOCKET_CONNECTION))
         task2 = asyncio.create_task(self.on_terminal_handler())
 
-
     async def on_GUI_handler(self, SOCKET_CONNECTION):
         while not self.break_trainer:
             event = await SOCKET_CONNECTION.receive()
@@ -27,7 +26,7 @@ class EventHandler1:
                 self.save_trainer = event[1]["save_trainer"]
                 self.break_trainer = event[1]["break_trainer"]
             if event[0] == "/tune_nn":
-                await self.overview_handler(event)
+                await self.project_config_handler(event)
 
     async def on_terminal_handler(self):
         with KeyPoller() as keyPoller:
@@ -41,5 +40,5 @@ class EventHandler1:
                 else:
                     await asyncio.sleep(0)
 
-    async def overview_handler(self, event):
-        self.update_trainer(json.loads(event[1]["overview"]))
+    async def project_config_handler(self, event):
+        self.update_trainer(json.loads(event[1]["project_config"]))
