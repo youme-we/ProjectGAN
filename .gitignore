@@ -1,7 +1,6 @@
 #NOTE:Start Custom
 data/
-NN/data
-NN/plots
+plots/
 .host.env
 #NOTE:End Custom 
 
