@@ -1,6 +1,3 @@
-import torch
-
-
 class Plotter1:
     def __init__(self, plots):
         self.__update__(plots)

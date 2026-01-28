@@ -1,8 +1,6 @@
 import asyncio
-from colorama import Fore
 from utils import KeyPoller
 import os
-from datetime import datetime
 
 
 class EventHandler1:

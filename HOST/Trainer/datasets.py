@@ -1,9 +1,8 @@
 import base64
 from io import BytesIO
-from colorama import Back, Fore, Style
+from colorama import Fore
 import torch
 from matplotlib import pyplot as plt
-from numpy import imag
 
 
 class Dataset1:

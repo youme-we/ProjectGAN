@@ -1,9 +1,6 @@
-import numpy
 import torch
-from matplotlib import pyplot as plt
-from torch import imag, nn, softmax
+from torch import nn
 from torch.utils.data import DataLoader, sampler
-from utils import device
 
 
 class GAN1(nn.Module):

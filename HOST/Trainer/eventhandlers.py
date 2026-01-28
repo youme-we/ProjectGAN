@@ -1,10 +1,6 @@
 import asyncio
 import json
-from types import SimpleNamespace
-from colorama import Fore
-from numpy import trace
 from utils import KeyPoller
-import traceback
 
 
 class EventHandler1:

@@ -2,14 +2,12 @@ from importlib import reload
 import torch
 import asyncio
 from tqdm import tqdm
-import requests
 import Trainer.datasets as datasets
 import Trainer.models as models
 import Trainer.plotters as plotters
 import Trainer.eventhandlers as eventhandlers
 import Trainer.datatransformers as datatransformers
-from utils import device, load_json
-from colorama import Fore
+from utils import device
 
 
 torch.set_default_device(device())
