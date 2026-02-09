@@ -22,7 +22,7 @@ class GAN1(nn.Module):
     def __update__(self, hyperparameters, dataset):
         self.__dict__.update(hyperparameters)
         self.samplers_data = sampler.SubsetRandomSampler(
-            indices=torch.arange(self.n_samples)
+            indices=torch.arange(self.sample_size)
         )
         self.training_dataloader = DataLoader(
             dataset,
