@@ -110,18 +110,17 @@ export default function DashboardGAN({ project_config, setproject_config }) {
               </div>
 
               <Chart_EL epoch={metrics.epoch} loss={metrics.loss} />
+              <Inputfields_project_config
+                project_config={project_config}
+                setproject_config={setproject_config}
+              />
             </div>
             <SamplesTT
               training_samples={metrics.training_samples}
               test_samples={metrics.test_samples}
             />
             {/*<Network weights={metrics.weights} />*/}
-            <div className="flex h-full justify-evenly items-center relative top-48 bg-dark-green">
-              <Inputfields_project_config
-                project_config={project_config}
-                setproject_config={setproject_config}
-              />
-            </div>
+            <div className="flex h-full justify-evenly items-center relative top-48 bg-dark-green"></div>
           </div>
         </>
       )}

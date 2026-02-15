@@ -20,3 +20,9 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+.heading_inputfield_project_config {
+  @apply font-serif text-lg subpixel-antialiased text-white-brown;
+}
+.inputfield_project_config {
+  @apply font-serif text-lg subpixel-antialiased bg-dark-gray text-white-brown;
+}

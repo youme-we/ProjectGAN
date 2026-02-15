@@ -14,13 +14,51 @@ export default function Inputfields_project_config({
   };
 
   return (
-    <div className="relative object-center basis-1/8">
-      <div className="font-serif text-lg subpixel-antialiased text-white-brown">
-        Learning Rate
-      </div>
+    <div className="">
+      <div className="heading_inputfield_project_config">Sample Size</div>
       <input
-        id={`inputfield_hyperparameters_learning_rate`}
-        className="font-serif text-lg subpixel-antialiased bg-dark-gray text-white-brown"
+        id={`inputfield_project_config_hyperparameters_sample_size`}
+        className="inputfield_project_config"
+        type="number"
+        value={project_config["hyperparameters"]["sample_size"]}
+        onChange={(e) => {
+          setproject_config((draft) => {
+            draft["hyperparameters"]["sample_size"] = parseFloat(
+              e.target.value
+            );
+          });
+        }}
+        onKeyDown={(e) => {
+          onTune_project_config(
+            e,
+            "inputfield_project_config_hyperparameters_sample_size"
+          );
+        }}
+      />
+      <p></p>
+      <div className="heading_inputfield_project_config">Batch Size</div>
+      <input
+        id={`inputfield_project_config_hyperparameters_batch_size`}
+        className="inputfield_project_config"
+        type="number"
+        value={project_config["hyperparameters"]["batch_size"]}
+        onChange={(e) => {
+          setproject_config((draft) => {
+            draft["hyperparameters"]["batch_size"] = parseFloat(e.target.value);
+          });
+        }}
+        onKeyDown={(e) => {
+          onTune_project_config(
+            e,
+            "inputfield_project_config_hyperparameters_batch_size"
+          );
+        }}
+      />
+      <p></p>
+      <div className="heading_inputfield_project_config">Learning Rate</div>
+      <input
+        id={`inputfield_project_config_hyperparameters_learning_rate`}
+        className="inputfield_project_config"
         type="number"
         value={project_config["hyperparameters"]["learning_rate"]}
         onChange={(e) => {
@@ -31,7 +69,29 @@ export default function Inputfields_project_config({
           });
         }}
         onKeyDown={(e) => {
-          onTune_project_config(e, "inputfield_hyperparameters_learning_rate");
+          onTune_project_config(
+            e,
+            "inputfield_project_config_hyperparameters_learning_rate"
+          );
+        }}
+      />
+      <p></p>
+      <div className="heading_inputfield_project_config">Momentum</div>
+      <input
+        id={`inputfield_project_config_hyperparameters_momentum`}
+        className="inputfield_project_config"
+        type="number"
+        value={project_config["hyperparameters"]["momentum"]}
+        onChange={(e) => {
+          setproject_config((draft) => {
+            draft["hyperparameters"]["momentum"] = parseFloat(e.target.value);
+          });
+        }}
+        onKeyDown={(e) => {
+          onTune_project_config(
+            e,
+            "inputfield_project_config_hyperparameters_momentum"
+          );
         }}
       />
       <p></p>
