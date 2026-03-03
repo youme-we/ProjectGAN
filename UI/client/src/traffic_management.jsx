@@ -1,8 +1,8 @@
 import { immerable } from "immer";
 import { io } from "socket.io-client";
 
-const HOST_SERVER = process.env.REACT_APP_HOST_SERVER || "localhost";
-const PORT_SERVER = process.env.REACT_APP_PORT_SERVER || 3001;
+const HOST_SERVER = import.meta.env.VITE_HOST_SERVER || "localhost";
+const PORT_SERVER = import.meta.env.VITE_PORT_SERVER || 3001;
 export const socket = io(`http://${HOST_SERVER}:${PORT_SERVER}`);
 
 export async function create_prj_overview(prj_overview) {

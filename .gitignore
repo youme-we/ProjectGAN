@@ -1,9 +1,37 @@
 #NOTE:Start Custom
 data/
-NN/data
-NN/plots
 .host.env
 #NOTE:End Custom 
+
+#NOTE:Start macOS
+
+# General
+.DS_Store
+__MACOSX/
+.AppleDouble
+.LSOverride
+Icon[
+]
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+#NOTE:End macOS
 
 #NOTE:Start NodeJS
 logs
@@ -358,3 +386,5 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 #NOTE:End Python
+
+
