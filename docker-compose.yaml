@@ -1,6 +1,6 @@
 services:
   nn:
-    image: youme-we/projectgan_nn_gan1:latest
+    image: youme-we/projectgan_host:latest
     ports:
       - "3002:3002"
     volumes:
