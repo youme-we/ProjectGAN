@@ -1,6 +1,4 @@
 import os
-import sys
-
 import torch
 from PIL import Image
 from tqdm import tqdm

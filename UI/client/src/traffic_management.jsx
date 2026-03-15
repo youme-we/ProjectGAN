@@ -1,26 +1,26 @@
 import { immerable } from "immer";
 import { io } from "socket.io-client";
 
-const HOST_SERVER = process.env.REACT_APP_HOST_SERVER || "localhost";
-const PORT_SERVER = process.env.REACT_APP_PORT_SERVER || 3001;
+const HOST_SERVER = import.meta.env.VITE_HOST_SERVER || "localhost";
+const PORT_SERVER = import.meta.env.VITE_PORT_SERVER || 3001;
 export const socket = io(`http://${HOST_SERVER}:${PORT_SERVER}`);
 
-export async function create_prj_overview(prj_overview) {
+export async function create_project_config(project_config) {
   const res = await fetch(
-    `http://${HOST_SERVER}:${PORT_SERVER}/create_prj_overview`,
+    `http://${HOST_SERVER}:${PORT_SERVER}/create_project_config`,
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prj_overview }),
+      body: JSON.stringify({ project_config }),
       mode: "cors",
       credentials: "include",
     }
   );
   return res.json();
 }
-export async function read_prj_overview(prj_name) {
+export async function read_project_config(prj_name) {
   const res = await fetch(
-    `http://${HOST_SERVER}:${PORT_SERVER}/read_prj_overview`,
+    `http://${HOST_SERVER}:${PORT_SERVER}/read_project_config`,
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -31,9 +31,9 @@ export async function read_prj_overview(prj_name) {
   );
   return res.json();
 }
-export async function update_prj_overview(prj_name, fields) {
+export async function update_project_config(prj_name, fields) {
   const res = await fetch(
-    `http://${HOST_SERVER}:${PORT_SERVER}/update_prj_overview`,
+    `http://${HOST_SERVER}:${PORT_SERVER}/update_project_config`,
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -44,9 +44,9 @@ export async function update_prj_overview(prj_name, fields) {
   );
   return res.json();
 }
-export async function delete_prj_overview(prj_name) {
+export async function delete_project_config(prj_name) {
   const res = await fetch(
-    `http://${HOST_SERVER}:${PORT_SERVER}/delete_prj_overview`,
+    `http://${HOST_SERVER}:${PORT_SERVER}/delete_project_config`,
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },

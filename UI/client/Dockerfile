@@ -12,4 +12,4 @@ ENV PORT_CLIENT=3000
 
 EXPOSE 3000
 
-CMD ["npm", "start"]
+CMD ["npm", "run", "dev"]

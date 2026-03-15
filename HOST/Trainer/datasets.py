@@ -1,9 +1,8 @@
 import base64
 from io import BytesIO
-from colorama import Back, Fore, Style
+from colorama import Fore
 import torch
 from matplotlib import pyplot as plt
-from numpy import imag
 
 
 class Dataset1:
@@ -26,13 +25,13 @@ class Dataset1:
 
     def checking_data_actuality(self):
         input_shape_Dataset = self[0][0].shape[0]
-        input_shape_overview = self.input_shape
+        input_shape_project_config = self.input_shape
 
         output_shape_Dataset = torch.flatten(self[0][1]).shape[0]
-        output_shape_overview = self.output_shape1 * self.output_shape2 * 3
+        output_shape_project_config = self.output_shape1 * self.output_shape2 * 3
         if (
-            input_shape_Dataset != input_shape_overview
-            or output_shape_Dataset != output_shape_overview
+            input_shape_Dataset != input_shape_project_config
+            or output_shape_Dataset != output_shape_project_config
         ):
             print(
                 Fore.RED + "WARNING:",

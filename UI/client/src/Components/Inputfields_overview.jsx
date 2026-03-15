@@ -1,12 +1,12 @@
-export default function Inputfields_overview({
+export default function Inputfields_project_config({
   section_name,
-  overview_section,
-  onChange_overview,
-  onTune_overview,
+  project_config_section,
+  onChange_project_config,
+  onTune_project_config,
 }) {
   return (
     <div className="relative object-center basis-1/8">
-      {Object.keys(overview_section).map((keyname, index) => (
+      {Object.keys(project_config_section).map((keyname, index) => (
         <div key={keyname}>
           <div className="font-serif text-lg subpixel-antialiased text-white-brown">
             {keyname}
@@ -14,13 +14,13 @@ export default function Inputfields_overview({
           <input
             id={`inputfield_${section_name}_${keyname}`}
             className="font-serif text-lg subpixel-antialiased bg-dark-gray text-white-brown"
-            type={typeof overview_section[keyname]}
-            value={overview_section[keyname]}
+            type={typeof project_config_section[keyname]}
+            value={project_config_section[keyname]}
             onChange={(e) => {
-              onChange_overview(e, section_name, keyname);
+              onChange_project_config(e, section_name, keyname);
             }}
             onKeyDown={(e) => {
-              onTune_overview(e, section_name, keyname);
+              onTune_project_config(e, section_name, keyname);
             }}
           />
           <p></p>

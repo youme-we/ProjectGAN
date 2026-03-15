@@ -13,14 +13,14 @@ export default class DB {
     const client = new MongoClient(uri);
     client.connect();
     const database = client.db(db_name);
-    // TODO:this.db instead of this.prj_overviews
-    this.prj_overviews = database.collection(collection_name);
+    // TODO:this.db instead of this.project_configs
+    this.project_configs = database.collection(collection_name);
   }
 
-  async create_prj_overview(prj_overview) {
+  async create_project_config(project_config) {
     try {
-      prj_overview._id = new ObjectId();
-      const status = await this.prj_overviews.insertOne(prj_overview);
+      project_config._id = new ObjectId();
+      const status = await this.project_configs.insertOne(project_config);
       return { acknowledged: true, insertedId: status.insertedId };
     } catch (error) {
       return {
@@ -30,24 +30,24 @@ export default class DB {
       };
     }
   }
-  async read_prj_overview(prj_name) {
-    const prj_overview = await this.prj_overviews.findOne(
+  async read_project_config(prj_name) {
+    const project_config = await this.project_configs.findOne(
       {
         "prj_info.name": prj_name,
       },
       { projection: { _id: 0 } }
     );
-    return prj_overview || false;
+    return project_config || false;
   }
-  async update_prj_overview(prj_name, fields) {
-    const status = await this.prj_overviews.updateOne(
+  async update_project_config(prj_name, fields) {
+    const status = await this.project_configs.updateOne(
       { "prj_info.name": prj_name },
       { $set: fields }
     );
     return status;
   }
-  async delete_prj_overview(prj_name) {
-    const status = await this.prj_overviews.deleteOne({ name: prj_name });
+  async delete_project_config(prj_name) {
+    const status = await this.project_configs.deleteOne({ name: prj_name });
     return status;
   }
 }

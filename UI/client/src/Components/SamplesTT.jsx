@@ -3,7 +3,7 @@ export default function SamplesTT({ training_samples, test_samples }) {
   return (
     <div className="flex relative top-48 bg-dark-gray">
       {training_samples && (
-        <div className="grid grid-cols-custom gap-x-32 gap-y-16 relative left-64">
+        <div className="grid grid-cols-[32px_1fr_1fr] gap-x-32 gap-y-16 relative left-64">
           <div className="font-serif text-2xl subpixel-antialiased bg-dark-gray text-white-brown">
             Samples
           </div>
