@@ -9,7 +9,7 @@ import {
   delete_project_config,
 } from "../traffic_management";
 
-export default function Create_prj({ project_config, setproject_config }) {
+export default function Create_project({ project_config, setproject_config }) {
   const navigate = useNavigate();
   useEffect(() => {
     let stored_project_config = JSON.parse(

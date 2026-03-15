@@ -9,26 +9,26 @@ import {
 function Home({ project_config, setproject_config }) {
   const navigate = useNavigate();
   const [prj_name, setprj_name] = useState("");
-  const onClick_create_prj = () => {
+  const onClick_create_project = () => {
     read_project_config("template").then((project_config_template) => {
       setproject_config(project_config_template);
       sessionStorage.setItem(
         "project_config",
         JSON.stringify(project_config_template)
       );
-      navigate("/create_prj");
+      navigate("/create_project");
     });
   };
 
-  const onClick_open_prj = () => {
-    read_project_config(prj_name).then((project_config_prj) => {
-      if (project_config_prj) {
-        setproject_config(project_config_prj);
+  const onClick_open_project = () => {
+    read_project_config(prj_name).then((project_config) => {
+      if (project_config) {
+        setproject_config(project_config);
         sessionStorage.setItem(
           "project_config",
-          JSON.stringify(project_config_prj)
+          JSON.stringify(project_config)
         );
-        navigate(`/${project_config_prj.prj_info.dashboard}`);
+        navigate(`/${project_config.dashboard.name}`);
       } else {
         alert("The requested project doesn't exist or is unavailable");
       }
@@ -46,7 +46,7 @@ function Home({ project_config, setproject_config }) {
 
         {/* Create Project Button */}
         <button
-          onClick={() => onClick_create_prj()}
+          onClick={() => onClick_create_project()}
           className="bg-dark-green hover:bg-blue-gray text-white font-semibold py-3 px-6 rounded-xl shadow-md transition-all w-full mb-6"
         >
           Create New Project
@@ -68,7 +68,7 @@ function Home({ project_config, setproject_config }) {
           className="border border-light-brown rounded-xl px-4 py-2 mb-4 w-full text-sm text-dark-gray focus:outline-none focus:ring-2 focus:ring-dark-green"
         />
         <button
-          onClick={() => onClick_open_prj()}
+          onClick={() => onClick_open_project()}
           className="bg-light-brown hover:bg-dark-gray text-white font-medium py-2 px-6 rounded-xl w-full transition-all"
         >
           Open Project

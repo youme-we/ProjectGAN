@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useImmer } from "use-immer";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./Center/Home";
-import Create_prj from "./Center/Create_prj";
+import Create_project from "./Center/Create_project";
 import DashboardGAN from "./Dashboards/DashboardGAN/Main";
 import { Navigate } from "react-router-dom";
 export default function App() {
@@ -20,9 +20,9 @@ export default function App() {
           }
         />
         <Route
-          path="/create_prj"
+          path="/create_project"
           element={
-            <Create_prj
+            <Create_project
               project_config={project_config}
               setproject_config={setproject_config}
             />
