@@ -33,17 +33,14 @@ export default class DB {
   async read_project_config(prj_name) {
     const project_config = await this.project_configs.findOne(
       {
-        "prj_info.name": prj_name,
+        name: prj_name,
       },
       { projection: { _id: 0 } }
     );
     return project_config || false;
   }
   async update_project_config(prj_name, fields) {
-    const status = await this.project_configs.updateOne(
-      { "prj_info.name": prj_name },
-      { $set: fields }
-    );
+    const status = await this.project_configs.updateOne({ name: prj_name }, { $set: fields });
     return status;
   }
   async delete_project_config(prj_name) {

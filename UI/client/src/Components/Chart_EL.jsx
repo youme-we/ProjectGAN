@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react";
 import ReactEcharts from "echarts-for-react";
 
 export default function Chart_EL({ epoch, loss }) {
@@ -8,35 +7,30 @@ export default function Chart_EL({ epoch, loss }) {
       data: epoch,
       axisLine: {
         lineStyle: {
-          color: "F5F9E9",
+          color: "#000000",
         },
       },
-      axisLabel: { color: "#F5F9E9" },
+      axisLabel: { color: "#000000" },
     },
     yAxis: {
       type: "value",
       axisLine: {
         lineStyle: {
-          color: "#F5F9E9",
+          color: "#000000",
         },
       },
-      axisLabel: { color: "#F5F9E9" },
+      axisLabel: { color: "#000000" },
     },
     series: [
       {
         data: loss,
         type: "line",
         smooth: true,
-        lineStyle: { color: "#F5F9E9" },
+        smoothMonotone: "x",
+        lineStyle: { color: "#000000" },
         showSymbol: false,
       },
     ],
   };
-  return (
-    <ReactEcharts
-      option={option}
-      className="basis-2/3"
-      style={{ height: "400px" }}
-    />
-  );
+  return <ReactEcharts option={option} className="basis-2/3" style={{ height: "400px" }} />;
 }

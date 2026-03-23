@@ -3,7 +3,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const buildPath = path.join(__dirname, "public");
+const buildPath = path.join(__dirname, "build");
 
 const http_endpoints = (app, db) => {
   app.post("/create_project_config", async (req, res) => {
@@ -17,10 +17,7 @@ const http_endpoints = (app, db) => {
   });
 
   app.post("/update_project_config", async (req, res) => {
-    const status = await db.update_project_config(
-      req.body.prj_name,
-      req.body.fields
-    );
+    const status = await db.update_project_config(req.body.prj_name, req.body.fields);
     res.send(status);
   });
 
