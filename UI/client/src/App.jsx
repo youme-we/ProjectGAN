@@ -13,7 +13,7 @@ export default function App() {
         <Route path="/home" element={<Home project_config={project_config} setproject_config={setproject_config} />} />
         <Route path="/create_project" element={<Create_project project_config={project_config} setproject_config={setproject_config} />} />
         <Route path="/DashboardGAN" element={<DashboardGAN project_config={project_config} setproject_config={setproject_config} />} />
-        <Route path="/Dashboard" element={<Dashboard />} />
+        <Route path="/Dashboard" element={<Dashboard project_config={project_config} />} />
       </Routes>
     </BrowserRouter>
   );

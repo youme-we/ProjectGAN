@@ -1,9 +1,8 @@
-import DashboardTabBar from "../components/DashboardTabBar";
+import DashbaordTabBar from "./DashboardTabBar";
 import PlotsTab from "./PlotsTab";
 import { useEffect, useState } from "react";
-import { useImmer } from "use-immer";
 
-export default function Dashbaord() {
+export default function Dashbaord(project_config, setproject_config) {
   const [tab, setTab] = useState("plots");
 
   return (
