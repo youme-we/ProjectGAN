@@ -12,7 +12,7 @@ const http_endpoints = (app, db) => {
   });
 
   app.post("/read_project_config", async (req, res) => {
-    const project_config = await db.read_project_config(req.body.prj_name);
+    const project_config = await db.read_project_config(req.body.name);
     res.send(project_config);
   });
 

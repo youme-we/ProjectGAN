@@ -1,18 +1,21 @@
 import base64
 from io import BytesIO
-from colorama import Fore
+
 import torch
+from colorama import Fore
 from matplotlib import pyplot as plt
 
 
-class Dataset1:
-    def __init__(self, metadata, inputs, targets):
+class Dataset:
+    def __init__(self, dataset_config, inputs, targets):
         self.inputs = inputs
         self.targets = targets
-        self.__update__(metadata)
+        self.__dict__.update(dataset_config)
+        self.input_dim = self.latent_dim
+        self.target_dim = self.image_height_px * self.image_width_px * 3
 
-    def __update__(self, metadata):
-        self.__dict__.update(metadata)
+    def __update__(self, dataset_config):
+        self.__dict__.update(dataset_config)
         self.checking_data_actuality()
 
     def __len__(self):
@@ -24,28 +27,30 @@ class Dataset1:
         return input, target
 
     def checking_data_actuality(self):
-        input_shape_Dataset = self[0][0].shape[0]
-        input_shape_project_config = self.input_shape
+        latent_dim_dataset = self[0][0].shape[0]
+        latent_dim_dataset_config = self.latent_dim
 
-        output_shape_Dataset = torch.flatten(self[0][1]).shape[0]
-        output_shape_project_config = self.output_shape1 * self.output_shape2 * 3
+        image_flatten_size_dataset = torch.flatten(self[0][1]).shape[0]
+        image_flatten_size_dataset_config = (
+            self.image_height_px * self.image_width_px * 3
+        )
         if (
-            input_shape_Dataset != input_shape_project_config
-            or output_shape_Dataset != output_shape_project_config
+            latent_dim_dataset != latent_dim_dataset_config
+            or image_flatten_size_dataset != image_flatten_size_dataset_config
         ):
             print(
                 Fore.RED + "WARNING:",
                 "Neural network is incompatible with the current data format",
             )
 
-    def to_base64(self, image_vectors):
+    def encode_images_to_base64(self, image_vectors):
         base64_images = []
         image_vectors = torch.div(image_vectors, 255)
         image_vectors[image_vectors > 1] = 1
         image_vectors[image_vectors < 0] = 0
         for image_vector in image_vectors:
             image_vector = torch.reshape(
-                image_vector, (self.output_shape1, self.output_shape2, 3)
+                image_vector, (self.image_height_px, self.image_width_px, 3)
             )
             image_vector = image_vector.to("cpu").detach().numpy()
             buf = BytesIO()

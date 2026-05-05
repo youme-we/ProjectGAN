@@ -13,7 +13,7 @@ export default class DB {
     const client = new MongoClient(uri);
     client.connect();
     const database = client.db(db_name);
-    // TODO:this.db instead of this.project_configs
+    // TODO:this.db.collection.insert instead of this.project_configs.insert
     this.project_configs = database.collection(collection_name);
   }
 

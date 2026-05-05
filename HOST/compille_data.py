@@ -1,11 +1,11 @@
 import os
+
 import torch
 from PIL import Image
 from tqdm import tqdm
 
-
 data_dir = "../data/cars"
-input_shape = 2048
+input_shape = 32
 output_shape1 = 64
 output_shape2 = 84
 dtype = "torch.float32"

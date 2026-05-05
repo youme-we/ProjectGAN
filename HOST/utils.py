@@ -1,4 +1,6 @@
+import glob
 import json
+import os
 from types import SimpleNamespace
 
 import torch
@@ -18,6 +20,10 @@ def load_json(file):
     with open(file, "r") as data_file:
         data = json.load(data_file, object_hook=lambda d: SimpleNamespace(**d))
     return data
+
+
+def get_last_modified_time():
+    return max(os.path.getmtime(d) for d in glob.glob("./*/"))
 
 
 global isWindows

@@ -1,7 +1,7 @@
 import torch
 
 
-class DataTransformer1:
+class DataTransformer:
     def __init__(self, reference_data):
         self.reference_data = reference_data
 
