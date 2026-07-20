@@ -36,9 +36,8 @@ class EventHandler:
                     elif key == "b":
                         asyncio.create_task(self.__executor.break_trainer())
                 elif last_modified != current_modified:
-                    print("modified")
                     asyncio.create_task(self.__executor.pull_project_config("GAN1"))
                     asyncio.create_task(self.__executor.reload_trainer())
                     last_modified = get_last_modified_time()
                 else:
-                    await asyncio.sleep(0)
+                    await asyncio.sleep(0.5)

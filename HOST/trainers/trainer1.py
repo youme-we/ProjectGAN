@@ -107,9 +107,9 @@ class Trainer:
                 pbar.colour = "yellow"
                 pbar.refresh()
                 while self.pause:
-                    await asyncio.sleep(0)
+                    await asyncio.sleep(0.5)
                 pbar.colour = "white"
             elif self.quit:
                 return
             else:
-                await asyncio.sleep(0)
+                await asyncio.sleep(0.5)
