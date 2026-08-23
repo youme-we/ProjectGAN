@@ -1,20 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useImmer } from "use-immer";
 import { useNavigate } from "react-router-dom";
-import Inputfields_project_config from "../Components/Inputfields_project_config";
-import {
-  create_project_config,
-  read_project_config,
-  update_project_config,
-  delete_project_config,
-} from "../traffic_management";
+import Inputfields_project_config from "./Components/Inputfields_project_config";
+import { create_project_config, read_project_config, update_project_config, delete_project_config } from "../traffic_management";
 
 export default function Create_project({ project_config, setproject_config }) {
   const navigate = useNavigate();
   useEffect(() => {
-    let stored_project_config = JSON.parse(
-      sessionStorage.getItem("project_config")
-    );
+    let stored_project_config = JSON.parse(sessionStorage.getItem("project_config"));
     if (stored_project_config) {
       setproject_config(stored_project_config);
     } else {
@@ -42,10 +35,7 @@ export default function Create_project({ project_config, setproject_config }) {
   const onClick_create_project_config = async () => {
     const res = await create_project_config(project_config);
     if (res.acknowledged) {
-      sessionStorage.setItem(
-        `${project_config.prj_info.name}_project_config`,
-        JSON.stringify(project_config)
-      );
+      sessionStorage.setItem(`${project_config.prj_info.name}_project_config`, JSON.stringify(project_config));
       if (project_config.prj_info.name.trim()) {
         navigate(`/${project_config.prj_info.dashboard}`);
       }
@@ -59,42 +49,14 @@ export default function Create_project({ project_config, setproject_config }) {
       {project_config && (
         <div>
           <div className="flex h-full justify-evenly items-center relative top-48 bg-dark-green">
-            <Inputfields_project_config
-              section_name={"prj_info"}
-              project_config_section={project_config.prj_info}
-              onTune_project_config={onTune_project_config}
-              onChange_project_config={onChange_project_config}
-            />
-            <Inputfields_project_config
-              section_name={"trainer"}
-              project_config_section={project_config.trainer}
-              onTune_project_config={onTune_project_config}
-              onChange_project_config={onChange_project_config}
-            />
-            <Inputfields_project_config
-              section_name={"plot_rates"}
-              project_config_section={project_config.plot_rates}
-              onTune_project_config={onTune_project_config}
-              onChange_project_config={onChange_project_config}
-            />
+            <Inputfields_project_config section_name={"prj_info"} project_config_section={project_config.prj_info} onTune_project_config={onTune_project_config} onChange_project_config={onChange_project_config} />
+            <Inputfields_project_config section_name={"trainer"} project_config_section={project_config.trainer} onTune_project_config={onTune_project_config} onChange_project_config={onChange_project_config} />
+            <Inputfields_project_config section_name={"plot_rates"} project_config_section={project_config.plot_rates} onTune_project_config={onTune_project_config} onChange_project_config={onChange_project_config} />
 
-            <Inputfields_project_config
-              section_name={"hyperparameters"}
-              project_config_section={project_config.hyperparameters}
-              onTune_project_config={onTune_project_config}
-              onChange_project_config={onChange_project_config}
-            />
-            <Inputfields_project_config
-              section_name={"metadata"}
-              project_config_section={project_config.metadata}
-              onTune_project_config={onTune_project_config}
-              onChange_project_config={onChange_project_config}
-            />
+            <Inputfields_project_config section_name={"hyperparameters"} project_config_section={project_config.hyperparameters} onTune_project_config={onTune_project_config} onChange_project_config={onChange_project_config} />
+            <Inputfields_project_config section_name={"metadata"} project_config_section={project_config.metadata} onTune_project_config={onTune_project_config} onChange_project_config={onChange_project_config} />
             <div className="flex flex-col items-center space-y-4">
-              <button
-                className="px-6 py-2 bg-white-brown text-dark-green font-semibold rounded-lg shadow hover:bg-light-brown transition"
-                onClick={() => onClick_create_project_config()}
-              >
+              <button className="px-6 py-2 bg-white-brown text-dark-green font-semibold rounded-lg shadow hover:bg-light-brown transition" onClick={() => onClick_create_project_config()}>
                 Create Project
               </button>
             </div>

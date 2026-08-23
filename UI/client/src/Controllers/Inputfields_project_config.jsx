@@ -6,7 +6,7 @@ export default function Inputfields_project_config({
   const onTune_project_config = (e, id) => {
     if (e.key === "Enter") {
       document.getElementById(id).blur();
-      socket.emit("/tune_s", {
+      socket.emit("tune_s", {
         project_config: JSON.stringify(project_config),
       });
       sessionStorage.setItem("project_config", JSON.stringify(project_config));

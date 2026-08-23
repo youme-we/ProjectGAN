@@ -1,7 +1,7 @@
 import torch
 
 
-class DataTransformer:
+class Normalizer:
     def __init__(self, reference_data):
         self.reference_data = reference_data
 

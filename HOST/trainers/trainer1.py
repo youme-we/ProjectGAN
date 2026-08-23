@@ -2,11 +2,6 @@ import asyncio
 from importlib import reload
 
 import torch
-
-# import Trainer.datatransformers as datatransformers
-# import Trainer.eventhandlers as eventhandlers
-# import Trainer.models as models
-# import Trainer.plotters as plotters
 from torch import nn
 from torch.utils.data import DataLoader, sampler
 from tqdm import tqdm
@@ -28,28 +23,44 @@ def reload_submodules():
 
 
 class Trainer:
-    def __init__(self, __trainer_config, inputs, targets):
+    def __init__(self, config_id, trainer_config, inputs, targets):
         self.pause = False
         self.quit = False
-        self.input_transformer = datatransformers.DataTransformer(inputs)
-        self.target_transfomer = datatransformers.DataTransformer(targets)
-        self._dataset = datasets.Dataset(__trainer_config["dataset"], inputs, targets)
-        self._model = models.Model(
-            __trainer_config["model"],
-            self._dataset.input_dim,
-            self._dataset.target_dim,
+        print(config_id)
+        self.__dict__.update(trainer_config)
+        self.imagetransformer = datatransformers.ImageTransformer()
+        self.input_normalizer = datatransformers.Normalizer(inputs)
+        self.target_normalizer = datatransformers.Normalizer(targets)
+        self.training_dataset = datasets.Dataset(
+            trainer_config["dataset"],
+            inputs[: self.sample_size],
+            targets[: self.sample_size],
         )
-        self._plotter = plotters.Plotter(__trainer_config["plotter"], self)
-        self.__update__(__trainer_config)
-
-    def __update__(self, __trainer_config):
-        self.__dict__.update(__trainer_config)
-        self.samplers_data = sampler.SubsetRandomSampler(
+        self.testing_dataset = datasets.Dataset(
+            trainer_config["dataset"],
+            inputs[self.sample_size :],
+            targets[self.sample_size :],
+        )
+        self.training_sampler = sampler.SubsetRandomSampler(
             indices=torch.arange(self.sample_size)
         )
+        self._model = models.Model(
+            trainer_config["model"],
+            self.training_dataset.latent_dim,
+            self.training_dataset.target_dim,
+        )
+
+        self.loss_fn = nn.MSELoss()
+        self._plotter = plotters.Plotter(trainer_config["plotter"])
+
+        self.__update__(trainer_config)
+
+    def __update__(self, trainer_config):
+        self.__dict__.update(trainer_config)
+
         self.training_dataloader = DataLoader(
-            self._dataset,
-            sampler=self.samplers_data,
+            self.training_dataset,
+            sampler=self.training_sampler,
             batch_size=self.batch_size,
         )
 
@@ -62,11 +73,7 @@ class Trainer:
             self.optimizer, step_size=1, gamma=0.9
         )
 
-        self.loss_fn = nn.MSELoss()
-
-        self._dataset.__update__(__trainer_config["dataset"])
-        self._model.__update__(__trainer_config["model"])
-        self._plotter.__update__(__trainer_config["plotter"])
+        self._plotter.__update__(trainer_config["plotter"])
 
     async def listen(self, SOCKET_CONNECTION):
         await self._plotter.listen(SOCKET_CONNECTION)
@@ -74,35 +81,53 @@ class Trainer:
     def forward(self, latent_vector):
         return self._model.linear_relu_stack(latent_vector)
 
-    def iter(self):
+    def iter(self, dataloader):
         self._model.train()
-        for batch, (input, target) in enumerate(self.training_dataloader):
-            X = self.input_transformer.normalize(input)
-            y = self.target_transfomer.normalize(target)
+        total_loss = 0
+        for batch, (input, target) in enumerate(dataloader):
+            X = self.input_normalizer.normalize(input)
+            y = self.target_normalizer.normalize(target)
             y = self._model.flatten(y)
             pred = self._model.forward(X)
             loss = self.loss_fn(pred, y)
+            total_loss += loss.item()
 
             self.optimizer.zero_grad()
             loss.backward()
             self.optimizer.step()
             # scheduler.step()
 
-            self.pred = pred
-            self.lable = y
-            self.loss = loss.item()
+        return {"loss": total_loss / (batch + 1)}
+
+    def test(self, input, target):
+        self._model.eval()
+        X = self.input_normalizer.normalize(input)
+        pred = self.forward(X)
+        output = self.target_normalizer.denormalize(pred)
+        b64 = self.imagetransformer.encode_images_to_base64(
+            output,
+            self.training_dataset.image_height_px,
+            self.training_dataset.image_width_px,
+        )
+        return {"pred": pred, "output": output, "b64": b64}
 
     def predict(self, input):
         self._model.eval()
-        X = self.input_transformer.normalize(input)
+        X = self.input_normalizer.normalize(input)
         pred = self.forward(X)
-        return self.target_transfomer.denormalize(pred).int()
+        return {"output": self.target_normalizer.denormalize(pred)}
 
     async def train(self):
         pbar = tqdm(range(1, self.epochs + 1), desc="Training", unit="Epoch")
         for epoch in pbar:
-            self.iter()
-            await self._plotter.plot(epoch)
+            iter_result = self.iter(self.training_dataloader)
+            train_result = self.test(
+                self.training_dataset[0:2][0], self.training_dataset[0:2][1]
+            )
+            test_result = self.test(
+                self.testing_dataset[0:2][0], self.testing_dataset[0:2][1]
+            )
+            await self._plotter.plot(epoch, iter_result, train_result, test_result)
             if self.pause:
                 pbar.colour = "yellow"
                 pbar.refresh()

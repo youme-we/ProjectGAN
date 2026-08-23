@@ -37,20 +37,21 @@ class DataCompiler1:
             try:
                 image = Image.open(image_path).convert("RGB")
                 image_tensor = transform(image)
-                image_tensors.append(image_tensor)
-
+                image_tensors.append(image_tensortorch.reshape(
+                image_vector, (self.image_height_px, self.image_width_px, 3)
+            )
             except Exception as e:
                 print(f"Skipping {image_name}: {e}")
 
         return torch.stack(image_tensors)
 
     # call 1.
-    def generate_training_data(self):
+    def generate_data(self):
         targets = self.load_images()
         inputs = self.sample_latent_vectors(len(targets))
         return inputs, targets
 
     # call 2.
-    def save_training_data(self, inputs, targets):
+    def save_data(self, inputs, targets):
         torch.save(inputs, os.path.join(self.data_dir, "inputs.pt"))
         torch.save(targets, os.path.join(self.data_dir, "targets.pt"))

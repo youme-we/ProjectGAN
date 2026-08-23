@@ -1,7 +1,11 @@
+from bson import ObjectId
+
+
 class Plotter:
-    def __init__(self, plotter_config, trainer):
-        self.trainer = trainer
+    def __init__(self, plotter_config, config_id):
         self.__dict__.update(plotter_config)
+        self.run_id = ObjectId()
+        self.config_id = config_id
 
     def __update__(self, plotter_config):
         self.__dict__.update(plotter_config)
@@ -9,22 +13,16 @@ class Plotter:
     async def listen(self, SOCKET_CONNECTION):
         self.SOCKET_CONNECTION = SOCKET_CONNECTION
 
-    async def plot(self, epoch):
+    async def plot(self, epoch, iter_result, train_result, test_result):
         if epoch % self.rate == 0:
-            samplesTT = self.plotting_samplesTT(epoch)
             await self.SOCKET_CONNECTION.emit(
-                "/nn_metrics_s",
+                "nn_metrics_s",
                 {
+                    "run_id": str(self.run_id),
+                    "config_id": self.config_id,
                     "epoch": epoch,
-                    "loss": self.trainer.loss,
-                    "training_samples": samplesTT[0],
-                    "test_samples": samplesTT[1],
+                    "loss": iter_result["loss"],
+                    "training_samples": train_result["b64"],
+                    "test_samples": test_result["b64"],
                 },
             )
-
-    def plotting_samplesTT(self, epoch):
-        pred_tr = self.trainer.predict(self.trainer._dataset[0:2][0])
-        pred_tr_b64 = self.trainer._dataset.encode_images_to_base64(pred_tr)
-        pred_te = self.trainer.predict(self.trainer._dataset[-2:][0])
-        pred_te_b64 = self.trainer._dataset.encode_images_to_base64(pred_te)
-        return [pred_tr_b64, pred_te_b64]

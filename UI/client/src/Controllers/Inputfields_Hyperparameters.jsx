@@ -7,7 +7,7 @@ export default function Inputfields_Hyperparameters({
   const onTune_project_config = (e, keyname) => {
     if (e.key === "Enter") {
       sessionStorage.setItem("project_config", JSON.stringify(project_config));
-      socket.emit("/tune_s", {
+      socket.emit("tune_s", {
         project_config: JSON.stringify(project_config),
       });
       document.getElementById(`inputfield_${keyname}`).blur();

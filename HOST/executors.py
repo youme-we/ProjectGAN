@@ -6,6 +6,7 @@ import traceback
 
 import httpx
 import torch
+from bson import ObjectId
 from colorama import Fore, Style
 
 from utils import device
@@ -20,8 +21,8 @@ class Executor:
         self.__socket_client = __socket_client
 
     async def starter(self):
-        project_name = "GAN1"  # input("Enter PROJECT_NAME: ")
-        await self.pull_project_config(project_name)
+        config_id = ObjectId("69f244289e1ba92747476ebf")  # input("Enter CONFIG_ID: ")
+        await self.pull_config(str(config_id))
         self.load_inputs()
         self.load_targets()
         asyncio.create_task(self.reload_trainer())
@@ -29,7 +30,7 @@ class Executor:
     def load_inputs(self):
         self.inputs = torch.load(
             os.path.join(
-                "./data", self.project_config["trainer"]["dataset"]["dir"], "inputs.pt"
+                "./data", self.config["trainer"]["dataset"]["dir"], "inputs.pt"
             ),
             map_location=torch.device(device()),
         )
@@ -37,17 +38,17 @@ class Executor:
     def load_targets(self):
         self.targets = torch.load(
             os.path.join(
-                "./data", self.project_config["trainer"]["dataset"]["dir"], "targets.pt"
+                "./data", self.config["trainer"]["dataset"]["dir"], "targets.pt"
             ),
             map_location=torch.device(device()),
         )
 
-    async def pull_project_config(self, project_name):
+    async def pull_config(self, project_name):
         response = await self.__http_client.post(
             "read_project_config",
-            json={"name": project_name},
+            json={"_id": project_name},
         )
-        self.project_config = response.json()
+        self.config = response.json()
 
     async def toggle_pause_trainer(self):
         self._trainer.pause = not self._trainer.pause
@@ -66,7 +67,7 @@ class Executor:
 
             trainers.reload_submodules()
             self._trainer = trainers.Trainer(
-                self.project_config["trainer"], self.inputs, self.targets
+                self.config["_id"], self.config["trainer"], self.inputs, self.targets
             )
             await self._trainer.listen(self.__socket_client)
             await self._trainer.train()

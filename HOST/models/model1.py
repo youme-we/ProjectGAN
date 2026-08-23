@@ -18,8 +18,5 @@ class Model(nn.Module):
 
         self.__dict__.update(model_config)
 
-    def __update__(self, model_config):
-        self.__dict__.update(model_config)
-
     def forward(self, x):
         return self.linear_relu_stack(x)

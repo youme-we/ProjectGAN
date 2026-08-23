@@ -4,7 +4,7 @@ import PauseIcon from "@mui/icons-material/Pause";
 
 export default function Controllers_pps({ socket }) {
   const pps = (pause, save, run) => {
-    socket.emit("/pps_s", {
+    socket.emit("pps_s", {
       pause_trainer: pause,
       save_trainer: save,
       break_trainer: run,

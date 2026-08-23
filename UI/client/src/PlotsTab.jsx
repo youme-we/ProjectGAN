@@ -5,13 +5,13 @@ import { Metrics, socket } from "../traffic_management";
 export default function PlotsTab() {
   const [metrics, setMetrics] = useImmer(new Metrics());
   useEffect(() => {
-    socket.on("/nn_metrics_c", (metrics_record) => {
+    socket.on("nn_metrics_c", (metrics_record) => {
       setMetrics((draft) => {
         draft.push(metrics_record);
       });
     });
     return () => {
-      socket.off("/nn_metrics_c");
+      socket.off("nn_metrics_c");
     };
   }, []);
 

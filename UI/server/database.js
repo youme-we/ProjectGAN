@@ -30,10 +30,10 @@ export default class DB {
       };
     }
   }
-  async read_project_config(prj_name) {
+  async read_project_config(config_id) {
     const project_config = await this.project_configs.findOne(
       {
-        name: prj_name,
+        _id: new ObjectId(config_id),
       },
       { projection: { _id: 0 } }
     );
