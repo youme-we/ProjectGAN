@@ -1,5 +1,5 @@
 [project]
-name = "nn"
+name = "HOST"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
@@ -11,6 +11,7 @@ dependencies = [
     "asyncio==3.4.3",
     "attrs==25.3.0",
     "bidict==0.23.1",
+    "bson>=0.5.10",
     "certifi==2025.4.26",
     "charset-normalizer==3.4.2",
     "colorama==0.4.6",
@@ -21,6 +22,7 @@ dependencies = [
     "frozenlist==1.6.0",
     "fsspec==2025.3.2",
     "h11==0.14.0",
+    "httpx>=0.28.1",
     "idna==3.10",
     "jinja2==3.1.6",
     "kiwisolver==1.4.8",
@@ -38,7 +40,6 @@ dependencies = [
     "python-engineio==4.12.0",
     "python-socketio==5.13.0",
     "readchar==4.2.1",
-    "requests==2.32.3",
     "rich>=14.1.0",
     "setuptools==78.1.1",
     "simple-websocket==1.1.0",
@@ -51,9 +52,4 @@ dependencies = [
     "watchdog==6.0.0",
     "wsproto==1.2.0",
     "yarl==1.20.0",
-]
-
-[tool.uv.workspace]
-members = [
-    "test",
 ]

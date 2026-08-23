@@ -9,11 +9,11 @@ run:
 	@cd NN && python3 wrapper.py
 
 plot:
-	@cd UI && cd server && npx nodemon server.js 
+	@cd UI && cd server && npx nodemon main.js 
 
-development:
-	@cd UI && cd client && npm start 
+devl:
+	@cd UI && cd client && npm run dev 
 
 compille:
-	@cd HOST && python3 compille_data.py
+	@cd HOST && uv run python compille_data.py
 

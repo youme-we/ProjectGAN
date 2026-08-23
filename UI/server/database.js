@@ -13,7 +13,7 @@ export default class DB {
     const client = new MongoClient(uri);
     client.connect();
     const database = client.db(db_name);
-    // TODO:this.db instead of this.project_configs
+    // TODO:this.db.collection.insert instead of this.project_configs.insert
     this.project_configs = database.collection(collection_name);
   }
 
@@ -30,20 +30,17 @@ export default class DB {
       };
     }
   }
-  async read_project_config(prj_name) {
+  async read_project_config(config_id) {
     const project_config = await this.project_configs.findOne(
       {
-        "prj_info.name": prj_name,
+        _id: new ObjectId(config_id),
       },
       { projection: { _id: 0 } }
     );
     return project_config || false;
   }
   async update_project_config(prj_name, fields) {
-    const status = await this.project_configs.updateOne(
-      { "prj_info.name": prj_name },
-      { $set: fields }
-    );
+    const status = await this.project_configs.updateOne({ name: prj_name }, { $set: fields });
     return status;
   }
   async delete_project_config(prj_name) {

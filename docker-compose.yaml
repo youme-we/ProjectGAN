@@ -43,7 +43,7 @@ services:
         condition: service_healthy
 
   mongodb:
-    image: mongodb/mongodb-community-server:latest
+    image: mongo:7.0
     ports:
       - "27018:27017"
     environment:

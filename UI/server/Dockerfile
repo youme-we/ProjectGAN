@@ -12,5 +12,5 @@ ENV PORT_SERVER=3001
 
 EXPOSE 3001
 
-CMD ["npx", "nodemon", "server.js"]
+CMD ["npx", "nodemon", "main.js"]
 
